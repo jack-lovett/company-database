@@ -23,8 +23,7 @@ class Project(Base):
     project_payment_basis = Column(Enum('lump_sum', 'hourly_rate'), nullable=True)
     project_creation_datetime = Column(DateTime, server_default=func.current_timestamp(), nullable=False)
 
-    client = relationship('Client', back_populates='projects')
-    address = relationship('Address', back_populates='projects')
+
 
     def __repr__(self):
         return f"<Project(id={self.project_id}, status={self.project_status})>"
