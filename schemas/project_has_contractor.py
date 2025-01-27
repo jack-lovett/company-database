@@ -25,4 +25,4 @@ class ProjectHasContractorUpdate(ProjectHasContractorBase):
 
 class ProjectHasContractor(ProjectHasContractorBase):
     class Config:
-        orm_mode = True
+        from_attributes = True

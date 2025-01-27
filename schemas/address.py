@@ -32,4 +32,4 @@ class Address(AddressBase):
     address_id: int
 
     class Config:
-        orm_mode = True  # Allow pydantic to read data from SQLAlchemy model
+        from_attributes = True  # Allow pydantic to read data from SQLAlchemy model

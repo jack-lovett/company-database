@@ -16,4 +16,4 @@ class ProjectIsBuildingClassUpdate(ProjectIsBuildingClassBase):
 
 class ProjectIsBuildingClass(ProjectIsBuildingClassBase):
     class Config:
-        orm_mode = True
+        from_attributes = True

@@ -17,4 +17,4 @@ class BuildingClass(BuildingClassBase):
     building_class_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
