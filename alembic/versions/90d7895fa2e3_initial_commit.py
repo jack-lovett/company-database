@@ -1,8 +1,8 @@
-"""Initial migration
+"""Initial commit
 
-Revision ID: d8d35503dfa5
+Revision ID: 90d7895fa2e3
 Revises: 
-Create Date: 2025-01-23 17:34:34.263308
+Create Date: 2025-01-28 14:10:01.576547
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'd8d35503dfa5'
+revision: str = '90d7895fa2e3'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -80,9 +80,9 @@ def upgrade() -> None:
     op.create_table('staff',
     sa.Column('staff_id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('contact_id', sa.Integer(), nullable=False),
-    sa.Column('staff_role', sa.Enum('secretary', 'director', 'building_designer', 'draftsperson', 'junior_draftsperson'), nullable=False),
-    sa.Column('staff_employment_status', sa.Enum('full_time', 'part_time', 'casual', 'not_employed'), nullable=False),
-    sa.Column('staff_hire_date', sa.DateTime(), nullable=False),
+    sa.Column('staff_role', sa.Enum('secretary', 'director', 'building_designer', 'draftsperson', 'junior_draftsperson', name='staff_role_enum'), nullable=False),
+    sa.Column('staff_employment_status', sa.Enum('full_time', 'part_time', 'casual', 'not_employed', name='staff_employment_status_enum'), nullable=False),
+    sa.Column('staff_hire_date', sa.Date(), nullable=False),
     sa.Column('staff_notes', sa.Text(), nullable=True),
     sa.ForeignKeyConstraint(['contact_id'], ['contact.contact_id'], ),
     sa.PrimaryKeyConstraint('staff_id')
@@ -91,15 +91,15 @@ def upgrade() -> None:
     sa.Column('project_id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('client_id', sa.Integer(), nullable=False),
     sa.Column('address_id', sa.Integer(), nullable=False),
-    sa.Column('project_status', sa.Enum('lead', 'job', 'completed', 'no_sale'), nullable=False),
+    sa.Column('project_status', sa.Enum('lead', 'job', 'completed', 'no_sale', name='project_status_enum'), nullable=False),
     sa.Column('project_description', sa.Text(), nullable=True),
     sa.Column('project_initial_inquiry_date', sa.Date(), nullable=True),
     sa.Column('project_start_date', sa.Date(), nullable=True),
     sa.Column('project_end_date', sa.Date(), nullable=True),
     sa.Column('project_storeys', sa.Integer(), nullable=True),
-    sa.Column('project_referral_source', sa.Enum('google', 'referral', 'repeat_client', 'jkc', 'smce', 'word_of_mouth', 'website'), nullable=True),
-    sa.Column('project_payment_basis', sa.Enum('lump_sum', 'hourly_rate'), nullable=True),
-    sa.Column('project_creation_datetime', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('project_referral_source', sa.Enum('google', 'referral', 'repeat_client', 'jkc', 'smce', 'word_of_mouth', 'website', name='project_referral_source_enum'), nullable=True),
+    sa.Column('project_payment_basis', sa.Enum('lump_sum', 'hourly_rate', name='project_payment_basis_enum'), nullable=True),
+    sa.Column('project_creation_datetime', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['address_id'], ['address.address_id'], ),
     sa.ForeignKeyConstraint(['client_id'], ['client.client_id'], ),
     sa.PrimaryKeyConstraint('project_id')
@@ -107,8 +107,8 @@ def upgrade() -> None:
     op.create_table('budget',
     sa.Column('budget_id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('project_id', sa.Integer(), nullable=False),
-    sa.Column('budget_type', sa.Enum('asset', 'liability'), nullable=False),
-    sa.Column('budget_status', sa.Enum('not_invoiced', 'invoiced', 'paid'), nullable=False),
+    sa.Column('budget_type', sa.Enum('asset', 'liability', name='budget_type_enum'), nullable=False),
+    sa.Column('budget_status', sa.Enum('not_invoiced', 'invoiced', 'paid', name='budget_status_enum'), nullable=False),
     sa.Column('budget_description', sa.String(length=45), nullable=True),
     sa.Column('budget_estimate', sa.String(length=45), nullable=True),
     sa.Column('budget_actual', sa.String(length=45), nullable=True),
@@ -120,9 +120,9 @@ def upgrade() -> None:
     sa.Column('client_id', sa.Integer(), nullable=False),
     sa.Column('staff_id', sa.Integer(), nullable=False),
     sa.Column('project_id', sa.Integer(), nullable=True),
-    sa.Column('call_log_type', sa.Enum('lead', 'information_request'), nullable=False),
-    sa.Column('call_log_status', sa.Enum('follow_up', 'resolved'), nullable=False),
-    sa.Column('call_log_datetime', sa.DateTime(), nullable=True),
+    sa.Column('call_log_type', sa.Enum('lead', 'information_request', name='call_log_type_enum'), nullable=False),
+    sa.Column('call_log_status', sa.Enum('follow_up', 'resolved', name='call_log_status_enum'), nullable=False),
+    sa.Column('call_log_datetime', sa.DateTime(), server_default='CURRENT_TIMESTAMP', nullable=False),
     sa.Column('call_log_description', sa.Text(), nullable=True),
     sa.ForeignKeyConstraint(['client_id'], ['client.client_id'], ),
     sa.ForeignKeyConstraint(['project_id'], ['project.project_id'], ),
