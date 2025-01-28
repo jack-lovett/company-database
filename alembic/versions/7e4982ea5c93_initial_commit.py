@@ -1,8 +1,8 @@
 """Initial commit
 
-Revision ID: 90d7895fa2e3
+Revision ID: 7e4982ea5c93
 Revises: 
-Create Date: 2025-01-28 14:10:01.576547
+Create Date: 2025-01-28 16:37:05.068605
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '90d7895fa2e3'
+revision: str = '7e4982ea5c93'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -26,20 +26,20 @@ def upgrade() -> None:
     sa.Column('address_suburb', sa.String(length=45), nullable=False),
     sa.Column('address_city', sa.String(length=45), nullable=False),
     sa.Column('address_state', sa.String(length=45), nullable=False),
-    sa.Column('address_postal_code', sa.String(length=45), nullable=False),
+    sa.Column('address_postal_code', sa.String(length=4), nullable=False),
     sa.Column('address_country', sa.String(length=45), nullable=False),
-    sa.Column('address_type', sa.Enum('billing_address', 'postal_address'), nullable=False),
+    sa.Column('address_type', sa.Enum('billing_address', 'postal_address', 'shipping_address', 'office_address'), nullable=False),
     sa.PrimaryKeyConstraint('address_id')
     )
     op.create_table('building_class',
     sa.Column('building_class_id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('building_class_code', sa.String(length=2), nullable=False),
-    sa.Column('building_class_description', sa.String(length=45), nullable=True),
+    sa.Column('building_class_description', sa.String(length=255), nullable=True),
     sa.PrimaryKeyConstraint('building_class_id')
     )
     op.create_table('contractor_type',
     sa.Column('contractor_type_id', sa.Integer(), autoincrement=True, nullable=False),
-    sa.Column('contractor_type', sa.String(length=45), nullable=False),
+    sa.Column('contractor_type', sa.String(length=255), nullable=False),
     sa.Column('contractor_type_description', sa.Text(), nullable=True),
     sa.PrimaryKeyConstraint('contractor_type_id')
     )
@@ -49,15 +49,14 @@ def upgrade() -> None:
     sa.Column('postal_address_id', sa.Integer(), nullable=True),
     sa.Column('contact_first_name', sa.String(length=45), nullable=False),
     sa.Column('contact_last_name', sa.String(length=45), nullable=False),
-    sa.Column('contact_phone', sa.String(length=45), nullable=True),
-    sa.Column('contact_email', sa.String(length=45), nullable=True),
-    sa.Column('contact_business_name', sa.String(length=45), nullable=True),
-    sa.Column('contact_abn', sa.String(length=45), nullable=True),
-    sa.Column('contact_acn', sa.String(length=45), nullable=True),
-    sa.Column('contact_accounts_email', sa.String(length=45), nullable=True),
-    sa.Column('contact_website', sa.String(length=45), nullable=True),
-    sa.Column('contact_discipline', sa.String(length=45), nullable=True),
-    sa.Column('contact_creation_datetime', sa.DateTime(), nullable=True),
+    sa.Column('contact_phone', sa.String(length=20), nullable=True),
+    sa.Column('contact_email', sa.String(length=255), nullable=True),
+    sa.Column('contact_business_name', sa.String(length=255), nullable=True),
+    sa.Column('contact_abn', sa.String(length=11), nullable=True),
+    sa.Column('contact_accounts_email', sa.String(length=255), nullable=True),
+    sa.Column('contact_website', sa.String(length=255), nullable=True),
+    sa.Column('contact_discipline', sa.String(length=255), nullable=True),
+    sa.Column('contact_creation_datetime', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['address_id'], ['address.address_id'], ),
     sa.ForeignKeyConstraint(['postal_address_id'], ['address.address_id'], ),
     sa.PrimaryKeyConstraint('contact_id')
@@ -66,7 +65,7 @@ def upgrade() -> None:
     sa.Column('client_id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('primary_contact_id', sa.Integer(), nullable=False),
     sa.Column('secondary_contact_id', sa.Integer(), nullable=True),
-    sa.Column('client_creation_datetime', sa.DateTime(), nullable=True),
+    sa.Column('client_creation_datetime', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['primary_contact_id'], ['contact.contact_id'], ),
     sa.ForeignKeyConstraint(['secondary_contact_id'], ['contact.contact_id'], ),
     sa.PrimaryKeyConstraint('client_id')
@@ -93,7 +92,7 @@ def upgrade() -> None:
     sa.Column('address_id', sa.Integer(), nullable=False),
     sa.Column('project_status', sa.Enum('lead', 'job', 'completed', 'no_sale', name='project_status_enum'), nullable=False),
     sa.Column('project_description', sa.Text(), nullable=True),
-    sa.Column('project_initial_inquiry_date', sa.Date(), nullable=True),
+    sa.Column('project_initial_inquiry_date', sa.Date(), nullable=False),
     sa.Column('project_start_date', sa.Date(), nullable=True),
     sa.Column('project_end_date', sa.Date(), nullable=True),
     sa.Column('project_storeys', sa.Integer(), nullable=True),
@@ -108,10 +107,10 @@ def upgrade() -> None:
     sa.Column('budget_id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('project_id', sa.Integer(), nullable=False),
     sa.Column('budget_type', sa.Enum('asset', 'liability', name='budget_type_enum'), nullable=False),
-    sa.Column('budget_status', sa.Enum('not_invoiced', 'invoiced', 'paid', name='budget_status_enum'), nullable=False),
-    sa.Column('budget_description', sa.String(length=45), nullable=True),
-    sa.Column('budget_estimate', sa.String(length=45), nullable=True),
-    sa.Column('budget_actual', sa.String(length=45), nullable=True),
+    sa.Column('budget_status', sa.Enum('not_invoiced', 'invoiced', 'paid', 'partially_invoiced', name='budget_status_enum'), nullable=False),
+    sa.Column('budget_description', sa.String(length=255), nullable=True),
+    sa.Column('budget_estimate', sa.DECIMAL(precision=10, scale=2), nullable=True),
+    sa.Column('budget_actual', sa.DECIMAL(precision=10, scale=2), nullable=True),
     sa.ForeignKeyConstraint(['project_id'], ['project.project_id'], ),
     sa.PrimaryKeyConstraint('budget_id')
     )
@@ -121,9 +120,9 @@ def upgrade() -> None:
     sa.Column('staff_id', sa.Integer(), nullable=False),
     sa.Column('project_id', sa.Integer(), nullable=True),
     sa.Column('call_log_type', sa.Enum('lead', 'information_request', name='call_log_type_enum'), nullable=False),
-    sa.Column('call_log_status', sa.Enum('follow_up', 'resolved', name='call_log_status_enum'), nullable=False),
-    sa.Column('call_log_datetime', sa.DateTime(), server_default='CURRENT_TIMESTAMP', nullable=False),
-    sa.Column('call_log_description', sa.Text(), nullable=True),
+    sa.Column('call_log_status', sa.Enum('follow_up', 'resolved', 'in_progress', name='call_log_status_enum'), nullable=False),
+    sa.Column('call_log_datetime', sa.DateTime(), nullable=False),
+    sa.Column('call_log_description', sa.String(length=255), nullable=True),
     sa.ForeignKeyConstraint(['client_id'], ['client.client_id'], ),
     sa.ForeignKeyConstraint(['project_id'], ['project.project_id'], ),
     sa.ForeignKeyConstraint(['staff_id'], ['staff.staff_id'], ),
@@ -133,7 +132,7 @@ def upgrade() -> None:
     sa.Column('note_id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('project_id', sa.Integer(), nullable=True),
     sa.Column('client_id', sa.Integer(), nullable=True),
-    sa.Column('note_type', sa.String(length=45), nullable=False),
+    sa.Column('note_type', sa.Enum('comment', 'reminder', 'follow_up', name='note_type_enum'), nullable=False),
     sa.Column('note_content', sa.Text(), nullable=False),
     sa.Column('note_creation_datetime', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['client_id'], ['client.client_id'], ),
@@ -167,7 +166,7 @@ def upgrade() -> None:
     sa.Column('staff_time_id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('staff_id', sa.Integer(), nullable=False),
     sa.Column('project_id', sa.Integer(), nullable=True),
-    sa.Column('staff_time_description', sa.String(length=45), nullable=True),
+    sa.Column('staff_time_description', sa.String(length=255), nullable=True),
     sa.Column('staff_time_hours', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['project_id'], ['project.project_id'], ),
     sa.ForeignKeyConstraint(['staff_id'], ['staff.staff_id'], ),
