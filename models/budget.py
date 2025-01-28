@@ -1,20 +1,19 @@
-"""Budget model for SQL database."""
-from sqlalchemy import Integer, Column, ForeignKey, Enum, String
+from sqlalchemy import Column, Integer, String, Enum, ForeignKey
 from sqlalchemy.orm import relationship
 
 from models import Base
 
 
 class Budget(Base):
-    """Budget model class"""
-    __tablename__ = 'budget'
+    __tablename__ = "budget"
 
     budget_id = Column(Integer, primary_key=True, autoincrement=True)
     project_id = Column(Integer, ForeignKey('project.project_id'), nullable=False)
-    budget_type = Column(Enum('asset', 'liability'), nullable=False)
-    budget_status = Column(Enum('not_invoiced', 'invoiced', 'paid'), nullable=False, default='not_invoiced')
-    budget_description = Column(String(45))
-    budget_estimate = Column(String(45))
-    budget_actual = Column(String(45))
+    budget_type = Column(Enum('asset', 'liability', name='budget_type_enum'), nullable=False)
+    budget_status = Column(Enum('not_invoiced', 'invoiced', 'paid', name='budget_status_enum'), default='not_invoiced',
+                           nullable=False)
+    budget_description = Column(String(45), nullable=True)
+    budget_estimate = Column(String(45), nullable=True)
+    budget_actual = Column(String(45), nullable=True)
 
-    project = relationship("Project", backref="budgets")
+    project = relationship("Project", back_populates="budgets")

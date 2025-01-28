@@ -16,6 +16,7 @@ from routers.project_is_building_class import project_is_building_class_router
 from routers.staff import staff_router
 from routers.staff_project import staff_project_router
 from routers.staff_time import staff_time_router
+from services.address import AddressService
 
 app = FastAPI()
 

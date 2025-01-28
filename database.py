@@ -1,6 +1,3 @@
-"""Database manager."""
-from contextlib import contextmanager
-
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Base
@@ -12,19 +9,13 @@ engine = create_engine(DATABASE_URL)
 # Create a configured "Session" class
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-
 # Dependency to get a SQLAlchemy session
-@contextmanager
 def get_database():
     database = SessionLocal()
     try:
-        yield database
-        database.commit()
-    except Exception:
-        database.rollback()
-        raise
+        yield database  # Return the session directly
     finally:
-        database.close()
+        database.close()  # Ensure the session is closed after use
 
 
 # Initialise the database
