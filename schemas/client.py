@@ -6,7 +6,7 @@ from datetime import datetime
 class ClientBase(BaseModel):
     primary_contact_id: int
     secondary_contact_id: Optional[int] = None
-    client_creation_datetime: Optional[datetime] = None
+
 
 class ClientCreate(ClientBase):
     pass
@@ -18,6 +18,7 @@ class ClientUpdate(ClientBase):
 
 class Client(ClientBase):
     client_id: int
+    client_creation_datetime: datetime
 
     class Config:
         from_attributes = True

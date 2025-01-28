@@ -12,7 +12,7 @@ class Project(Base):
     address_id = Column(Integer, ForeignKey('address.address_id'), nullable=False)
     project_status = Column(Enum('lead', 'job', 'completed', 'no_sale', name='project_status_enum'), nullable=False)
     project_description = Column(Text, nullable=True)
-    project_initial_inquiry_date = Column(Date, nullable=True)
+    project_initial_inquiry_date = Column(Date, nullable=False)
     project_start_date = Column(Date, nullable=True)
     project_end_date = Column(Date, nullable=True)
     project_storeys = Column(Integer, nullable=True)

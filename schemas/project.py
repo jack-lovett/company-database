@@ -27,7 +27,7 @@ class ProjectBase(BaseModel):
     address_id: int
     project_status: ProjectStatusEnum
     project_description: Optional[str] = None
-    project_initial_inquiry_date: Optional[date] = None
+    project_initial_inquiry_date: date
     project_start_date: Optional[date] = None
     project_end_date: Optional[date] = None
     project_storeys: Optional[int] = None

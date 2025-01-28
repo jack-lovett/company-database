@@ -11,6 +11,7 @@ class CallLogTypeEnum(str, Enum):
 class CallLogStatusEnum(str, Enum):
     follow_up = "follow_up"
     resolved = "resolved"
+    in_progress = "in_progress"
 
 class CallLogBase(BaseModel):
     client_id: int

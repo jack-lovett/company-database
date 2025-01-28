@@ -19,7 +19,7 @@ class Contact(Base):
     contact_accounts_email = Column(String(255), nullable=True)
     contact_website = Column(String(255), nullable=True)
     contact_discipline = Column(String(255), nullable=True)
-    contact_creation_datetime = Column(DateTime, default=func.now())
+    contact_creation_datetime = Column(DateTime, default=func.now(), nullable=False)
 
     contractors = relationship("Contractor", back_populates="contact")
 
