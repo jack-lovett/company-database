@@ -13,7 +13,7 @@ class CallLog(Base):
     project_id = Column(Integer, ForeignKey('project.project_id'), nullable=True)
     call_log_type = Column(Enum('lead', 'information_request', name='call_log_type_enum'), nullable=False)
     call_log_status = Column(Enum('follow_up', 'resolved', name='call_log_status_enum'), nullable=False)
-    call_log_datetime = Column(DateTime, server_default="CURRENT_TIMESTAMP",
+    call_log_datetime = Column(DateTime, default=func.now(),
                                nullable=False)  # Automatically set to current timestamp
     call_log_description = Column(Text, nullable=True)
 
