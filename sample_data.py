@@ -2,7 +2,7 @@ from decimal import Decimal
 from sqlalchemy.orm import Session
 from database import get_database
 from models import Client, Contact, Address, Project, ContractorType, Contractor, ProjectHasContractor, \
-    ProjectIsBuildingClass, Budget, BuildingClass, CallLog, StaffTime, StaffProject, Note
+    ProjectIsBuildingClass, Budget, BuildingClass, CallLog, StaffTime, StaffProject, Note, Staff
 from faker import Faker
 from datetime import datetime
 import random
@@ -53,14 +53,17 @@ def create_contacts(database: Session, number_of_records: int, addresses: list):
 
 
 def create_clients(database: Session, contacts: list):
-    """Generate and insert test client data."""
-    clients = [
-        Client(
+    """Generate and insert test client data with different primary and secondary contacts."""
+    clients = []
+
+    for contact in contacts:
+        secondary_contact = random.choice([c for c in contacts if c.contact_id != contact.contact_id])
+
+        clients.append(Client(
             primary_contact_id=contact.contact_id,
-            secondary_contact_id=contact.contact_id
-        )
-        for contact in contacts
-    ]
+            secondary_contact_id=secondary_contact.contact_id
+        ))
+
     database.add_all(clients)
     database.commit()
     return clients
@@ -180,10 +183,99 @@ def create_project_is_building_class(database: Session, building_classes: list, 
     database.commit()
 
 
+def create_staff(database: Session, number_of_records: int, contacts: list):
+    """Generate and insert staff data."""
+    staff_roles = ['secretary', 'director', 'building_designer', 'draftsperson', 'junior_draftsperson']
+    employment_statuses = ['full_time', 'part_time', 'casual', 'not_employed']
+
+    staff_members = [
+        Staff(
+            contact_id=fake.random_element(contacts).contact_id,
+            staff_role=fake.random_element(staff_roles),
+            staff_employment_status=fake.random_element(employment_statuses),
+            staff_hire_date=fake.date_this_decade(),
+            staff_notes=fake.text(max_nb_chars=200)
+        )
+        for _ in range(number_of_records)
+    ]
+    database.add_all(staff_members)
+    database.commit()
+    return staff_members
+
+
+def create_staff_time(database: Session, number_of_records: int, staff: list, projects: list):
+    """Generate and insert staff time logs."""
+    staff_times = [
+        StaffTime(
+            staff_id=fake.random_element(staff).staff_id,
+            project_id=fake.random_element(projects).project_id if random.choice([True, False]) else None,
+            staff_time_description=fake.sentence(),
+            staff_time_hours=random.randint(1, 8)
+        )
+        for _ in range(number_of_records)
+    ]
+    database.add_all(staff_times)
+    database.commit()
+
+
+def create_staff_project(database: Session, staff: list, projects: list):
+    """Assign staff members to projects."""
+    assignments = [
+        StaffProject(
+            staff_id=fake.random_element(staff).staff_id,
+            project_id=fake.random_element(projects).project_id
+        )
+        for _ in range(len(staff))  # Assign each staff member to at least one project
+    ]
+    database.add_all(assignments)
+    database.commit()
+
+
+def create_call_logs(database: Session, number_of_records: int, clients: list, staff: list, projects: list):
+    """Generate and insert call logs."""
+    call_types = ['lead', 'information_request']
+    call_statuses = ['follow_up', 'resolved', 'in_progress']
+
+    call_logs = [
+        CallLog(
+            client_id=fake.random_element(clients).client_id,
+            staff_id=fake.random_element(staff).staff_id,
+            project_id=fake.random_element(projects).project_id if random.choice([True, False]) else None,
+            call_log_type=fake.random_element(call_types),
+            call_log_status=fake.random_element(call_statuses),
+            call_log_datetime=fake.date_time_this_year(),
+            call_log_description=fake.text(max_nb_chars=255)
+        )
+        for _ in range(number_of_records)
+    ]
+    database.add_all(call_logs)
+    database.commit()
+
+
+def create_budgets(database: Session, number_of_records: int, projects: list):
+    """Generate and insert budget data."""
+    budget_types = ['asset', 'liability']
+    budget_statuses = ['not_invoiced', 'invoiced', 'paid', 'partially_invoiced']
+
+    budgets = [
+        Budget(
+            project_id=fake.random_element(projects).project_id,
+            budget_type=fake.random_element(budget_types),
+            budget_status=fake.random_element(budget_statuses),
+            budget_description=fake.sentence(),
+            budget_estimate=round(random.uniform(1000, 50000), 2),
+            budget_actual=round(random.uniform(500, 49000), 2) if random.choice([True, False]) else None
+        )
+        for _ in range(number_of_records)
+    ]
+    database.add_all(budgets)
+    database.commit()
+
+
 def generate_test_data(database: Session, number_of_records: int):
     """Main function to generate test data for the database."""
     try:
-        # Generate data
+        # Generate base data
         addresses = create_addresses(database, number_of_records)
         contacts = create_contacts(database, number_of_records, addresses)
         clients = create_clients(database, contacts)
@@ -191,15 +283,23 @@ def generate_test_data(database: Session, number_of_records: int):
         contractor_types = create_contractor_types(database)
         contractors = create_contractors(database, number_of_records)
 
-        # Create associations
+        # Create staff-related data
+        staff = create_staff(database, number_of_records, contacts)
+        create_staff_time(database, number_of_records, staff, projects)
+        create_staff_project(database, staff, projects)
+
+        # Create other associations
         create_project_has_contractors(database, contractors, projects, contractor_types)
         create_notes(database, number_of_records, projects, clients)
         building_classes = create_building_classes(database, number_of_records)
         create_project_is_building_class(database, building_classes, projects)
+        create_call_logs(database, number_of_records, clients, staff, projects)
+        create_budgets(database, number_of_records, projects)
 
         print("Test data inserted successfully.")
     except Exception as e:
         print(f"Error generating test data: {e}")
+
 
 
 def main():
