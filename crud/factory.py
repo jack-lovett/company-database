@@ -1,5 +1,6 @@
-import os
 import importlib
+import os
+
 from crud.base import CRUDBase
 
 
@@ -52,8 +53,6 @@ models = import_models(models_dir, model_files)
 
 # Dynamically create CRUD classes for all models
 crud_classes = {model_name: create_crud_class(model) for model_name, model in models.items()}
-
-
 
 # Optionally, print the names of the created CRUD classes
 for crud_name in crud_classes:

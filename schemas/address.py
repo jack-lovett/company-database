@@ -1,6 +1,8 @@
-from pydantic import BaseModel
-from typing import Optional
 from enum import Enum
+from typing import Optional
+
+from pydantic import BaseModel
+
 
 # Enum for Address Types
 class AddressTypeEnum(str, Enum):
@@ -16,8 +18,10 @@ class AddressBase(BaseModel):
     address_country: str
     address_type: AddressTypeEnum
 
+
 class AddressCreate(AddressBase):
     pass  # For creating a new address
+
 
 class AddressUpdate(AddressBase):
     address_street: Optional[str] = None
@@ -27,6 +31,7 @@ class AddressUpdate(AddressBase):
     address_postal_code: Optional[str] = None
     address_country: Optional[str] = None
     address_type: Optional[AddressTypeEnum] = None
+
 
 class Address(AddressBase):
     address_id: int

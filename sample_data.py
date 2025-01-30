@@ -1,11 +1,13 @@
-from decimal import Decimal
 from sqlalchemy.orm import Session
+import random
+from datetime import datetime
+
+from faker import Faker
+from sqlalchemy.orm import Session
+
 from database import get_database
 from models import Client, Contact, Address, Project, ContractorType, Contractor, ProjectHasContractor, \
     ProjectIsBuildingClass, Budget, BuildingClass, CallLog, StaffTime, StaffProject, Note, Staff
-from faker import Faker
-from datetime import datetime
-import random
 
 fake = Faker()
 
@@ -299,7 +301,6 @@ def generate_test_data(database: Session, number_of_records: int):
         print("Test data inserted successfully.")
     except Exception as e:
         print(f"Error generating test data: {e}")
-
 
 
 def main():

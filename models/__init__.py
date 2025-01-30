@@ -1,7 +1,7 @@
 """Package initialisation."""
 
-from .base import Base
 from .address import Address
+from .base import Base
 from .budget import Budget
 from .building_class import BuildingClass
 from .call_log import CallLog

@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 
-from database import get_database
 from routers.address import address_router
 from routers.budget import budget_router
 from routers.building_class import building_class_router
@@ -16,7 +15,6 @@ from routers.project_is_building_class import project_is_building_class_router
 from routers.staff import staff_router
 from routers.staff_project import staff_project_router
 from routers.staff_time import staff_time_router
-from services.address import AddressService
 
 app = FastAPI()
 

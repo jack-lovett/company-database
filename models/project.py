@@ -20,7 +20,7 @@ class Project(Base):
         Enum('google', 'referral', 'repeat_client', 'jkc', 'smce', 'word_of_mouth', 'website',
              name='project_referral_source_enum'), nullable=True)
     project_payment_basis = Column(Enum('lump_sum', 'hourly_rate', name='project_payment_basis_enum'), nullable=True)
-    project_creation_datetime = Column(DateTime, default=func.now(),  nullable=False)
+    project_creation_datetime = Column(DateTime, default=func.now(), nullable=False)
 
     contractors = relationship("Contractor", secondary="project_has_contractor", back_populates="projects")
 
