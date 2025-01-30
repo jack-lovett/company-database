@@ -8,6 +8,9 @@ from pydantic import BaseModel
 class AddressTypeEnum(str, Enum):
     billing_address = "billing_address"
     postal_address = "postal_address"
+    shipping_address = "shipping_address"
+    office_address = "office_address"
+
 
 class AddressBase(BaseModel):
     address_street: str
