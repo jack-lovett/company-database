@@ -1,7 +1,7 @@
 """Project model for SQL database."""
 from sqlalchemy import Column, Integer, Text, String
 
-from models import Base
+from models.base import Base
 
 
 class ContractorType(Base):

@@ -2,7 +2,7 @@
 from sqlalchemy import Column, Integer, ForeignKey, Text, DateTime, func, Enum
 from sqlalchemy.orm import relationship
 
-from models import Base
+from models.base import Base
 
 
 class Note(Base):

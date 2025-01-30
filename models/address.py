@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, Enum, String
 from sqlalchemy.orm import relationship
 
-from models import Base
+from models.base import Base
 
 
 class Address(Base):

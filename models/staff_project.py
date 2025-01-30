@@ -1,7 +1,7 @@
 """Staff project model for SQL database."""
 from sqlalchemy import Integer, Column, ForeignKey
 
-from models import Base
+from models.base import Base
 
 
 class StaffProject(Base):

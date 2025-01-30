@@ -1,6 +1,6 @@
 from sqlalchemy import Column, ForeignKey, Integer
 
-from models import Base
+from models.base import Base
 
 
 class ProjectIsBuildingClass(Base):

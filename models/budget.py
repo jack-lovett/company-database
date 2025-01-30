@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Enum, ForeignKey, DECIMAL
 from sqlalchemy.orm import relationship
 
-from models import Base
+from models.base import Base
 
 
 class Budget(Base):

@@ -1,7 +1,7 @@
 from sqlalchemy import Integer, Column, ForeignKey, Enum, DateTime, func, String
 from sqlalchemy.orm import relationship
 
-from models import Base
+from models.base import Base
 
 
 class CallLog(Base):
