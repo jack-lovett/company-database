@@ -22,7 +22,8 @@ def create_addresses(database: Session, number_of_records: int):
             address_state=fake.state(),
             address_postal_code="3433",
             address_country=fake.country(),
-            address_type=fake.word(ext_word_list=["billing_address", "shipping_address"])
+            address_type=fake.word(
+                ext_word_list=["billing_address", "postal_address", "shipping_address", "office_address"])
         )
         for _ in range(number_of_records)
     ]
@@ -221,15 +222,28 @@ def create_staff_time(database: Session, number_of_records: int, staff: list, pr
 
 
 def create_staff_project(database: Session, staff: list, projects: list):
-    """Assign staff members to projects."""
-    assignments = [
-        StaffProject(
-            staff_id=fake.random_element(staff).staff_id,
-            project_id=fake.random_element(projects).project_id
-        )
-        for _ in range(len(staff))  # Assign each staff member to at least one project
+    """Assign staff members to projects, ensuring no duplicates."""
+    assignments = set()  # Use a set to ensure uniqueness
+
+    # Assign each staff member to at least one project
+    for _ in range(len(staff)):
+        staff_member = fake.random_element(staff)
+        project = fake.random_element(projects)
+        staff_id = staff_member.staff_id
+        project_id = project.project_id
+
+        # Only add the assignment if it's not already in the set
+        if (staff_id, project_id) not in assignments:
+            assignments.add((staff_id, project_id))
+
+    # Convert the assignments set to a list of StaffProject objects
+    staff_project_entries = [
+        StaffProject(staff_id=staff_id, project_id=project_id)
+        for staff_id, project_id in assignments
     ]
-    database.add_all(assignments)
+
+    # Insert the unique assignments
+    database.add_all(staff_project_entries)
     database.commit()
 
 

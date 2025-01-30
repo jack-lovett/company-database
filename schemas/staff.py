@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from datetime import date
 from enum import Enum
 from typing import Optional
 
@@ -24,7 +24,7 @@ class StaffBase(BaseModel):
     contact_id: int
     staff_role: StaffRoleEnum
     staff_employment_status: EmploymentStatusEnum
-    staff_hire_date: str
+    staff_hire_date: date
     staff_notes: Optional[str] = None
 
 
@@ -35,7 +35,7 @@ class StaffCreate(StaffBase):
 class StaffUpdate(StaffBase):
     staff_role: Optional[StaffRoleEnum] = None
     staff_employment_status: Optional[EmploymentStatusEnum] = None
-    staff_hire_date: Optional[str] = None
+    staff_hire_date: Optional[date] = None
     staff_notes: Optional[str] = None
 
 
