@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Contact List</h2>
+<div class="table-responsive">
+    <table class="table table-light table-striped table-hover">
+        <thead>
+        <tr>
+            <th>Contact ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Business Name</th>
+            <th>ABN</th>
+            <th>Billing Address</th>
+            <th>Postal Address</th>
+            <th>Creation Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for contact in contacts %}
+        <tr>
+            <td>{{ contact.contact_id }}</td>
+            <td>{{ contact.contact_first_name }}</td>
+            <td>{{ contact.contact_last_name }}</td>
+            <td>{{ contact.contact_phone or 'N/A' }}</td>
+            <td>{{ contact.contact_email or 'N/A' }}</td>
+            <td>{{ contact.contact_business_name or 'N/A' }}</td>
+            <td>{{ contact.contact_abn or 'N/A' }}</td>
+            <td>{{ contact.billing_address }}</td>
+            <td>{{ contact.postal_address }}</td>
+            <td>{{ contact.contact_creation_datetime }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
