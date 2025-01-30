@@ -1,12 +1,12 @@
 # app.py
-from flask import Flask, render_template, request, g
+from flask import Flask, render_template, g, request, jsonify
 
 from database import SessionLocal
+from models import Project
 from services.address import AddressService
 from services.client import ClientService
 from services.contact import ContactService
 from services.project import ProjectService
-from services.table_service import GenericTableService
 
 app = Flask(__name__)
 
@@ -43,6 +43,8 @@ def projects():
     session = g.database
     project_service = ProjectService()
     projects = project_service.get_enriched_projects(session)
+    clients_service = ClientService()
+
     return render_template('projects.html', projects=projects)
 
 
@@ -69,25 +71,24 @@ def addresses():
     enriched_addresses = address_service.get_enriched_addresses(session)
     return render_template("addresses.html", addresses=enriched_addresses)
 
-    }
 
-    model = model_map.get(table_name.lower())
-    if not model:
-        return "Table not found", 404
-
-    columns = service.get_table_columns(model)
-    data = service.get_enriched_data(model)
-
-    return render_template("dynamic_table.html", table_name=table_name, columns=columns, data=data)
-
-
-# Other routes for adding/editing projects, etc.
-@app.route('/add_project', methods=['GET', 'POST'])
-def add_project():
-    if request.method == 'POST':
-        # Logic to add a project
-        pass
-    return render_template('add_project.html')
+@app.route('/projects/create', methods=['POST'])
+def create_project():
+    data = request.form
+    new_project = Project(
+        client_id=data['client_id'],
+        address_id=data['address_id'],
+        project_status=data['project_status'],
+        project_description=data.get('project_description'),
+        project_start_date=data.get('project_start_date'),
+        project_end_date=data.get('project_end_date'),
+        project_storeys=data.get('project_storeys'),
+        project_referral_source=data.get('project_referral_source'),
+        project_payment_basis=data.get('project_payment_basis')
+    )
+    # db.session.add(new_project)
+    # db.session.commit()
+    return jsonify(success=True)
 
 
 if __name__ == '__main__':
