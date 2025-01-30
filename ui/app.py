@@ -2,7 +2,7 @@
 from flask import Flask, render_template, request, g
 
 from database import SessionLocal
-from models import Project, Contact, Client
+from services.address import AddressService
 from services.client import ClientService
 from services.contact import ContactService
 from services.project import ProjectService
@@ -62,15 +62,12 @@ def contacts():
     return render_template("contacts.html", contacts=enriched_contacts)
 
 
-@app.route("/table/<table_name>")
-def dynamic_table(table_name):
+@app.route("/addresses")
+def addresses():
     session = g.database
-    service = GenericTableService(session)
-
-    model_map = {
-        "projects": Project,
-        "contacts": Contact,
-        "clients": Client,
+    address_service = AddressService()
+    enriched_addresses = address_service.get_enriched_addresses(session)
+    return render_template("addresses.html", addresses=enriched_addresses)
 
     }
 

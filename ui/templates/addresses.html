@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Address List</h2>
+<div class="table-responsive">
+    <table id="data" class="table table-light table-striped table-hover">
+        <thead>
+        <tr>
+            <th>Address ID</th>
+            <th>Street</th>
+            <th>Suburb</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Postal Code</th>
+            <th>Country</th>
+            <th>Type</th>
+            <th>Billing Contacts</th>
+            <th>Postal Contacts</th>
+            <th>Projects</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for address in addresses %}
+        <tr>
+            <td>{{ address.address_id }}</td>
+            <td>{{ address.address_street }}</td>
+            <td>{{ address.address_suburb }}</td>
+            <td>{{ address.address_city }}</td>
+            <td>{{ address.address_state }}</td>
+            <td>{{ address.address_postal_code }}</td>
+            <td>{{ address.address_country }}</td>
+            <td>{{ address.address_type }}</td>
+            <td>{{ address.billing_contacts | join(', ') or 'N/A' }}</td>
+            <td>{{ address.postal_contacts | join(', ') or 'N/A' }}</td>
+            <td>{% for project in address.projects %}
+                <div>{{ project.project_id }} - {{ project.project_status }}</div>
+                {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        $('#data').DataTable();
+    });
+</script>
+{% endblock %}
+{% endblock %}
