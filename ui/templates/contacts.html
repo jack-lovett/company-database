@@ -3,7 +3,7 @@
 {% block content %}
 <h2>Contact List</h2>
 <div class="table-responsive">
-    <table class="table table-light table-striped table-hover">
+    <table id="data" class="table table-light table-striped table-hover">
         <thead>
         <tr>
             <th>Contact ID</th>
@@ -36,4 +36,11 @@
         </tbody>
     </table>
 </div>
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        $('#data').DataTable();
+    });
+</script>
+{% endblock %}
 {% endblock %}
