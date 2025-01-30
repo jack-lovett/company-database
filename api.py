@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import FastAPI
 
 from routers.address import address_router
@@ -42,6 +43,5 @@ def read_root():
     return "Welcome to the Drawing Works backend database API"
 
 
-@app.get("/test")
-def read_test():
-    return "This is a test endpoint!"
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=80)
