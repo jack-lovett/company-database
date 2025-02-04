@@ -34,11 +34,8 @@ class CallLogCreate(CallLogBase):
 class CallLogUpdate(CallLogBase):
     client_id: Optional[int] = None
     staff_id: Optional[int] = None
-    project_id: Optional[int] = None
     call_log_type: Optional[CallLogTypeEnum] = None
     call_log_status: Optional[CallLogStatusEnum] = None
-    call_log_datetime: Optional[datetime] = None
-    call_log_description: Optional[str] = None
 
 
 class CallLog(CallLogBase):

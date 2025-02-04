@@ -44,158 +44,52 @@
         </tbody>
     </table>
 </div>
-<!-- Modal for Address Selection/Creation -->
-<div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addressModalLabel">Address Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Address Form Goes Here -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="saveAddressBtn">Save Address</button>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Modal for Contact Selection/Creation -->
-<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="contactModalLabel">Contact Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Contact Form Goes Here -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="saveContactBtn">Save Contact</button>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- Include Client Modal -->
+{% include "modals/client_modal.html" %}
 
-<!-- Modal for Project Details -->
-<div class="modal fade" id="projectModal" tabindex="-1" aria-labelledby="projectModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="projectModalLabel">Project Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Project Name -->
-                <input type="text" class="form-control mb-3" id="projectName" placeholder="Project Name">
-                <!-- Client -->
-                <select class="form-control mb-3" id="clientSelect">
-                    <option value="" disabled selected>Select Client</option>
-                    {% for client in clients %}
-                    <option value="{{ client.client_id }}">{{ client.client_name }}</option>
-                    {% endfor %}
-                </select>
-                <!-- Address -->
-                <select class="form-control mb-3" id="addressSelect">
-                    <option value="" disabled selected>Select Address</option>
-                    {% for address in addresses %}
-                    <option value="{{ address.address_id }}">{{ address.address_street }}, {{ address.address_suburb }},
-                        {{ address.address_city }}
-                    </option>
-                    {% endfor %}
-                </select>
-                <!-- Project Description -->
-                <textarea class="form-control mb-3" id="projectDescription"
-                          placeholder="Project Description"></textarea>
-                <!-- Project Status -->
-                <select class="form-control mb-3" id="projectStatus">
-                    <option value="lead">Lead</option>
-                    <option value="job">Job</option>
-                    <option value="completed">Completed</option>
-                    <option value="no_sale">No Sale</option>
-                </select>
-                <!-- Start Date -->
-                <input type="date" class="form-control mb-3" id="projectStartDate">
-                <!-- End Date -->
-                <input type="date" class="form-control mb-3" id="projectEndDate">
-                <!-- Storeys -->
-                <input type="number" class="form-control mb-3" id="projectStoreys" placeholder="Number of Storeys">
-                <!-- Referral Source -->
-                <select class="form-control mb-3" id="projectReferralSource">
-                    <option value="google">Google</option>
-                    <option value="referral">Referral</option>
-                    <option value="repeat_client">Repeat Client</option>
-                    <option value="jkc">JKC</option>
-                    <option value="smce">SMCE</option>
-                    <option value="word_of_mouth">Word of Mouth</option>
-                    <option value="website">Website</option>
-                </select>
-                <!-- Payment Basis -->
-                <select class="form-control mb-3" id="projectPaymentBasis">
-                    <option value="lump_sum">Lump Sum</option>
-                    <option value="hourly_rate">Hourly Rate</option>
-                </select>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="saveProjectBtn">Save Project</button>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- Include Project Modal -->
+{% include "modals/project_modal.html" %}
 
+<!-- Include Contact Modal -->
+{% include "modals/contact_modal.html" %}
+
+<!-- Include Address Modal -->
+{% include "modals/address_modal.html" %}
+
+{% endblock %}
 
 {% block scripts %}
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+
+<!-- Initialize DataTables -->
 <script>
     $(document).ready(function () {
-        $('#data').DataTable();
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        $('#data').DataTable();
-
-        // Handle project form submission
-        $('#saveProjectBtn').click(function () {
-            // Collect form data
-            var projectData = {
-                project_name: $('#projectName').val(),
-                client_id: $('#clientSelect').val(),
-                address_id: $('#addressSelect').val(),
-                project_description: $('#projectDescription').val(),
-                project_status: $('#projectStatus').val(),
-                project_start_date: $('#projectStartDate').val(),
-                project_end_date: $('#projectEndDate').val(),
-                project_storeys: $('#projectStoreys').val(),
-                project_referral_source: $('#projectReferralSource').val(),
-                project_payment_basis: $('#projectPaymentBasis').val()
-            };
-
-            // Make AJAX request to save project
-            $.ajax({
-                url: '/projects/create',  // Replace with your backend endpoint
-                type: 'POST',
-                data: projectData,
-                success: function (response) {
-                    if (response.success) {
-                        // Close modal and refresh project table
-                        $('#projectModal').modal('hide');
-                        location.reload();  // Reload the page to show the new project in the table
-                    } else {
-                        alert('Error saving project');
-                    }
-                },
-                error: function () {
-                    alert('Error saving project');
+        $('#data').DataTable({
+            pageLength: 10,
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, 'All']],
+            pagingType: 'full_numbers',
+            order: [[0, 'asc']],
+            processing: true,
+            language: {
+                paginate: {
+                    first: '<<',
+                    previous: '<',
+                    next: '>',
+                    last: '>>'
                 }
-            });
+            }
         });
     });
 </script>
-{% endblock %}
+
+<!-- Include Your Custom Modals JavaScript -->
+<script src="{{ url_for('static', filename='js/modal_handlers.js') }}"></script>
 {% endblock %}

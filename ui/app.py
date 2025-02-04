@@ -1,8 +1,7 @@
 # app.py
-from flask import Flask, render_template, g, request, jsonify
+from flask import Flask, render_template, g, jsonify
 
 from database import SessionLocal
-from models import Project
 from services.address import AddressService
 from services.client import ClientService
 from services.contact import ContactService
@@ -35,7 +34,7 @@ def after_request(response):
 # Home route
 @app.route('/')
 def index():
-    return render_template('index.html', )
+    return render_template('index.html')
 
 
 @app.route('/projects')
@@ -72,23 +71,17 @@ def addresses():
     return render_template("addresses.html", addresses=enriched_addresses)
 
 
-@app.route('/projects/create', methods=['POST'])
-def create_project():
-    data = request.form
-    new_project = Project(
-        client_id=data['client_id'],
-        address_id=data['address_id'],
-        project_status=data['project_status'],
-        project_description=data.get('project_description'),
-        project_start_date=data.get('project_start_date'),
-        project_end_date=data.get('project_end_date'),
-        project_storeys=data.get('project_storeys'),
-        project_referral_source=data.get('project_referral_source'),
-        project_payment_basis=data.get('project_payment_basis')
-    )
-    # db.session.add(new_project)
-    # db.session.commit()
-    return jsonify(success=True)
+@app.route('/add_project', methods=['POST'])
+def add_project():
+    session = g.database
+    try:
+        print("test")
+
+    except Exception as e:
+        session.rollback()
+        return jsonify({'success': False, 'error': str(e)})
+    finally:
+        session.close()
 
 
 if __name__ == '__main__':

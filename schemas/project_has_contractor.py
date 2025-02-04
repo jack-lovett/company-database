@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import Optional
 
 from pydantic import BaseModel
 
@@ -21,7 +20,8 @@ class ProjectHasContractorCreate(ProjectHasContractorBase):
 
 
 class ProjectHasContractorUpdate(ProjectHasContractorBase):
-    contractor_type_id: Optional[int] = None
+    # In many-to-many relationship tables, we do not update, instead delete entry and create new one
+    pass
 
 
 class ProjectHasContractor(ProjectHasContractorBase):

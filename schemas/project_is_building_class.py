@@ -11,6 +11,7 @@ class ProjectIsBuildingClassCreate(ProjectIsBuildingClassBase):
 
 
 class ProjectIsBuildingClassUpdate(ProjectIsBuildingClassBase):
+    # In many-to-many relationship tables, we do not update, instead delete entry and create new one
     pass
 
 

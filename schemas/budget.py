@@ -33,7 +33,6 @@ class BudgetCreate(BudgetBase):
 class BudgetUpdate(BudgetBase):
     budget_type: Optional[BudgetTypeEnum] = None
     budget_status: Optional[BudgetStatusEnum] = None
-    budget_description: Optional[str] = None
     budget_estimate: Optional[str] = None
     budget_actual: Optional[str] = None
 

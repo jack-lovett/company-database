@@ -14,7 +14,6 @@ class ContractorTypeCreate(ContractorTypeBase):
 
 class ContractorTypeUpdate(ContractorTypeBase):
     contractor_type: Optional[str] = None
-    contractor_type_description: Optional[str] = None
 
 
 class ContractorType(ContractorTypeBase):

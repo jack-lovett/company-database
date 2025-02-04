@@ -45,14 +45,10 @@ class ProjectCreate(ProjectBase):
 
 
 class ProjectUpdate(ProjectBase):
+    client_id: Optional[int] = None
+    address_id: Optional[int] = None
     project_status: Optional[ProjectStatusEnum] = None
-    project_description: Optional[str] = None
     project_initial_inquiry_date: Optional[date] = None
-    project_start_date: Optional[date] = None
-    project_end_date: Optional[date] = None
-    project_storeys: Optional[int] = None
-    project_referral_source: Optional[ReferralSourceEnum] = None
-    project_payment_basis: Optional[PaymentBasisEnum] = None
 
 
 class Project(ProjectBase):
@@ -61,3 +57,17 @@ class Project(ProjectBase):
 
     class Config:
         from_attributes = True
+
+
+class ProjectDisplay(BaseModel):
+    project_id: int
+    full_address: str
+    client_name: str
+    project_status: ProjectStatusEnum
+    project_description: Optional[str] = None
+    project_initial_inquiry_date: date
+    project_start_date: Optional[date] = None
+    project_end_date: Optional[date] = None
+    project_storeys: Optional[int] = None
+    project_referral_source: Optional[ReferralSourceEnum] = None
+    project_payment_basis: Optional[PaymentBasisEnum] = None

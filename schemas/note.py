@@ -17,7 +17,8 @@ class NoteBase(BaseModel):
 
 
 class NoteCreate(NoteBase):
-    pass  # No additional fields for creation
+    project_id: int
+    client_id: int
 
 
 class NoteUpdate(NoteBase):

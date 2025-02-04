@@ -54,3 +54,10 @@ class BaseService:
         except IntegrityError as e:
             database.rollback()
             raise ValueError(f"Error deleting record: {e}")
+
+    def filter(self, database, **filters):
+        """Filter records by specified conditions."""
+        try:
+            return self.crud.filter_by(database, **filters)
+        except SQLAlchemyError as e:
+            raise ValueError(f"Error during filtering: {e.args}")

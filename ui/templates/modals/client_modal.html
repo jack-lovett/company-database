@@ -1,0 +1,40 @@
+<div class="modal fade" id="clientModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create New Client</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="clientForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Primary Contact</label>
+                        <div class="input-group">
+                            <select class="form-select" name="primary_contact_id" id="primary_contact_select" required>
+                                <option value="">Select Contact...</option>
+                            </select>
+                            <button type="button" class="btn btn-outline-secondary" id="createPrimaryContactBtn">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Secondary Contact</label>
+                        <div class="input-group">
+                            <select class="form-select" name="secondary_contact_id" id="secondary_contact_select">
+                                <option value="">Select Contact...</option>
+                            </select>
+                            <button type="button" class="btn btn-outline-secondary" id="createSecondaryContactBtn">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Client</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

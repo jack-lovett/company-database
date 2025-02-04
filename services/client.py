@@ -13,21 +13,14 @@ class ClientService(BaseService):
 
         contact_service = ContactService()
 
-        # Fetch primary contact details
+        # Get primary contact details
         primary_contact = contact_service.get_by_id(database, client.primary_contact_id)
         if primary_contact:
-            client_dict['primary_contact_name'] = (
-                f"{primary_contact.contact_first_name} {primary_contact.contact_last_name}"
-            )
-            client_dict['primary_contact_email'] = primary_contact.contact_email or "N/A"
-            client_dict['primary_contact_phone'] = primary_contact.contact_phone or "N/A"
+            client_dict['client_name'] = f"{primary_contact.contact_first_name} {primary_contact.contact_last_name}"
+            client_dict['primary_contact_email'] = primary_contact.contact_email
+            client_dict['primary_contact_phone'] = primary_contact.contact_phone
         else:
-            client_dict['primary_contact_name'] = "Unknown Contact"
-            client_dict['primary_contact_email'] = "N/A"
-            client_dict['primary_contact_phone'] = "N/A"
-
-        # Count associated projects
-        client_dict['project_count'] = len(client.projects)
+            client_dict['client_name'] = "Unknown Client"
 
         return client_dict
 
@@ -35,3 +28,11 @@ class ClientService(BaseService):
         """Retrieve all clients with enriched values."""
         clients = self.get_all(database)
         return [self.enrich_client(database, client) for client in clients]
+
+    def get_by_name(self, database, query):
+        """Retrieve all clients searchable by name."""
+        clients = self.filter(database, name=query)
+        enriched_clients = [self.enrich_client(database, client) for client in clients]
+
+        # Ensure the client dict contains 'name' and 'id' for Select2 compatibility
+        return [{'id': client['client_id'], 'text': client['primary_contact_name']} for client in enriched_clients]

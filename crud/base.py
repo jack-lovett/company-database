@@ -10,8 +10,12 @@ class CRUDBase:
         return database.query(self.model_class).filter(
             getattr(self.model_class, self.id_field_name) == object_id).first()
 
-    def get_all(self, database: Session, skip: int = 0, limit: int = 10):
-        return database.query(self.model_class).offset(skip).limit(limit).all()
+    def get_all(self, database: Session):
+        return database.query(self.model_class).all()
+
+    # Removed limit and skip as its a small company with a requirement to see all records
+    # def get_all(self, database: Session, skip: int = 0, limit: int = 1):
+    #     return database.query(self.model_class).offset(skip).limit(limit).all()
 
     def create(self, database: Session, object_data):
         database_object = self.model_class(**object_data)
@@ -35,3 +39,11 @@ class CRUDBase:
             database.delete(database_object)
             database.commit()
         return database_object
+
+    def filter_by(self, database: Session, **filters):
+        """Generically filter records by various conditions."""
+        query = database.query(self.model_class)
+        for field, value in filters.items():
+            column = getattr(self.model_class, field)
+            query = query.filter(column.ilike(f"%{value}%") if isinstance(value, str) else column == value)
+        return query.all()

@@ -1,0 +1,85 @@
+<div class="modal fade" id="contactModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create New Contact</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="contactForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="contact_first_name" class="form-label">First Name</label>
+                                <input type="text" class="form-control" name="contact_first_name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="contact_last_name" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" name="contact_last_name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="contact_phone" class="form-label">Phone</label>
+                                <input type="tel" class="form-control" name="contact_phone">
+                            </div>
+                            <div class="mb-3">
+                                <label for="contact_email" class="form-label">Email</label>
+                                <input type="email" class="form-control" name="contact_email">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="contact_business_name" class="form-label">Business Name</label>
+                                <input type="text" class="form-control" name="contact_business_name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="contact_abn" class="form-label">ABN</label>
+                                <input type="text" class="form-control" name="contact_abn" maxlength="11">
+                            </div>
+                            <div class="mb-3">
+                                <label for="contact_website" class="form-label">Website</label>
+                                <input type="url" class="form-control" name="contact_website">
+                            </div>
+                            <div class="mb-3">
+                                <label for="contact_discipline" class="form-label">Discipline</label>
+                                <input type="text" class="form-control" name="contact_discipline">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Billing Address</label>
+                                <div class="input-group">
+                                    <select class="form-select" name="address_id" id="billing_address_select">
+                                        <option value="">Select Address...</option>
+                                    </select>
+                                    <button type="button" class="btn btn-outline-secondary"
+                                            id="createBillingAddressBtn">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Postal Address</label>
+                                <div class="input-group">
+                                    <select class="form-select" name="postal_address_id" id="postal_address_select">
+                                        <option value="">Select Address...</option>
+                                    </select>
+                                    <button type="button" class="btn btn-outline-secondary" id="createPostalAddressBtn">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Contact</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

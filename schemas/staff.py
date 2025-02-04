@@ -36,7 +36,6 @@ class StaffUpdate(StaffBase):
     staff_role: Optional[StaffRoleEnum] = None
     staff_employment_status: Optional[EmploymentStatusEnum] = None
     staff_hire_date: Optional[date] = None
-    staff_notes: Optional[str] = None
 
 
 class Staff(StaffBase):

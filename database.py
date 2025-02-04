@@ -5,10 +5,18 @@ from config import DATABASE_URL
 from models.base import Base
 
 # Create the SQLAlchemy engine
-engine = create_engine(DATABASE_URL)
+engine = create_engine(
+    DATABASE_URL,
+    echo=True,  # Set to False in production
+    pool_pre_ping=True
+)
 
 # Create a configured "Session" class
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal = sessionmaker(
+    bind=engine,
+    autocommit=False,
+    autoflush=False
+)
 
 
 # Dependency to get a SQLAlchemy session
