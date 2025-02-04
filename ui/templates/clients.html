@@ -1,7 +1,10 @@
-{% extends "base.html" %}
+{% extends "table_base.html" %}
 
 {% block content %}
 <h2>Client List</h2>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#clientModal">
+    <i class="fas fa-plus"></i> Create Client
+</button>
 <div class="table-responsive">
     <table id="data" class="table table-light table-striped table-hover">
         <thead>
@@ -28,11 +31,4 @@
         </tbody>
     </table>
 </div>
-{% block scripts %}
-<script>
-    $(document).ready(function () {
-        $('#data').DataTable();
-    });
-</script>
-{% endblock %}
 {% endblock %}

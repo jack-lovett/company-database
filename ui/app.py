@@ -1,5 +1,5 @@
 # app.py
-from flask import Flask, render_template, g, jsonify
+from flask import Flask, render_template, g
 
 from database import SessionLocal
 from services.address import AddressService
@@ -42,8 +42,6 @@ def projects():
     session = g.database
     project_service = ProjectService()
     projects = project_service.get_enriched_projects(session)
-    clients_service = ClientService()
-
     return render_template('projects.html', projects=projects)
 
 
@@ -69,19 +67,6 @@ def addresses():
     address_service = AddressService()
     enriched_addresses = address_service.get_enriched_addresses(session)
     return render_template("addresses.html", addresses=enriched_addresses)
-
-
-@app.route('/add_project', methods=['POST'])
-def add_project():
-    session = g.database
-    try:
-        print("test")
-
-    except Exception as e:
-        session.rollback()
-        return jsonify({'success': False, 'error': str(e)})
-    finally:
-        session.close()
 
 
 if __name__ == '__main__':
