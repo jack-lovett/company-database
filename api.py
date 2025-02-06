@@ -41,15 +41,28 @@ app.include_router(staff_time.router)
 
 origins = [
     "http://localhost:5000",
+    "http://192.168.15.15:5000",
+    "http://localhost:8080",
+    "http://192.168.15.15:8080",
+    "https://localhost:5000",
+    "https://192.168.15.15:5000",
+    "https://localhost:8080",
+    "https://192.168.15.15:8080"
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.get("/")
+async def main():
+    return {"message": "Welcome to Drawing Works API"}
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8080)

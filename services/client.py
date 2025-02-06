@@ -15,10 +15,20 @@ class ClientService(BaseService):
 
         # Get primary contact details
         primary_contact = contact_service.get_by_id(database, client.primary_contact_id)
+        if client.secondary_contact_id:
+            secondary_contact = contact_service.get_by_id(database, client.secondary_contact_id)
+        else:
+            secondary_contact = None
         if primary_contact:
             client_dict['client_name'] = f"{primary_contact.contact_first_name} {primary_contact.contact_last_name}"
             client_dict['primary_contact_email'] = primary_contact.contact_email
             client_dict['primary_contact_phone'] = primary_contact.contact_phone
+            if secondary_contact:
+                client_dict[
+                    'secondary_contact_name'] = f"{secondary_contact.contact_first_name} {secondary_contact.contact_last_name}"
+                client_dict['secondary_contact_email'] = secondary_contact.contact_email
+                client_dict['secondary_contact_phone'] = secondary_contact.contact_phone
+
         else:
             client_dict['client_name'] = "Unknown Client"
 

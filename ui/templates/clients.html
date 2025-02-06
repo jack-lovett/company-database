@@ -11,9 +11,11 @@
         <tr>
             <th>Client ID</th>
             <th>Primary Contact</th>
+            <th>Secondary Contact</th>
             <th>Email</th>
+            <th>Secondary Contact Email</th>
             <th>Phone</th>
-            <th>Projects Count</th>
+            <th>Secondary Contact Phone</th>
             <th>Creation Date</th>
         </tr>
         </thead>
@@ -22,9 +24,11 @@
         <tr>
             <td>{{ client.client_id }}</td>
             <td>{{ client.client_name }}</td>
+            <td>{{ client.secondary_contact_name }}</td>
             <td>{{ client.primary_contact_email }}</td>
+            <td>{{ client.secondary_contact_email }}</td>
             <td>{{ client.primary_contact_phone }}</td>
-            <td>{{ client.project_count }}</td>
+            <td>{{ client.secondary_contact_phone }}</td>
             <td>{{ client.client_creation_datetime }}</td>
         </tr>
         {% endfor %}

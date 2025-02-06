@@ -25,7 +25,6 @@ class ContactBase(BaseModel):
     contact_email: Optional[str] = None
     contact_business_name: Optional[str] = None
     contact_abn: Optional[str] = None
-    contact_acn: Optional[str] = None
     contact_accounts_email: Optional[str] = None
     contact_website: Optional[str] = None
     contact_discipline: Optional[str] = None

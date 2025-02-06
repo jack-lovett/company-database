@@ -71,3 +71,4 @@ class ProjectDisplay(BaseModel):
     project_storeys: Optional[int] = None
     project_referral_source: Optional[ReferralSourceEnum] = None
     project_payment_basis: Optional[PaymentBasisEnum] = None
+    project_creation_datetime: datetime

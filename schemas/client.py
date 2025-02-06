@@ -26,10 +26,7 @@ class ClientCreate(ClientBase):
 
 
 class ClientUpdate(ClientBase):
-    primary_contact_id: Optional[int] = None
     secondary_contact_id: Optional[int] = None
-    # Probably shouldn't be able to update creation time
-    # client_creation_datetime: Optional[datetime] = None
 
 
 class Client(ClientBase):
@@ -48,3 +45,6 @@ class ClientDisplay(BaseModel):
     client_name: str
     primary_contact_email: str
     primary_contact_phone: str
+    secondary_contact_name: Optional[str] = None
+    secondary_contact_email: Optional[str] = None
+    secondary_contact_phone: Optional[str] = None
