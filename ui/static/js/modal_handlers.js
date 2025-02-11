@@ -39,6 +39,57 @@ const modalState = {
 
 
 $(document).ready(function () {
+
+    // Address import
+
+    let addressQueue = [];
+
+    $('#importAddressForm').submit(function (e) {
+        e.preventDefault();
+        const fileInput = document.getElementById('csvFile');
+        const file = fileInput.files[0];
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            addressQueue = e.target.result.split('\n')
+                .map(line => line.trim())
+                .filter(line => line.length > 0)
+                .reverse(); // Process from newest to oldest
+
+            $('#importAddressesModal').modal('hide');
+            processNextAddress();
+        };
+        reader.readAsText(file);
+    });
+
+    function processNextAddress() {
+        if (addressQueue.length > 0) {
+            const address = addressQueue.pop();
+            const autocomplete = new google.maps.places.AutocompleteService();
+
+            autocomplete.getPlacePredictions({
+                input: address,
+                componentRestrictions: {country: 'au'}
+            }, function (predictions, status) {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    const placesService = new google.maps.places.PlacesService(document.createElement('div'));
+                    placesService.getDetails({
+                        placeId: predictions[0].place_id,
+                        fields: ['address_components', 'geometry']
+                    }, function (place, status) {
+                        if (status === google.maps.places.PlacesServiceStatus.OK) {
+                            modalState.pushModal(null, 'addressModal');
+                            fillInAddress(place);
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+
+    // Google autocomplete
+
     let autocomplete;
 
     const SHORT_NAME_ADDRESS_COMPONENT_TYPES = new Set(['street_number', 'administrative_area_level_1', 'postal_code']);
@@ -163,6 +214,10 @@ $(document).ready(function () {
         modalState.pushModal(null, 'clientModal');
     });
 
+    // openImportModal
+    $('#openImportModal').click(function () {
+        modalState.pushModal(null, 'importAddressesModal');
+    })
 
     $('#projectModal').on('show.bs.modal', function () {
         $.get('http://localhost:8080/projects/next-number', function (data) {
@@ -197,8 +252,13 @@ $(document).ready(function () {
 
 
     // Modal close handlers
-    $('#projectModal, #contactModal, #clientModal, #addressModal').on('hidden.bs.modal', function () {
+    $('#projectModal, #contactModal, #clientModal').on('hidden.bs.modal', function () {
         modalState.popModal();
+    });
+
+    $('#addressModal').on('hidden.bs.modal', function () {
+        modalState.popModal();
+        processNextAddress(); // Process next address after close
     });
 
 
@@ -248,6 +308,7 @@ $(document).ready(function () {
                         }
                     }
                 });
+                processNextAddress(); // Process next address after save
             }
         });
     });
