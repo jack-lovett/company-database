@@ -9,9 +9,15 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="icon" href="../static/images/DW FAVICON.png" type="image/icon type">
+    <link rel="stylesheet" href="../static/css/styles.css">
+
+    <!-- Add before closing </head> tag -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBueipd-IZrgcjCSfBe2jWFoBVRtJbpai0&loading=async&libraries=places"></script>
+
 
     <!-- Optional CSS -->
     {% block additional_css %}{% endblock %}
+    {% block head %}{% endblock %}
 </head>
 <body>
 <main>
@@ -23,7 +29,7 @@
     </div>
 
 </main>
-{% block modals %}{% endblock %}
+
 <!-- Core JavaScript -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -34,6 +40,8 @@
 <script type="text/javascript" charset="utf8"
         src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
 {% block scripts %}{% endblock %}
+{% block modals %}{% endblock %}
+
 </body>
 
 
