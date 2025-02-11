@@ -2,28 +2,47 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from routes import (
-    building_class_routes
+from app.routes import (
+    project_routes,
+    client_routes,
+    contact_routes,
+    address_routes,
+    budget_routes,
+    building_class_routes,
+    call_log_routes,
+    contractor_routes,
+    contractor_type_routes,
+    note_routes,
+    project_has_contractor_routes,
+    project_is_building_class_routes,
+    staff_routes,
+    staff_project_routes,
+    staff_time_routes
 )
 
 app = FastAPI()
 
-# Include all routers
-app.include_router(project.router)
-app.include_router(client.router)
-app.include_router(contact.router)
-app.include_router(address.router)
-app.include_router(budget.router)
-app.include_router(building_class_routes.router)
-app.include_router(call_log.router)
-app.include_router(contractor.router)
-app.include_router(contractor_type.router)
-app.include_router(note.router)
-app.include_router(project_has_contractor.router)
-app.include_router(project_is_building_class.router)
-app.include_router(staff.router)
-app.include_router(staff_project.router)
-app.include_router(staff_time.router)
+# Include all routers efficiently
+routers = [
+    project_routes,
+    client_routes,
+    contact_routes,
+    address_routes,
+    budget_routes,
+    building_class_routes,
+    call_log_routes,
+    contractor_routes,
+    contractor_type_routes,
+    note_routes,
+    project_has_contractor_routes,
+    project_is_building_class_routes,
+    staff_routes,
+    staff_project_routes,
+    staff_time_routes
+]
+
+for router in routers:
+    app.include_router(router.router)
 
 origins = [
     "http://localhost:5000",
@@ -51,4 +70,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8080)
+    uvicorn.run(app, host="localhost", port=8080)
