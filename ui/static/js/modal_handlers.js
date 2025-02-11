@@ -96,6 +96,11 @@ $(document).ready(function () {
         modalState.pushModal(null, 'projectModal');
     });
 
+    $('#projectModal').on('show.bs.modal', function () {
+        $.get('http://localhost:8080/projects/next-number', function (data) {
+            $('#project_number_preview').val(data.project_number);
+        });
+    });
 
     $('#createClientBtn').click(function () {
         modalState.pushModal('projectModal', 'clientModal');
