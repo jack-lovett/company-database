@@ -1,4 +1,3 @@
-from sqlalchemy.orm import Session
 import random
 from datetime import datetime
 
@@ -6,8 +5,9 @@ from faker import Faker
 from sqlalchemy.orm import Session
 
 from database import get_database
-from models import Client, Contact, Address, Project, ContractorType, Contractor, ProjectHasContractor, \
+from models import Client, Contact, Address, ContractorType, Contractor, ProjectHasContractor, \
     ProjectIsBuildingClass, Budget, BuildingClass, CallLog, StaffTime, StaffProject, Note, Staff
+from services.project import ProjectService
 
 fake = Faker()
 
@@ -73,29 +73,31 @@ def create_clients(database: Session, contacts: list):
 
 
 def create_projects(database: Session, clients: list, addresses: list):
-    """Generate and insert test project data."""
+    """Generate and insert test project data using ProjectService."""
+    project_service = ProjectService()
     project_statuses = ['lead', 'job', 'completed', 'no_sale']
     project_referral_sources = ['google', 'referral', 'repeat_client', 'jkc', 'smce', 'word_of_mouth', 'website']
     project_payment_bases = ['lump_sum', 'hourly_rate']
 
-    projects = [
-        Project(
-            client_id=client.client_id,
-            address_id=fake.random_element(addresses).address_id,
-            project_status=fake.random_element(project_statuses),
-            project_description=fake.text(),
-            project_initial_inquiry_date=fake.date_this_decade(),
-            project_start_date=fake.date_this_year(),
-            project_end_date=fake.date_this_year(),
-            project_storeys=random.randint(1, 3),  # Assuming a random number of storeys
-            project_referral_source=fake.random_element(project_referral_sources),
-            project_payment_basis=fake.random_element(project_payment_bases),
-            project_creation_datetime=datetime.now()
-        )
-        for client in clients
-    ]
-    database.add_all(projects)
-    database.commit()
+    projects = []
+    for client in clients:
+        project_dict = {
+            'client_id': client.client_id,
+            'address_id': fake.random_element(addresses).address_id,
+            'project_status': fake.random_element(project_statuses),
+            'project_description': fake.text(),
+            'project_initial_inquiry_date': fake.date_this_decade(),
+            'project_start_date': fake.date_this_year(),
+            'project_end_date': fake.date_this_year(),
+            'project_storeys': random.randint(1, 3),
+            'project_referral_source': fake.random_element(project_referral_sources),
+            'project_payment_basis': fake.random_element(project_payment_bases),
+            'project_creation_datetime': datetime.now()
+        }
+
+        created_project = project_service.create(database, project_dict)
+        projects.append(created_project)
+
     return projects
 
 

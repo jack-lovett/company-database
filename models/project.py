@@ -8,6 +8,7 @@ class Project(Base):
     __tablename__ = "project"
 
     project_id = Column(Integer, primary_key=True, autoincrement=True)
+    project_number = Column(Integer, unique=True, nullable=False)
     client_id = Column(Integer, ForeignKey('client.client_id'), nullable=False)
     address_id = Column(Integer, ForeignKey('address.address_id'), nullable=False)
     project_status = Column(Enum('lead', 'job', 'completed', 'no_sale', name='project_status_enum'), nullable=False)

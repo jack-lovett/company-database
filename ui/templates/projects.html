@@ -9,7 +9,7 @@
     <table id="data" class="table table-light table-striped table-hover w-100">
         <thead>
         <tr>
-            <th>Project ID</th>
+            <th>Project Number</th>
             <th>Client Name</th>
             <th>Project Address</th>
             <th>Status</th>
@@ -26,7 +26,7 @@
         <tbody>
         {% for project in projects %}
         <tr>
-            <td>{{ project.project_id }}</td>
+            <td>{{ project.project_number }}</td>
             <td>{{ project.client_name }}</td>
             <td>{{ project.full_address }}</td>
             <td>{{ project.project_status }}</td>
@@ -58,7 +58,7 @@
             pageLength: 10,     // Show 10 entries per page
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], // Pagination options
             columns: [
-                {data: "project_id"},
+                {data: "project_number"},
                 {data: "client_name"},
                 {data: "full_address"},
                 {data: "project_status"},

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from crud.project import CRUDProject
 from services.address import AddressService
 from services.base import BaseService
@@ -40,3 +42,36 @@ class ProjectService(BaseService):
         """Retrieve all projects with enriched values."""
         projects = self.get_all(database)
         return [self.enrich_project(database, project) for project in projects]
+
+    def generate_project_number(self, database) -> int:
+        """Generate a unique project number based on year and sequence.
+        Format: YYYY###, e.g., 2025001, 2025002, etc."""
+        current_year = datetime.now().year
+
+        # Get all projects
+        all_projects = self.crud.get_all(database)
+        if not all_projects:
+            # First project ever
+            return current_year * 1000 + 1
+
+        # Filter projects for current year
+        current_year_projects = [
+            project for project in all_projects
+            if project.project_number // 1000 == current_year
+        ]
+
+        if not current_year_projects:
+            # First project of the year
+            return current_year * 1000 + 1
+
+        # Get highest number for current year and increment
+        highest_number = max(project.project_number for project in current_year_projects)
+        return highest_number + 1
+
+    def create(self, database, data):
+        """Create a new project with an automatically generated project number."""
+        if isinstance(data, dict):
+            data['project_number'] = self.generate_project_number(database)
+        else:
+            data.project_number = self.generate_project_number(database)
+        return super().create(database, data)

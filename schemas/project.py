@@ -41,7 +41,7 @@ class ProjectBase(BaseModel):
 
 
 class ProjectCreate(ProjectBase):
-    pass  # No additional fields for creation
+    project_number: int
 
 
 class ProjectUpdate(ProjectBase):
@@ -60,7 +60,7 @@ class Project(ProjectBase):
 
 
 class ProjectDisplay(BaseModel):
-    project_id: int
+    project_number: int
     full_address: str
     client_name: str
     project_status: ProjectStatusEnum
