@@ -16,6 +16,7 @@
 <!-- Include Address Import Modal -->
 {% include "modals/import_address_modal.html" %}
 {% endblock %}
+
 {% block additional_css %}
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
 {% endblock %}
@@ -23,10 +24,7 @@
 {% block additional_scripts %}
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-
-
-<!-- Include Your Custom Modals JavaScript -->
-<script src="{{ url_for('static', filename='js/modal_handlers.js') }}"></script>
 {% block table_scripts %}
+
 {% endblock %}
 {% endblock %}
