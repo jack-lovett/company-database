@@ -2,11 +2,11 @@
 
 {% block content %}
 <h2>Client List</h2>
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#clientModal">
-    <i class="fas fa-plus"></i> Create Client
+<button type="button" class="btn btn-primary" id="openClientModal">
+    Create Client
 </button>
 <div class="table-responsive">
-    <table id="data" class="table table-light table-striped table-hover">
+    <table id="data" class="table table-light table-striped table-hover w-100">
         <thead>
         <tr>
             <th>Client ID</th>
@@ -35,4 +35,37 @@
         </tbody>
     </table>
 </div>
+{% block table_scripts %}
+<script>
+    $(document).ready(function () {
+        let clientsTable = $('#data').DataTable({
+            processing: true,
+            serverSide: false,
+            autoWidth: true,
+            ajax: {
+                url: "http://localhost:8080/clients",
+                type: "GET",
+                dataSrc: ""
+            },
+            pageLength: 10,
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            columns: [
+                {data: "client_id"},
+                {data: "client_name"},
+                {data: "secondary_contact_name"},
+                {data: "primary_contact_email"},
+                {data: "secondary_contact_email"},
+                {data: "primary_contact_phone"},
+                {data: "secondary_contact_phone"},
+                {
+                    data: "client_creation_datetime",
+                    render: function (data) {
+                        return data ? new Date(data).toLocaleString() : 'N/A';
+                    }
+                }
+            ]
+        });
+    });
+</script>
+{% endblock %}
 {% endblock %}

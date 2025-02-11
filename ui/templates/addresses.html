@@ -2,11 +2,11 @@
 
 {% block content %}
 <h2>Address List</h2>
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addressModal">
-    <i class="fas fa-plus"></i> Create Address
+<button type="button" class="btn btn-primary" id="openAddressModal">
+    Create Address
 </button>
 <div class="table-responsive">
-    <table id="data" class="table table-light table-striped table-hover">
+    <table id="data" class="table table-light table-striped table-hover w-100">
         <thead>
         <tr>
             <th>Address ID</th>
@@ -17,9 +17,6 @@
             <th>Postal Code</th>
             <th>Country</th>
             <th>Type</th>
-            <th>Billing Contacts</th>
-            <th>Postal Contacts</th>
-            <th>Projects</th>
         </tr>
         </thead>
         <tbody>
@@ -33,15 +30,37 @@
             <td>{{ address.address_postal_code }}</td>
             <td>{{ address.address_country }}</td>
             <td>{{ address.address_type }}</td>
-            <td>{{ address.billing_contacts | join(', ') or 'N/A' }}</td>
-            <td>{{ address.postal_contacts | join(', ') or 'N/A' }}</td>
-            <td>{% for project in address.projects %}
-                <div>{{ project.project_id }} - {{ project.project_status }}</div>
-                {% endfor %}
-            </td>
         </tr>
         {% endfor %}
         </tbody>
     </table>
 </div>
+{% block table_scripts %}
+<script>
+    $(document).ready(function () {
+        let addressesTable = $('#data').DataTable({
+            processing: true,
+            serverSide: false,
+            autoWidth: true,
+            ajax: {
+                url: "http://localhost:8080/addresses",
+                type: "GET",
+                dataSrc: ""
+            },
+            pageLength: 10,
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            columns: [
+                {data: "address_id"},
+                {data: "address_street"},
+                {data: "address_suburb"},
+                {data: "address_city"},
+                {data: "address_state"},
+                {data: "address_postal_code"},
+                {data: "address_country"},
+                {data: "address_type"}
+            ]
+        });
+    });
+</script>
+{% endblock %}
 {% endblock %}

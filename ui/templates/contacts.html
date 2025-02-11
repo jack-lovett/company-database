@@ -2,11 +2,11 @@
 
 {% block content %}
 <h2>Contact List</h2>
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactModal">
-    <i class="fas fa-plus"></i> Create Contact
+<button type="button" class="btn btn-primary" id="openContactModal">
+    Create Contact
 </button>
 <div class="table-responsive">
-    <table id="data" class="table table-light table-striped table-hover">
+    <table id="data" class="table table-light table-striped table-hover w-100">
         <thead>
         <tr>
             <th>Contact ID</th>
@@ -39,4 +39,39 @@
         </tbody>
     </table>
 </div>
+{% block table_scripts %}
+<script>
+    $(document).ready(function () {
+        let contactsTable = $('#data').DataTable({
+            processing: true,
+            serverSide: false,
+            autoWidth: true,
+            ajax: {
+                url: "http://localhost:8080/contacts",
+                type: "GET",
+                dataSrc: ""
+            },
+            pageLength: 10,
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            columns: [
+                {data: "contact_id"},
+                {data: "contact_first_name"},
+                {data: "contact_last_name"},
+                {data: "contact_phone"},
+                {data: "contact_email"},
+                {data: "contact_business_name"},
+                {data: "contact_abn"},
+                {data: "billing_address"},
+                {data: "postal_address"},
+                {
+                    data: "contact_creation_datetime",
+                    render: function (data) {
+                        return data ? new Date(data).toLocaleString() : 'N/A';
+                    }
+                }
+            ]
+        });
+    });
+</script>
+{% endblock %}
 {% endblock %}
