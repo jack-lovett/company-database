@@ -1,7 +1,7 @@
 import importlib
 import os
 
-from crud.base import CRUDBase
+from crud.base_crud import CRUDBase
 
 
 # Dynamically create a CRUD class for each model

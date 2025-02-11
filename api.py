@@ -3,21 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from routes import (
-    project,
-    client,
-    contact,
-    address,
-    building_class,
-    call_log,
-    contractor,
-    contractor_type,
-    note,
-    project_has_contractor,
-    project_is_building_class,
-    staff,
-    staff_project,
-    staff_time,
-    budget
+    building_class_routes
 )
 
 app = FastAPI()
@@ -28,7 +14,7 @@ app.include_router(client.router)
 app.include_router(contact.router)
 app.include_router(address.router)
 app.include_router(budget.router)
-app.include_router(building_class.router)
+app.include_router(building_class_routes.router)
 app.include_router(call_log.router)
 app.include_router(contractor.router)
 app.include_router(contractor_type.router)

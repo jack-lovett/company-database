@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from database import get_database
 from models import Client, Contact, Address, ContractorType, Contractor, ProjectHasContractor, \
     ProjectIsBuildingClass, Budget, BuildingClass, CallLog, StaffTime, StaffProject, Note, Staff
-from services.project import ProjectService
+from services.project_service import ProjectService
 
 fake = Faker()
 

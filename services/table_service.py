@@ -51,7 +51,7 @@ class GenericTableService:
 
     def get_model_by_table_name(self, table_name):
         """Dynamically retrieve the model class by table name."""
-        from models.base import Base
+        from models.base_model import Base
         for cls in Base.__subclasses__():
             if cls.__tablename__ == table_name:
                 return cls

@@ -2,10 +2,10 @@
 from flask import Flask, render_template, g
 
 from database import SessionLocal
-from services.address import AddressService
-from services.client import ClientService
-from services.contact import ContactService
-from services.project import ProjectService
+from services.address_service import AddressService
+from services.client_service import ClientService
+from services.contact_service import ContactService
+from services.project_service import ProjectService
 
 app = Flask(__name__)
 
