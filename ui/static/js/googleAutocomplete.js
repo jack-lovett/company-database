@@ -23,7 +23,7 @@ export async function initAutocomplete() {
 }
 
 
-function fillInAddress(place) {
+export function fillInAddress(place) {
     function getComponentName(componentType) {
         for (const component of place.address_components || []) {
             if (component.types[0] === componentType) {

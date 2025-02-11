@@ -2,12 +2,14 @@ export const modalState = {
     modalStack: [],
     lastClickedAddressBtn: null,
     lastClickedContactBtn: null,
+    importMode: false,
 
     clearAllForms: function () {
         $('#addressForm')[0].reset();
         $('#contactForm')[0].reset();
         $('#clientForm')[0].reset();
         $('#projectForm')[0].reset();
+        $('#importAddressForm')[0].reset();
     },
 
     pushModal: function (fromModalId, toModalId) {
@@ -27,6 +29,7 @@ export const modalState = {
 
         if (isClosingLastModal) {
             this.modalStack.pop();
+            this.importMode = false;
             modalState.clearAllForms();
         } else if (!isOpeningNewModal) {
             const previousModal = this.modalStack[this.modalStack.length - 2];

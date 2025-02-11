@@ -1,44 +1,85 @@
-let addressQueue = [];
+import {fillInAddress} from "./googleAutocomplete.js";
 
-$('#importAddressForm').submit(function (e) {
-    e.preventDefault();
-    const fileInput = document.getElementById('csvFile');
-    const file = fileInput.files[0];
+export let addressQueue = [];
+export let importStats = {
+    total: 0,
+    accepted: 0,
+    skipped: 0,
+    current: 0
+};
 
-    const reader = new FileReader();
-    reader.onload = function (e) {
-        addressQueue = e.target.result.split('\n')
-            .map(line => line.trim())
-            .filter(line => line.length > 0)
-            .reverse(); // Process from newest to oldest
+export function setAddressQueue(addresses) {
+    addressQueue = addresses;
+}
 
-        $('#importAddressesModal').modal('hide');
-        processNextAddress();
-    };
-    reader.readAsText(file);
-});
+export function showPreviewStage() {
+    $('#importStage').hide();
+    $('#previewStage').show();
+    $('#totalRowsCount').text(importStats.total);
 
-function processNextAddress() {
+    // Populate preview table
+    const previewTable = $('#previewTable tbody');
+    previewTable.empty();
+
+    addressQueue.forEach(address => {
+        previewTable.append(`
+            <tr>
+                <td>${address}</td>
+                <td>Pending</td>
+                <td><span class="badge bg-secondary">Waiting</span></td>
+            </tr>
+        `);
+    });
+}
+
+export function updateImportProgress() {
+    importStats.current++;
+    const progress = (importStats.current / importStats.total) * 100;
+    $('#importProgress').css('width', `${progress}%`);
+    $('#currentProgress').text(`Reviewing address ${importStats.current} of ${importStats.total}`);
+    $('#importStats').text(`Accepted: ${importStats.accepted} | Skipped: ${importStats.skipped}`);
+}
+
+export function processNextAddress() {
     if (addressQueue.length > 0) {
-        const address = addressQueue.pop();
-        const autocomplete = new google.maps.places.AutocompleteService();
+        const address = addressQueue[addressQueue.length - 1];
+        updateImportProgress();
 
+        const autocomplete = new google.maps.places.AutocompleteService();
         autocomplete.getPlacePredictions({
             input: address,
             componentRestrictions: {country: 'au'}
-        }, function (predictions, status) {
+        }, handlePlacePredictions);
+    } else {
+        showImportSummary();
+    }
+}
+
+function handlePlacePredictions(predictions, status) {
+    if (status === google.maps.places.PlacesServiceStatus.OK) {
+        const originalAddress = addressQueue[addressQueue.length - 1];
+
+        const placesService = new google.maps.places.PlacesService(document.createElement('div'));
+        placesService.getDetails({
+            placeId: predictions[0].place_id,
+            fields: ['address_components', 'geometry', 'formatted_address']
+        }, function (place, status) {
             if (status === google.maps.places.PlacesServiceStatus.OK) {
-                const placesService = new google.maps.places.PlacesService(document.createElement('div'));
-                placesService.getDetails({
-                    placeId: predictions[0].place_id,
-                    fields: ['address_components', 'geometry']
-                }, function (place, status) {
-                    if (status === google.maps.places.PlacesServiceStatus.OK) {
-                        modalState.pushModal(null, 'addressModal');
-                        fillInAddress(place);
-                    }
-                });
+                fillInAddress(place);
+                $('#currentAddressPreview').html(`
+                    <div class="alert alert-info">
+                        <strong>Currently Processing:</strong><br>
+                        <p class="mt-2">${originalAddress}</p>
+                        <strong>Google Maps Suggestion:</strong><br>
+                        <p class="mt-2">${place.formatted_address}</p>
+                    </div>
+                `);
             }
         });
     }
+}
+
+export function showImportSummary() {
+    alert(`Import Complete!\nTotal Processed: ${importStats.total}\nAccepted: ${importStats.accepted}\nSkipped: ${importStats.skipped}`);
+    $('.modal').modal('hide');
 }
