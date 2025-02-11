@@ -52,3 +52,19 @@ class Contact(ContactBase):
 
     class Config:
         from_attributes = True
+
+
+class ContactDisplay(ContactBase):
+    contact_id: int
+    contact_first_name: str
+    contact_last_name: str
+    contact_phone: Optional[str] = None
+    contact_email: Optional[str] = None
+    contact_business_name: Optional[str] = None
+    contact_abn: Optional[str] = None
+    contact_accounts_email: Optional[str] = None
+    contact_website: Optional[str] = None
+    contact_discipline: Optional[str] = None
+    billing_address: str
+    postal_address: str
+    contact_creation_datetime: datetime
