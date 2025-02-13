@@ -2,35 +2,31 @@ export const modalState = {
     modalStack: [],
     lastClickedAddressBtn: null,
     lastClickedContactBtn: null,
-    importMode: false,
+    stackSizeAfterOpen: 0,
 
-    clearAllForms: function () {
-        $('#addressForm')[0].reset();
-        $('#contactForm')[0].reset();
-        $('#clientForm')[0].reset();
-        $('#projectForm')[0].reset();
-        $('#importAddressForm')[0].reset();
+    clearAllForms() {
+        ['addressForm', 'contactForm', 'clientForm', 'projectForm'].forEach(formId => {
+            $(`#${formId}`)[0].reset();
+        });
     },
 
-    pushModal: function (fromModalId, toModalId) {
+    pushModal(fromModalId, toModalId) {
         this.stackSizeAfterOpen = this.modalStack.length;
         this.modalStack.push(toModalId);
 
         if (fromModalId) {
             $(`#${fromModalId}`).modal('hide');
         }
-
         $(`#${toModalId}`).modal('show');
     },
 
-    popModal: function () {
+    popModal() {
         const isClosingLastModal = !this.stackSizeAfterOpen;
         const isOpeningNewModal = this.modalStack.length > this.stackSizeAfterOpen;
 
         if (isClosingLastModal) {
             this.modalStack.pop();
-            this.importMode = false;
-            modalState.clearAllForms();
+            this.clearAllForms();
         } else if (!isOpeningNewModal) {
             const previousModal = this.modalStack[this.modalStack.length - 2];
             $(`#${previousModal}`).modal('show');
