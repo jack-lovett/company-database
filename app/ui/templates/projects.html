@@ -26,18 +26,18 @@
         <tbody>
         {% for project in projects %}
         <tr>
-            <td>{{ project.project_number }}</td>
+            <td>{{ project.number }}</td>
             <td>{{ project.client_name }}</td>
             <td>{{ project.full_address }}</td>
-            <td>{{ project.project_status }}</td>
-            <td>{{ project.project_description or 'N/A' }}</td>
-            <td>{{ project.project_initial_inquiry_date }}</td>
-            <td>{{ project.project_start_date or 'N/A' }}</td>
-            <td>{{ project.project_end_date or 'N/A' }}</td>
-            <td>{{ project.project_storeys or 'N/A' }}</td>
-            <td>{{ project.project_referral_source or 'N/A' }}</td>
-            <td>{{ project.project_payment_basis or 'N/A' }}</td>
-            <td>{{ project.project_creation_datetime }}</td>
+            <td>{{ project.status }}</td>
+            <td>{{ project.description or 'N/A' }}</td>
+            <td>{{ project.initial_inquiry_date }}</td>
+            <td>{{ project.start_date or 'N/A' }}</td>
+            <td>{{ project.end_date or 'N/A' }}</td>
+            <td>{{ project.storeys or 'N/A' }}</td>
+            <td>{{ project.referral_source or 'N/A' }}</td>
+            <td>{{ project.payment_basis or 'N/A' }}</td>
+            <td>{{ project.creation_datetime }}</td>
         </tr>
         {% endfor %}
         </tbody>
@@ -59,19 +59,19 @@
             pageLength: 10,     // Show 10 entries per page
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], // Pagination options
             columns: [
-                {data: "project_number"},
+                {data: "number"},
                 {data: "client_name"},
                 {data: "full_address"},
-                {data: "project_status"},
-                {data: "project_description"},
-                {data: "project_initial_inquiry_date"},
-                {data: "project_start_date"},
-                {data: "project_end_date"},
-                {data: "project_storeys"},
-                {data: "project_referral_source"},
-                {data: "project_payment_basis"},
+                {data: "status"},
+                {data: "description"},
+                {data: "initial_inquiry_date"},
+                {data: "start_date"},
+                {data: "end_date"},
+                {data: "storeys"},
+                {data: "referral_source"},
+                {data: "payment_basis"},
                 {
-                    data: "project_creation_datetime",
+                    data: "creation_datetime",
                     render: function (data) {
                         return data ? new Date(data).toLocaleString() : 'N/A';
                     }

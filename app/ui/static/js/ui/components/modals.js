@@ -31,22 +31,22 @@ export function initModalHandlers() {
         const clients = await API.fetchClients();
 
         $('#project_number_preview').val(nextNumber["project_number"]);
-        await populateSelect('project_address_select', addresses, 'address_id', ['address_street', 'address_suburb']);
-        await populateSelect('client_select', clients, 'client_id', ['client_name']);
+        await populateSelect('project_address_select', addresses, 'id', ['street', 'suburb']);
+        await populateSelect('client_select', clients, 'id', ['name']);
 
     });
 
     $('#clientModal').on('show.bs.modal', async () => {
         const contacts = await API.fetchContacts();
-        await populateSelect('primary_contact_select', contacts, 'contact_id', ['contact_first_name', 'contact_last_name']);
-        await populateSelect('secondary_contact_select', contacts, 'contact_id', ['contact_first_name', 'contact_last_name']);
+        await populateSelect('primary_contact_select', contacts, 'id', ['first_name', 'last_name']);
+        await populateSelect('secondary_contact_select', contacts, 'id', ['first_name', 'last_name']);
     });
 
 
     $('#contactModal').on('show.bs.modal', async () => {
         const addresses = await API.fetchAddresses();
-        await populateSelect('billing_address_select', addresses, 'address_id', ['address_street', 'address_suburb']);
-        await populateSelect('postal_address_select', addresses, 'address_id', ['address_street', 'address_suburb']);
+        await populateSelect('billing_address_select', addresses, 'id', ['street', 'suburb']);
+        await populateSelect('postal_address_select', addresses, 'id', ['street', 'suburb']);
     });
 
 

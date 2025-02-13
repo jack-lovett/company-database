@@ -16,13 +16,13 @@ def create_addresses(database: Session, number_of_records: int):
     """Generate and insert test address data."""
     addresses = [
         Address(
-            address_street=fake.street_address(),
-            address_suburb=fake.city(),
-            address_city=fake.city(),
-            address_state=fake.state(),
-            address_postal_code="3433",
-            address_country=fake.country(),
-            address_type=fake.word(
+            street=fake.street_address(),
+            suburb=fake.city(),
+            city=fake.city(),
+            state=fake.state(),
+            postal_code="3433",
+            country=fake.country(),
+            type=fake.word(
                 ext_word_list=["billing_address", "postal_address", "shipping_address", "office_address"])
         )
         for _ in range(number_of_records)
@@ -36,17 +36,17 @@ def create_contacts(database: Session, number_of_records: int, addresses: list):
     """Generate and insert test contact data."""
     contacts = [
         Contact(
-            address_id=fake.random_element(addresses).address_id,
-            postal_address_id=fake.random_element(addresses).address_id,
-            contact_first_name=fake.first_name(),
-            contact_last_name=fake.last_name(),
-            contact_phone="0438910998",
-            contact_email=fake.email(),
-            contact_business_name=fake.company(),
-            contact_abn=str(fake.random_number(11)),
-            contact_accounts_email=fake.email(),
-            contact_website=fake.url(),
-            contact_discipline=fake.company()
+            address_id=fake.random_element(addresses).id,
+            postal_address_id=fake.random_element(addresses).id,
+            first_name=fake.first_name(),
+            last_name=fake.last_name(),
+            phone="0438910998",
+            email=fake.email(),
+            business_name=fake.company(),
+            abn=str(fake.random_number(11)),
+            accounts_email=fake.email(),
+            website=fake.url(),
+            discipline=fake.company()
         )
         for _ in range(number_of_records)
     ]
@@ -60,11 +60,11 @@ def create_clients(database: Session, contacts: list):
     clients = []
 
     for contact in contacts:
-        secondary_contact = random.choice([c for c in contacts if c.contact_id != contact.contact_id])
+        secondary_contact = random.choice([c for c in contacts if c.id != contact.id])
 
         clients.append(Client(
-            primary_contact_id=contact.contact_id,
-            secondary_contact_id=secondary_contact.contact_id
+            primary_contact_id=contact.id,
+            secondary_contact_id=secondary_contact.id
         ))
 
     database.add_all(clients)
@@ -82,17 +82,17 @@ def create_projects(database: Session, clients: list, addresses: list):
     projects = []
     for client in clients:
         project_dict = {
-            'client_id': client.client_id,
-            'address_id': fake.random_element(addresses).address_id,
-            'project_status': fake.random_element(project_statuses),
-            'project_description': fake.text(),
-            'project_initial_inquiry_date': fake.date_this_decade(),
-            'project_start_date': fake.date_this_year(),
-            'project_end_date': fake.date_this_year(),
-            'project_storeys': random.randint(1, 3),
-            'project_referral_source': fake.random_element(project_referral_sources),
-            'project_payment_basis': fake.random_element(project_payment_bases),
-            'project_creation_datetime': datetime.now()
+            'client_id': client.id,
+            'address_id': fake.random_element(addresses).id,
+            'status': fake.random_element(project_statuses),
+            'description': fake.text(),
+            'initial_inquiry_date': fake.date_this_decade(),
+            'start_date': fake.date_this_year(),
+            'end_date': fake.date_this_year(),
+            'storeys': random.randint(1, 3),
+            'referral_source': fake.random_element(project_referral_sources),
+            'payment_basis': fake.random_element(project_payment_bases),
+            'creation_datetime': datetime.now()
         }
 
         created_project = project_service.create(database, project_dict)
@@ -104,10 +104,10 @@ def create_projects(database: Session, clients: list, addresses: list):
 def create_contractor_types(database: Session):
     """Generate and insert contractor types."""
     contractor_types = [
-        ContractorType(contractor_type="Electrician", contractor_type_description="Electrical work"),
-        ContractorType(contractor_type="Plumber", contractor_type_description="Plumbing services"),
-        ContractorType(contractor_type="Carpenter", contractor_type_description="Woodworking and carpentry"),
-        ContractorType(contractor_type="Builder", contractor_type_description="General construction")
+        ContractorType(type="Electrician", description="Electrical work"),
+        ContractorType(type="Plumber", description="Plumbing services"),
+        ContractorType(type="Carpenter", description="Woodworking and carpentry"),
+        ContractorType(type="Builder", description="General construction")
     ]
     database.add_all(contractor_types)
     database.commit()
@@ -118,7 +118,7 @@ def create_contractors(database: Session, number_of_records: int):
     """Generate and insert contractor data."""
     contractors = [
         Contractor(
-            contact_id=fake.random_element([contact.contact_id for contact in database.query(Contact).all()])
+            contact_id=fake.random_element([contact.id for contact in database.query(Contact).all()])
         )
         for _ in range(number_of_records)
     ]
@@ -129,13 +129,13 @@ def create_contractors(database: Session, number_of_records: int):
 
 def create_project_has_contractors(database: Session, contractors: list, projects: list, contractor_types: list):
     """Associate contractors with projects."""
-    project_ids = [project.project_id for project in projects]
+    project_ids = [project.id for project in projects]
     for contractor in contractors:
         project_id = fake.random_element(project_ids)  # Randomly pick a project
-        contractor_type_id = fake.random_element([ct.contractor_type_id for ct in contractor_types])
+        contractor_type_id = fake.random_element([ct.id for ct in contractor_types])
         project_has_contractor = ProjectHasContractor(
             project_id=project_id,
-            contractor_id=contractor.contractor_id,
+            contractor_id=contractor.id,
             contractor_type_id=contractor_type_id
         )
         database.add(project_has_contractor)
@@ -146,10 +146,10 @@ def create_notes(database: Session, number_of_records: int, projects: list, clie
     """Generate and insert notes for projects."""
     notes = [
         Note(
-            project_id=fake.random_element([project.project_id for project in projects]),
-            client_id=fake.random_element([client.client_id for client in clients]),
-            note_type=fake.random_element(['comment', 'reminder', 'follow_up']),
-            note_content=fake.text(max_nb_chars=200),
+            project_id=fake.random_element([project.id for project in projects]),
+            client_id=fake.random_element([client.id for client in clients]),
+            type=fake.random_element(['comment', 'reminder', 'follow_up']),
+            content=fake.text(max_nb_chars=200),
         )
         for _ in range(number_of_records)
     ]
@@ -161,8 +161,8 @@ def create_building_classes(database: Session, number_of_records: int):
     """Generate and insert building class data."""
     building_classes = [
         BuildingClass(
-            building_class_code=fake.state_abbr(),  # Two-letter code for building class
-            building_class_description=fake.text(max_nb_chars=255)
+            code=fake.state_abbr(),  # Two-letter code for building class
+            description=fake.text(max_nb_chars=255)
         )
         for _ in range(number_of_records)
     ]
@@ -173,14 +173,14 @@ def create_building_classes(database: Session, number_of_records: int):
 
 def create_project_is_building_class(database: Session, building_classes: list, projects: list):
     """Associate building classes with projects."""
-    project_ids = [project.project_id for project in projects]
+    project_ids = [project.id for project in projects]
     for building_class in building_classes:
         num_associations = random.randint(1, 5)  # Random number of associations
         selected_projects = random.sample(project_ids, num_associations)
         associations = [
             ProjectIsBuildingClass(
-                building_class_building_class_id=building_class.building_class_id,
-                project_project_id=project_id
+                building_class_id=building_class.id,
+                project_id=project_id
             )
             for project_id in selected_projects
         ]
@@ -195,11 +195,11 @@ def create_staff(database: Session, number_of_records: int, contacts: list):
 
     staff_members = [
         Staff(
-            contact_id=fake.random_element(contacts).contact_id,
-            staff_role=fake.random_element(staff_roles),
-            staff_employment_status=fake.random_element(employment_statuses),
-            staff_hire_date=fake.date_this_decade(),
-            staff_notes=fake.text(max_nb_chars=200)
+            contact_id=fake.random_element(contacts).id,
+            role=fake.random_element(staff_roles),
+            employment_status=fake.random_element(employment_statuses),
+            hire_date=fake.date_this_decade(),
+            notes=fake.text(max_nb_chars=200)
         )
         for _ in range(number_of_records)
     ]
@@ -212,10 +212,10 @@ def create_staff_time(database: Session, number_of_records: int, staff: list, pr
     """Generate and insert staff time logs."""
     staff_times = [
         StaffTime(
-            staff_id=fake.random_element(staff).staff_id,
-            project_id=fake.random_element(projects).project_id if random.choice([True, False]) else None,
-            staff_time_description=fake.sentence(),
-            staff_time_hours=random.randint(1, 8)
+            staff_id=fake.random_element(staff).id,
+            project_id=fake.random_element(projects).id if random.choice([True, False]) else None,
+            description=fake.sentence(),
+            hours=random.randint(1, 8)
         )
         for _ in range(number_of_records)
     ]
@@ -231,8 +231,8 @@ def create_staff_project(database: Session, staff: list, projects: list):
     for _ in range(len(staff)):
         staff_member = fake.random_element(staff)
         project = fake.random_element(projects)
-        staff_id = staff_member.staff_id
-        project_id = project.project_id
+        staff_id = staff_member.id
+        project_id = project.id
 
         # Only add the assignment if it's not already in the set
         if (staff_id, project_id) not in assignments:
@@ -256,13 +256,13 @@ def create_call_logs(database: Session, number_of_records: int, clients: list, s
 
     call_logs = [
         CallLog(
-            client_id=fake.random_element(clients).client_id,
-            staff_id=fake.random_element(staff).staff_id,
-            project_id=fake.random_element(projects).project_id if random.choice([True, False]) else None,
-            call_log_type=fake.random_element(call_types),
-            call_log_status=fake.random_element(call_statuses),
-            call_log_datetime=fake.date_time_this_year(),
-            call_log_description=fake.text(max_nb_chars=255)
+            client_id=fake.random_element(clients).id,
+            staff_id=fake.random_element(staff).id,
+            project_id=fake.random_element(projects).id if random.choice([True, False]) else None,
+            type=fake.random_element(call_types),
+            status=fake.random_element(call_statuses),
+            datetime=fake.date_time_this_year(),
+            description=fake.text(max_nb_chars=255)
         )
         for _ in range(number_of_records)
     ]
@@ -277,12 +277,12 @@ def create_budgets(database: Session, number_of_records: int, projects: list):
 
     budgets = [
         Budget(
-            project_id=fake.random_element(projects).project_id,
-            budget_type=fake.random_element(budget_types),
-            budget_status=fake.random_element(budget_statuses),
-            budget_description=fake.sentence(),
-            budget_estimate=round(random.uniform(1000, 50000), 2),
-            budget_actual=round(random.uniform(500, 49000), 2) if random.choice([True, False]) else None
+            project_id=fake.random_element(projects).id,
+            type=fake.random_element(budget_types),
+            status=fake.random_element(budget_statuses),
+            description=fake.sentence(),
+            estimate=round(random.uniform(1000, 50000), 2),
+            actual=round(random.uniform(500, 49000), 2) if random.choice([True, False]) else None
         )
         for _ in range(number_of_records)
     ]

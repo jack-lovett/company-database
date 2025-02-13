@@ -13,13 +13,13 @@ let currentPlaceData = null;
 export function handleAddressImport(action) {
     if (action === 'accept' && currentPlaceData) {
         const addressData = {
-            address_street: $('#address_street').val(),
-            address_suburb: $('#address_suburb').val(),
-            address_city: $('#address_city').val(),
-            address_state: $('#address_state').val(),
-            address_postal_code: $('#address_postal_code').val(),
-            address_country: $('#address_country').val(),
-            address_type: $('#address_type').val()
+            street: $('#street').val(),
+            suburb: $('#suburb').val(),
+            city: $('#city').val(),
+            state: $('#state').val(),
+            postal_code: $('#postal_code').val(),
+            country: $('#country').val(),
+            type: $('#type').val()
         };
 
         API.createAddress(addressData).then(() => {
@@ -78,11 +78,11 @@ function handlePlacePredictions(predictions, status) {
         const placesService = new google.maps.places.PlacesService(document.createElement('div'));
         placesService.getDetails({
             placeId: predictions[0].place_id,
-            fields: ['address_components', 'geometry', 'formatted_address']
+            fields: ['components', 'geometry', 'formatted_address']
         }, function (place, status) {
             if (status === google.maps.places.PlacesServiceStatus.OK) {
                 currentPlaceData = place;
-                updateAddressFields(place.address_components);
+                updateAddressFields(place.components);
                 $('#currentAddressPreview').html(`
                     <div class="alert alert-info">
                         <strong>Currently Processing:</strong><br>

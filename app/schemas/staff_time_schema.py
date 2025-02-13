@@ -6,8 +6,8 @@ from pydantic import BaseModel
 class StaffTimeBase(BaseModel):
     staff_id: int
     project_id: Optional[int]
-    staff_time_description: Optional[str] = None
-    staff_time_hours: int
+    description: Optional[str] = None
+    hours: int
 
 
 class StaffTimeCreate(StaffTimeBase):
@@ -15,12 +15,12 @@ class StaffTimeCreate(StaffTimeBase):
 
 
 class StaffTimeUpdate(StaffTimeBase):
-    staff_time_description: Optional[str] = None
-    staff_time_hours: Optional[int] = None
+    description: Optional[str] = None
+    hours: Optional[int] = None
 
 
 class StaffTime(StaffTimeBase):
-    staff_time_id: int
+    id: int
 
     class Config:
         from_attributes = True

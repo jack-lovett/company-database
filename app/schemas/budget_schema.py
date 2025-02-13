@@ -19,11 +19,11 @@ class BudgetStatusEnum(str, Enum):
 
 
 class BudgetBase(BaseModel):
-    budget_type: BudgetTypeEnum
-    budget_status: BudgetStatusEnum
-    budget_description: Optional[str] = None
-    budget_estimate: Optional[Decimal] = None
-    budget_actual: Optional[Decimal] = None
+    type: BudgetTypeEnum
+    status: BudgetStatusEnum
+    description: Optional[str] = None
+    estimate: Optional[Decimal] = None
+    actual: Optional[Decimal] = None
 
 
 class BudgetCreate(BudgetBase):
@@ -31,14 +31,14 @@ class BudgetCreate(BudgetBase):
 
 
 class BudgetUpdate(BudgetBase):
-    budget_type: Optional[BudgetTypeEnum] = None
-    budget_status: Optional[BudgetStatusEnum] = None
-    budget_estimate: Optional[str] = None
-    budget_actual: Optional[str] = None
+    type: Optional[BudgetTypeEnum] = None
+    status: Optional[BudgetStatusEnum] = None
+    estimate: Optional[str] = None
+    actual: Optional[str] = None
 
 
 class Budget(BudgetBase):
-    budget_id: int
+    id: int
     project_id: int
 
     class Config:

@@ -12,8 +12,8 @@ class NoteTypeEnum(str, Enum):
 
 
 class NoteBase(BaseModel):
-    note_type: NoteTypeEnum
-    note_content: str
+    type: NoteTypeEnum
+    content: str
 
 
 class NoteCreate(NoteBase):
@@ -22,15 +22,15 @@ class NoteCreate(NoteBase):
 
 
 class NoteUpdate(NoteBase):
-    note_type: Optional[NoteTypeEnum] = None
-    note_content: Optional[str] = None
+    type: Optional[NoteTypeEnum] = None
+    content: Optional[str] = None
 
 
 class Note(NoteBase):
-    note_id: int
+    id: int
     project_id: int
     client_id: int
-    note_creation_datetime: datetime
+    creation_datetime: datetime
 
     class Config:
         from_attributes = True

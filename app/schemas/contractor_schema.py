@@ -16,7 +16,7 @@ class ContractorUpdate(ContractorBase):
 
 
 class Contractor(ContractorBase):
-    contractor_id: int
+    id: int
 
     class Config:
         from_attributes = True

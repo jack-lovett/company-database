@@ -14,10 +14,10 @@ class ContactService(BaseService):
         address_service = AddressService()
 
         # Fetch billing address details
-        billing_address = address_service.get_by_id(database, contact.address_id)
+        billing_address = address_service.get_by_id(database, contact.id)
         if billing_address:
             contact_dict[
-                'billing_address'] = f"{billing_address.address_street}, {billing_address.address_suburb}, {billing_address.address_city}, {billing_address.address_state} {billing_address.address_postal_code}"
+                'billing_address'] = f"{billing_address.street}, {billing_address.suburb}, {billing_address.city}, {billing_address.state} {billing_address.postal_code}"
         else:
             contact_dict['billing_address'] = "No Billing Address"
 
@@ -25,7 +25,7 @@ class ContactService(BaseService):
         postal_address = address_service.get_by_id(database, contact.postal_address_id)
         if postal_address:
             contact_dict[
-                'postal_address'] = f"{postal_address.address_street}, {postal_address.address_suburb}, {postal_address.address_city}, {postal_address.address_state} {postal_address.address_postal_code}"
+                'postal_address'] = f"{postal_address.street}, {postal_address.suburb}, {postal_address.city}, {postal_address.state} {postal_address.postal_code}"
         else:
             contact_dict['postal_address'] = "No Postal Address"
 

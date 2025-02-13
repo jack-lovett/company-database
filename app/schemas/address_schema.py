@@ -13,13 +13,13 @@ class AddressTypeEnum(str, Enum):
 
 
 class AddressBase(BaseModel):
-    address_street: str
-    address_suburb: str
-    address_city: str
-    address_state: str
-    address_postal_code: str
-    address_country: str
-    address_type: AddressTypeEnum
+    street: str
+    suburb: str
+    city: str
+    state: str
+    postal_code: str
+    country: str
+    type: AddressTypeEnum
 
 
 class AddressCreate(AddressBase):
@@ -27,17 +27,17 @@ class AddressCreate(AddressBase):
 
 
 class AddressUpdate(AddressBase):
-    address_street: Optional[str] = None
-    address_suburb: Optional[str] = None
-    address_city: Optional[str] = None
-    address_state: Optional[str] = None
-    address_postal_code: Optional[str] = None
-    address_country: Optional[str] = None
-    address_type: Optional[AddressTypeEnum] = None
+    street: Optional[str] = None
+    suburb: Optional[str] = None
+    city: Optional[str] = None
+    state: Optional[str] = None
+    postal_code: Optional[str] = None
+    country: Optional[str] = None
+    type: Optional[AddressTypeEnum] = None
 
 
 class Address(AddressBase):
-    address_id: int
+    id: int
 
     class Config:
         from_attributes = True  # Allow pydantic to read data from SQLAlchemy model

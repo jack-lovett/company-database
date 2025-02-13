@@ -17,14 +17,14 @@ class AddressService(BaseService):
         from app.services.contact_service import ContactService
         contact_service = ContactService()
 
-        billing_contacts = [contact_service.get_by_id(database, contact.contact_id) for contact in
+        billing_contacts = [contact_service.get_by_id(database, contact.id) for contact in
                             address.contacts_as_billing]
-        postal_contacts = [contact_service.get_by_id(database, contact.contact_id) for contact in
+        postal_contacts = [contact_service.get_by_id(database, contact.id) for contact in
                            address.contacts_as_postal]
 
-        address_dict['billing_contacts'] = [f"{contact.contact_first_name} {contact.contact_last_name}" for contact in
+        address_dict['billing_contacts'] = [f"{contact.first_name} {contact.last_name}" for contact in
                                             billing_contacts if contact]
-        address_dict['postal_contacts'] = [f"{contact.contact_first_name} {contact.contact_last_name}" for contact in
+        address_dict['postal_contacts'] = [f"{contact.first_name} {contact.last_name}" for contact in
                                            postal_contacts if contact]
 
         return address_dict

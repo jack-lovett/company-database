@@ -4,8 +4,8 @@ from pydantic import BaseModel
 
 
 class ContractorTypeBase(BaseModel):
-    contractor_type: str
-    contractor_type_description: Optional[str] = None
+    type: str
+    description: Optional[str] = None
 
 
 class ContractorTypeCreate(ContractorTypeBase):
@@ -13,11 +13,11 @@ class ContractorTypeCreate(ContractorTypeBase):
 
 
 class ContractorTypeUpdate(ContractorTypeBase):
-    contractor_type: Optional[str] = None
+    type: Optional[str] = None
 
 
 class ContractorType(ContractorTypeBase):
-    contractor_type_id: int
+    id: int
 
     class Config:
         from_attributes = True

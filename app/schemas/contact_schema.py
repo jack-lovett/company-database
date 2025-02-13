@@ -19,15 +19,15 @@ from pydantic import BaseModel
 #
 class ContactBase(BaseModel):
     """Base class contains all fields that can be inputted by the user."""
-    contact_first_name: str
-    contact_last_name: str
-    contact_phone: Optional[str] = None
-    contact_email: Optional[str] = None
-    contact_business_name: Optional[str] = None
-    contact_abn: Optional[str] = None
-    contact_accounts_email: Optional[str] = None
-    contact_website: Optional[str] = None
-    contact_discipline: Optional[str] = None
+    first_name: str
+    last_name: str
+    phone: Optional[str] = None
+    email: Optional[str] = None
+    business_name: Optional[str] = None
+    abn: Optional[str] = None
+    accounts_email: Optional[str] = None
+    website: Optional[str] = None
+    discipline: Optional[str] = None
     address_id: Optional[int] = None
     postal_address_id: Optional[int] = None
 
@@ -41,30 +41,30 @@ class ContactCreate(ContactBase):
 #
 class ContactUpdate(ContactBase):
     """Convert required fields to optional as they are not required to change when updating."""
-    contact_first_name: Optional[str] = None
-    contact_last_name: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
 
 
 class Contact(ContactBase):
     """Inherits contactbase but adds system generated fields."""
-    contact_id: int
-    contact_creation_datetime: datetime
+    id: int
+    creation_datetime: datetime
 
     class Config:
         from_attributes = True
 
 
 class ContactDisplay(ContactBase):
-    contact_id: int
-    contact_first_name: str
-    contact_last_name: str
-    contact_phone: Optional[str] = None
-    contact_email: Optional[str] = None
-    contact_business_name: Optional[str] = None
-    contact_abn: Optional[str] = None
-    contact_accounts_email: Optional[str] = None
-    contact_website: Optional[str] = None
-    contact_discipline: Optional[str] = None
+    id: int
+    first_name: str
+    last_name: str
+    phone: Optional[str] = None
+    email: Optional[str] = None
+    business_name: Optional[str] = None
+    abn: Optional[str] = None
+    accounts_email: Optional[str] = None
+    website: Optional[str] = None
+    discipline: Optional[str] = None
     billing_address: str
     postal_address: str
-    contact_creation_datetime: datetime
+    creation_datetime: datetime

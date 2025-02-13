@@ -7,21 +7,21 @@ from app.models.base_model import Base
 class Project(Base):
     __tablename__ = "project"
 
-    project_id = Column(Integer, primary_key=True, autoincrement=True)
-    project_number = Column(Integer, unique=True, nullable=False)
-    client_id = Column(Integer, ForeignKey('client.client_id'), nullable=False)
-    address_id = Column(Integer, ForeignKey('address.address_id'), nullable=False)
-    project_status = Column(Enum('lead', 'job', 'completed', 'no_sale', name='project_status_enum'), nullable=False)
-    project_description = Column(Text, nullable=True)
-    project_initial_inquiry_date = Column(Date, nullable=False)
-    project_start_date = Column(Date, nullable=True)
-    project_end_date = Column(Date, nullable=True)
-    project_storeys = Column(Integer, nullable=True)
-    project_referral_source = Column(
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    number = Column(Integer, unique=True, nullable=False)
+    client_id = Column(Integer, ForeignKey('client.id'), nullable=False)
+    address_id = Column(Integer, ForeignKey('address.id'), nullable=False)
+    status = Column(Enum('lead', 'job', 'completed', 'no_sale', name='status_enum'), nullable=False)
+    description = Column(Text, nullable=True)
+    initial_inquiry_date = Column(Date, nullable=False)
+    start_date = Column(Date, nullable=True)
+    end_date = Column(Date, nullable=True)
+    storeys = Column(Integer, nullable=True)
+    referral_source = Column(
         Enum('google', 'referral', 'repeat_client', 'jkc', 'smce', 'word_of_mouth', 'website',
-             name='project_referral_source_enum'), nullable=True)
-    project_payment_basis = Column(Enum('lump_sum', 'hourly_rate', name='project_payment_basis_enum'), nullable=True)
-    project_creation_datetime = Column(DateTime, default=func.now(), nullable=False)
+             name='referral_source_enum'), nullable=True)
+    payment_basis = Column(Enum('lump_sum', 'hourly_rate', name='payment_basis_enum'), nullable=True)
+    creation_datetime = Column(DateTime, default=func.now(), nullable=False)
 
     contractors = relationship("Contractor", secondary="project_has_contractor", back_populates="projects")
 

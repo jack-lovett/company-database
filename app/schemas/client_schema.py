@@ -30,19 +30,19 @@ class ClientUpdate(ClientBase):
 
 
 class Client(ClientBase):
-    client_id: int
-    client_creation_datetime: datetime
+    id: int
+    creation_datetime: datetime
 
     class Config:
         from_attributes = True
 
 
 class ClientDisplay(BaseModel):
-    client_id: int
-    client_creation_datetime: datetime
+    id: int
+    creation_datetime: datetime
     # primary_contact_id: int
     # secondary_contact_id: int
-    client_name: str
+    name: str
     primary_contact_email: str
     primary_contact_phone: str
     secondary_contact_name: Optional[str] = None

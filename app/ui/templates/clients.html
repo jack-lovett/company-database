@@ -22,14 +22,14 @@
         <tbody>
         {% for client in clients %}
         <tr>
-            <td>{{ client.client_id }}</td>
-            <td>{{ client.client_name }}</td>
+            <td>{{ client.id }}</td>
+            <td>{{ client.name }}</td>
             <td>{{ client.secondary_contact_name }}</td>
             <td>{{ client.primary_contact_email }}</td>
             <td>{{ client.secondary_contact_email }}</td>
             <td>{{ client.primary_contact_phone }}</td>
             <td>{{ client.secondary_contact_phone }}</td>
-            <td>{{ client.client_creation_datetime }}</td>
+            <td>{{ client.creation_datetime }}</td>
         </tr>
         {% endfor %}
         </tbody>
@@ -51,15 +51,15 @@
             pageLength: 10,
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
             columns: [
-                {data: "client_id"},
-                {data: "client_name"},
+                {data: "id"},
+                {data: "name"},
                 {data: "secondary_contact_name"},
                 {data: "primary_contact_email"},
                 {data: "secondary_contact_email"},
                 {data: "primary_contact_phone"},
                 {data: "secondary_contact_phone"},
                 {
-                    data: "client_creation_datetime",
+                    data: "creation_datetime",
                     render: function (data) {
                         return data ? new Date(data).toLocaleString() : 'N/A';
                     }

@@ -68,28 +68,28 @@ function cleanFormData(formData) {
 
 async function handleAddressCreationSuccess(response) {
     const addresses = await API.fetchAddresses();
-    await populateSelect('project_address_select', addresses, 'address_id', ['address_street', 'address_suburb']);
-    await populateSelect('billing_address_select', addresses, 'address_id', ['address_street', 'address_suburb']);
-    await populateSelect('postal_address_select', addresses, 'address_id', ['address_street', 'address_suburb']);
+    await populateSelect('project_address_select', addresses, 'id', ['street', 'suburb']);
+    await populateSelect('billing_address_select', addresses, 'id', ['street', 'suburb']);
+    await populateSelect('postal_address_select', addresses, 'id', ['street', 'suburb']);
     refreshDataTable();
-    updateAddressSelects(response.address_id);
+    updateAddressSelects(response.id);
 }
 
 
 async function handleContactCreationSuccess(response) {
     const contacts = await API.fetchContacts();
-    await populateSelect('primary_contact_select', contacts, 'contact_id', ['contact_first_name', 'contact_last_name']);
-    await populateSelect('secondary_contact_select', contacts, 'contact_id', ['contact_first_name', 'contact_last_name']);
+    await populateSelect('primary_contact_select', contacts, 'id', ['first_name', 'last_name']);
+    await populateSelect('secondary_contact_select', contacts, 'id', ['first_name', 'last_name']);
     refreshDataTable();
-    updateContactSelects(response.contact_id);
+    updateContactSelects(response.id);
 }
 
 
 async function handleClientCreationSuccess(response) {
     const clients = await API.fetchClients();
-    await populateSelect('client_select', clients, 'client_id', ['client_name']);
+    await populateSelect('client_select', clients, 'id', ['name']);
     refreshDataTable();
-    updateClientSelect(response.client_id);
+    updateClientSelect(response.id);
 }
 
 

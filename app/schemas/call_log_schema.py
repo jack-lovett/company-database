@@ -21,10 +21,10 @@ class CallLogBase(BaseModel):
     client_id: int
     staff_id: int
     project_id: Optional[int] = None
-    call_log_type: CallLogTypeEnum
-    call_log_status: CallLogStatusEnum
-    call_log_datetime: Optional[datetime] = None
-    call_log_description: Optional[str] = None
+    type: CallLogTypeEnum
+    status: CallLogStatusEnum
+    datetime: Optional[datetime] = None
+    description: Optional[str] = None
 
 
 class CallLogCreate(CallLogBase):
@@ -34,12 +34,12 @@ class CallLogCreate(CallLogBase):
 class CallLogUpdate(CallLogBase):
     client_id: Optional[int] = None
     staff_id: Optional[int] = None
-    call_log_type: Optional[CallLogTypeEnum] = None
-    call_log_status: Optional[CallLogStatusEnum] = None
+    type: Optional[CallLogTypeEnum] = None
+    status: Optional[CallLogStatusEnum] = None
 
 
 class CallLog(CallLogBase):
-    call_log_id: int
+    id: int
 
     class Config:
         from_attributes = True

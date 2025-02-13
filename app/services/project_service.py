@@ -24,7 +24,7 @@ class ProjectService(BaseService):
         if client:
             primary_contact = contact_service.get_by_id(database, client.primary_contact_id)
             project_dict[
-                'client_name'] = f"{primary_contact.contact_first_name} {primary_contact.contact_last_name}" if primary_contact else "Unknown Client"
+                'client_name'] = f"{primary_contact.first_name} {primary_contact.last_name}" if primary_contact else "Unknown Client"
         else:
             project_dict['client_name'] = "Unknown Client"
 
@@ -32,7 +32,7 @@ class ProjectService(BaseService):
         address = address_service.get_by_id(database, project.address_id)
         if address:
             project_dict[
-                'full_address'] = f"{address.address_street}, {address.address_suburb}, {address.address_city}, {address.address_state} {address.address_postal_code}"
+                'full_address'] = f"{address.street}, {address.suburb}, {address.city}, {address.state} {address.postal_code}"
         else:
             project_dict['full_address'] = "Unknown Address"
 
@@ -57,7 +57,7 @@ class ProjectService(BaseService):
         # Filter projects for current year
         current_year_projects = [
             project for project in all_projects
-            if project.project_number // 1000 == current_year
+            if project.number // 1000 == current_year
         ]
 
         if not current_year_projects:
@@ -65,13 +65,13 @@ class ProjectService(BaseService):
             return current_year * 1000 + 1
 
         # Get highest number for current year and increment
-        highest_number = max(project.project_number for project in current_year_projects)
+        highest_number = max(project.number for project in current_year_projects)
         return highest_number + 1
 
     def create(self, database, data):
         """Create a new project with an automatically generated project number."""
         if isinstance(data, dict):
-            data['project_number'] = self.generate_project_number(database)
+            data['number'] = self.generate_project_number(database)
         else:
-            data.project_number = self.generate_project_number(database)
+            data.number = self.generate_project_number(database)
         return super().create(database, data)

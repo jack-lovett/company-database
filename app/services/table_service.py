@@ -32,11 +32,11 @@ class GenericTableService:
                     # Check if the related record is a Client
                     if isinstance(related_record, Client):
                         record_dict[
-                            column] = f"{related_record.primary_contact.contact_first_name} {related_record.primary_contact.contact_last_name}"
+                            column] = f"{related_record.primary_contact.first_name} {related_record.primary_contact.last_name}"
                     # Check if the related record is an Address
                     elif isinstance(related_record, Address):
                         record_dict[
-                            column] = f"{related_record.address_street}, {related_record.address_city}, {related_record.address_state}"
+                            column] = f"{related_record.street}, {related_record.city}, {related_record.state}"
                     else:
                         record_dict[column] = str(related_record)  # Default handling for other related models
                 else:
@@ -61,6 +61,6 @@ class GenericTableService:
         """Return a user-friendly display name for a foreign key record."""
         if hasattr(record, "name"):
             return record.name  # Example: If the table has a `name` column
-        elif hasattr(record, "contact_first_name") and hasattr(record, "contact_last_name"):
-            return f"{record.contact_first_name} {record.contact_last_name}"
+        elif hasattr(record, "first_name") and hasattr(record, "last_name"):
+            return f"{record.first_name} {record.last_name}"
         return str(record)

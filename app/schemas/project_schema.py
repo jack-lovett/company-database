@@ -30,45 +30,45 @@ class PaymentBasisEnum(str, Enum):
 class ProjectBase(BaseModel):
     client_id: int
     address_id: int
-    project_status: ProjectStatusEnum
-    project_description: Optional[str] = None
-    project_initial_inquiry_date: date
-    project_start_date: Optional[date] = None
-    project_end_date: Optional[date] = None
-    project_storeys: Optional[int] = None
-    project_referral_source: Optional[ReferralSourceEnum] = None
-    project_payment_basis: Optional[PaymentBasisEnum] = None
+    status: ProjectStatusEnum
+    description: Optional[str] = None
+    initial_inquiry_date: date
+    start_date: Optional[date] = None
+    end_date: Optional[date] = None
+    storeys: Optional[int] = None
+    referral_source: Optional[ReferralSourceEnum] = None
+    payment_basis: Optional[PaymentBasisEnum] = None
 
 
 class ProjectCreate(ProjectBase):
-    project_number: int
+    number: int
 
 
 class ProjectUpdate(ProjectBase):
     client_id: Optional[int] = None
     address_id: Optional[int] = None
-    project_status: Optional[ProjectStatusEnum] = None
-    project_initial_inquiry_date: Optional[date] = None
+    status: Optional[ProjectStatusEnum] = None
+    initial_inquiry_date: Optional[date] = None
 
 
 class Project(ProjectBase):
-    project_id: int
-    project_creation_datetime: datetime
+    id: int
+    creation_datetime: datetime
 
     class Config:
         from_attributes = True
 
 
 class ProjectDisplay(BaseModel):
-    project_number: int
+    number: int
     full_address: str
     client_name: str
-    project_status: ProjectStatusEnum
-    project_description: Optional[str] = None
-    project_initial_inquiry_date: date
-    project_start_date: Optional[date] = None
-    project_end_date: Optional[date] = None
-    project_storeys: Optional[int] = None
-    project_referral_source: Optional[ReferralSourceEnum] = None
-    project_payment_basis: Optional[PaymentBasisEnum] = None
-    project_creation_datetime: datetime
+    status: ProjectStatusEnum
+    description: Optional[str] = None
+    initial_inquiry_date: date
+    start_date: Optional[date] = None
+    end_date: Optional[date] = None
+    storeys: Optional[int] = None
+    referral_source: Optional[ReferralSourceEnum] = None
+    payment_basis: Optional[PaymentBasisEnum] = None
+    creation_datetime: datetime

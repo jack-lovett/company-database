@@ -24,16 +24,16 @@
         <tbody>
         {% for contact in contacts %}
         <tr>
-            <td>{{ contact.contact_id }}</td>
-            <td>{{ contact.contact_first_name }}</td>
-            <td>{{ contact.contact_last_name }}</td>
-            <td>{{ contact.contact_phone or 'N/A' }}</td>
-            <td>{{ contact.contact_email or 'N/A' }}</td>
-            <td>{{ contact.contact_business_name or 'N/A' }}</td>
-            <td>{{ contact.contact_abn or 'N/A' }}</td>
+            <td>{{ contact.id }}</td>
+            <td>{{ contact.first_name }}</td>
+            <td>{{ contact.last_name }}</td>
+            <td>{{ contact.phone or 'N/A' }}</td>
+            <td>{{ contact.email or 'N/A' }}</td>
+            <td>{{ contact.business_name or 'N/A' }}</td>
+            <td>{{ contact.abn or 'N/A' }}</td>
             <td>{{ contact.billing_address }}</td>
             <td>{{ contact.postal_address }}</td>
-            <td>{{ contact.contact_creation_datetime }}</td>
+            <td>{{ contact.creation_datetime }}</td>
         </tr>
         {% endfor %}
         </tbody>
@@ -55,17 +55,17 @@
             pageLength: 10,
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
             columns: [
-                {data: "contact_id"},
-                {data: "contact_first_name"},
-                {data: "contact_last_name"},
-                {data: "contact_phone"},
-                {data: "contact_email"},
-                {data: "contact_business_name"},
-                {data: "contact_abn"},
+                {data: "id"},
+                {data: "first_name"},
+                {data: "last_name"},
+                {data: "phone"},
+                {data: "email"},
+                {data: "business_name"},
+                {data: "abn"},
                 {data: "billing_address"},
                 {data: "postal_address"},
                 {
-                    data: "contact_creation_datetime",
+                    data: "creation_datetime",
                     render: function (data) {
                         return data ? new Date(data).toLocaleString() : 'N/A';
                     }

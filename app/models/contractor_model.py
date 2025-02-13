@@ -7,8 +7,8 @@ from app.models.base_model import Base
 class Contractor(Base):
     __tablename__ = "contractor"
 
-    contractor_id = Column(Integer, primary_key=True, autoincrement=True)
-    contact_id = Column(Integer, ForeignKey('contact.contact_id'), nullable=False)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    contact_id = Column(Integer, ForeignKey('contact.id'), nullable=False)
 
     contact = relationship("Contact", back_populates="contractors")
 

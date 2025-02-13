@@ -25,14 +25,14 @@
         <tbody>
         {% for address in addresses %}
         <tr>
-            <td>{{ address.address_id }}</td>
-            <td>{{ address.address_street }}</td>
-            <td>{{ address.address_suburb }}</td>
-            <td>{{ address.address_city }}</td>
-            <td>{{ address.address_state }}</td>
-            <td>{{ address.address_postal_code }}</td>
-            <td>{{ address.address_country }}</td>
-            <td>{{ address.address_type }}</td>
+            <td>{{ address.id }}</td>
+            <td>{{ address.street }}</td>
+            <td>{{ address.suburb }}</td>
+            <td>{{ address.city }}</td>
+            <td>{{ address.state }}</td>
+            <td>{{ address.postal_code }}</td>
+            <td>{{ address.country }}</td>
+            <td>{{ address.type }}</td>
         </tr>
         {% endfor %}
         </tbody>
@@ -54,14 +54,14 @@
             pageLength: 10,
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
             columns: [
-                {data: "address_id"},
-                {data: "address_street"},
-                {data: "address_suburb"},
-                {data: "address_city"},
-                {data: "address_state"},
-                {data: "address_postal_code"},
-                {data: "address_country"},
-                {data: "address_type"}
+                {data: "id"},
+                {data: "street"},
+                {data: "suburb"},
+                {data: "city"},
+                {data: "state"},
+                {data: "postal_code"},
+                {data: "country"},
+                {data: "type"}
             ]
         });
     });

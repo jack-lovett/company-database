@@ -22,10 +22,10 @@ class EmploymentStatusEnum(str, Enum):
 
 class StaffBase(BaseModel):
     contact_id: int
-    staff_role: StaffRoleEnum
-    staff_employment_status: EmploymentStatusEnum
-    staff_hire_date: date
-    staff_notes: Optional[str] = None
+    role: StaffRoleEnum
+    employment_status: EmploymentStatusEnum
+    hire_date: date
+    notes: Optional[str] = None
 
 
 class StaffCreate(StaffBase):
@@ -33,13 +33,13 @@ class StaffCreate(StaffBase):
 
 
 class StaffUpdate(StaffBase):
-    staff_role: Optional[StaffRoleEnum] = None
-    staff_employment_status: Optional[EmploymentStatusEnum] = None
-    staff_hire_date: Optional[date] = None
+    role: Optional[StaffRoleEnum] = None
+    employment_status: Optional[EmploymentStatusEnum] = None
+    hire_date: Optional[date] = None
 
 
 class Staff(StaffBase):
-    staff_id: int
+    id: int
 
     class Config:
         from_attributes = True
