@@ -58,7 +58,7 @@ export function initModalHandlers() {
     });
 
     // Modal close handlers
-    $('#exitModal').click(() => {
+    $('.btn-close').click(() => {
         modalState.modalStack = [];
         modalState.clearAllForms();
         $('.modal').modal('hide');
@@ -98,6 +98,14 @@ export function initModalHandlers() {
     $('#createProjectAddressBtn').click(function () {
         modalState.lastClickedAddressBtn = this.id;
         modalState.pushModal('projectModal', 'addressModal');
+    });
+
+    ['projectModal', 'contactModal', 'clientModal', 'addressModal'].forEach(modalId => {
+        $(`#${modalId}`)
+            .on('hidden.bs.modal', () => modalState.popModal())
+            .on('shown.bs.modal', function () {
+                $(this).find('input:visible, select:visible').first().focus();
+            });
     });
 
 

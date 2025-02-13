@@ -15,9 +15,17 @@ export const modalState = {
         this.modalStack.push(toModalId);
 
         if (fromModalId) {
-            $(`#${fromModalId}`).modal('hide');
+            const fromModal = $(`#${fromModalId}`);
+            fromModal.modal('hide');
+            fromModal.attr('aria-hidden', 'false');
         }
-        $(`#${toModalId}`).modal('show');
+
+        const toModal = $(`#${toModalId}`);
+        toModal.modal('show');
+        toModal.attr('aria-hidden', 'false');
+
+        // Set focus to the first focusable element in new modal
+        toModal.find('input:visible, select:visible').first().focus();
     },
 
     popModal() {
