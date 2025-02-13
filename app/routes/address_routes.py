@@ -18,3 +18,9 @@ def create_address(address: AddressCreate, database: Session = Depends(get_datab
 def get_addresses(database: Session = Depends(get_database)):
     address_service = AddressService()
     return address_service.get_all(database)
+
+
+@router.post("/import", response_model=list[Address])
+def import_addresses(addresses: list[str], database: Session = Depends(get_database)):
+    address_service = AddressService()
+    return address_service.batch_import_addresses(database, addresses)
