@@ -1,10 +1,10 @@
 from datetime import datetime
 
 from app.crud.project_crud import CRUDProject
-from app.services.address_service import AddressService
 from app.services.base_service import BaseService
 from app.services.client_service import ClientService
 from app.services.contact_service import ContactService
+from app.services.site_service import SiteService
 
 
 class ProjectService(BaseService):
@@ -17,7 +17,7 @@ class ProjectService(BaseService):
 
         client_service = ClientService()
         contact_service = ContactService()
-        address_service = AddressService()
+        site_service = SiteService()
 
         # Fetch client details
         client = client_service.get_by_id(database, project.client_id)
@@ -28,13 +28,12 @@ class ProjectService(BaseService):
         else:
             project_dict['client_name'] = "Unknown Client"
 
-        # Fetch address details
-        address = address_service.get_by_id(database, project.address_id)
-        if address:
-            project_dict[
-                'full_address'] = f"{address.street}, {address.suburb}, {address.city}, {address.state} {address.postal_code}"
+        # Fetch site details
+        site = site_service.get_by_id(database, project.site_id)
+        if site:
+            project_dict['site'] = site_service.enrich_site(database, site)
         else:
-            project_dict['full_address'] = "Unknown Address"
+            project_dict['site'] = "Unknown Site"
 
         return project_dict
 

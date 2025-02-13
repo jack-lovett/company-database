@@ -17,7 +17,7 @@ def create_project(project: ProjectCreate, database: Session = Depends(get_datab
 
 
 @router.get("/", response_model=list[ProjectDisplay])
-def get_projects(database: Session = Depends(get_database), skip: int = 0, limit: int = 10):
+def get_projects(database: Session = Depends(get_database)):
     service = ProjectService()
     return service.get_enriched_projects(database)
 

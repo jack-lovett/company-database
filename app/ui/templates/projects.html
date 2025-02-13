@@ -11,7 +11,10 @@
         <tr>
             <th>Project Number</th>
             <th>Client Name</th>
-            <th>Project Address</th>
+            <th>Site Address</th>
+            <th>Local Authority</th>
+            <th>Wind Class</th>
+            <th>Soil Class</th>
             <th>Status</th>
             <th>Description</th>
             <th>Initial Inquiry</th>
@@ -28,7 +31,10 @@
         <tr>
             <td>{{ project.number }}</td>
             <td>{{ project.client_name }}</td>
-            <td>{{ project.full_address }}</td>
+            <td>{{ project.site.address.full_address }}</td>
+            <td>{{ project.site.local_authority.name }}</td>
+            <td>{{ project.site.wind_class.class_ }}</td>
+            <td>{{ project.site.soil_class.class_ }}</td>
             <td>{{ project.status }}</td>
             <td>{{ project.description or 'N/A' }}</td>
             <td>{{ project.initial_inquiry_date }}</td>
@@ -40,6 +46,7 @@
             <td>{{ project.creation_datetime }}</td>
         </tr>
         {% endfor %}
+
         </tbody>
     </table>
 </div>
@@ -56,12 +63,15 @@
                 type: "GET",
                 dataSrc: ""
             },
-            pageLength: 10,     // Show 10 entries per page
-            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], // Pagination options
+            pageLength: 10,
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
             columns: [
                 {data: "number"},
                 {data: "client_name"},
-                {data: "full_address"},
+                {data: "site.address.full_address"},
+                {data: "site.local_authority.name"},
+                {data: "site.wind_class.class_"},
+                {data: "site.soil_class.class_"},
                 {data: "status"},
                 {data: "description"},
                 {data: "initial_inquiry_date"},
@@ -81,3 +91,4 @@
     });
 </script>
 {% endblock %}
+

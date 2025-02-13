@@ -1,20 +1,12 @@
 {% extends "base.html" %}
 
 {% block modals %}
-<!-- Include Client Modal -->
 {% include "modals/client_modal.html" %}
-
-<!-- Include Project Modal -->
 {% include "modals/project_modal.html" %}
-
-<!-- Include Contact Modal -->
 {% include "modals/contact_modal.html" %}
-
-<!-- Include Address Modal -->
 {% include "modals/address_modal.html" %}
-
-<!-- Include Address Import Modal -->
 {% include "modals/import_address_modal.html" %}
+{% include "modals/site_modal.html" %}
 {% endblock %}
 
 {% block additional_css %}

@@ -1,58 +1,52 @@
 from datetime import date, datetime
-from enum import Enum
 from typing import Optional
 
 from pydantic import BaseModel
 
 
-class ProjectStatusEnum(str, Enum):
-    lead = "lead"
-    job = "job"
-    completed = "completed"
-    no_sale = "no_sale"
+class AddressDisplay(BaseModel):
+    full_address: str
 
 
-class ReferralSourceEnum(str, Enum):
-    google = "google"
-    referral = "referral"
-    repeat_client = "repeat_client"
-    jkc = "jkc"
-    smce = "smce"
-    word_of_mouth = "word_of_mouth"
-    website = "website"
+class LocalAuthorityDisplay(BaseModel):
+    name: str
 
 
-class PaymentBasisEnum(str, Enum):
-    lump_sum = "lump_sum"
-    hourly_rate = "hourly_rate"
+class WindClassDisplay(BaseModel):
+    class_: str
+
+
+class SoilClassDisplay(BaseModel):
+    class_: str
+
+
+class SiteDisplay(BaseModel):
+    address: AddressDisplay
+    local_authority: LocalAuthorityDisplay
+    wind_class: WindClassDisplay
+    soil_class: SoilClassDisplay
 
 
 class ProjectBase(BaseModel):
     client_id: int
-    address_id: int
-    status: ProjectStatusEnum
+    site_id: int
+    status: str
     description: Optional[str] = None
     initial_inquiry_date: date
     start_date: Optional[date] = None
     end_date: Optional[date] = None
     storeys: Optional[int] = None
-    referral_source: Optional[ReferralSourceEnum] = None
-    payment_basis: Optional[PaymentBasisEnum] = None
+    referral_source: Optional[str] = None
+    payment_basis: Optional[str] = None
 
 
 class ProjectCreate(ProjectBase):
-    number: int
-
-
-class ProjectUpdate(ProjectBase):
-    client_id: Optional[int] = None
-    address_id: Optional[int] = None
-    status: Optional[ProjectStatusEnum] = None
-    initial_inquiry_date: Optional[date] = None
+    pass
 
 
 class Project(ProjectBase):
     id: int
+    number: int
     creation_datetime: datetime
 
     class Config:
@@ -60,15 +54,19 @@ class Project(ProjectBase):
 
 
 class ProjectDisplay(BaseModel):
+    id: int
     number: int
-    full_address: str
     client_name: str
-    status: ProjectStatusEnum
-    description: Optional[str] = None
+    site: SiteDisplay
+    status: str
+    description: Optional[str]
     initial_inquiry_date: date
-    start_date: Optional[date] = None
-    end_date: Optional[date] = None
-    storeys: Optional[int] = None
-    referral_source: Optional[ReferralSourceEnum] = None
-    payment_basis: Optional[PaymentBasisEnum] = None
+    start_date: Optional[date]
+    end_date: Optional[date]
+    storeys: Optional[int]
+    referral_source: Optional[str]
+    payment_basis: Optional[str]
     creation_datetime: datetime
+
+    class Config:
+        from_attributes = True

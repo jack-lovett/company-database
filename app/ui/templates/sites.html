@@ -1,0 +1,44 @@
+{% extends "table_base.html" %}
+
+{% block content %}
+<h2>Site List</h2>
+<button type="button" class="btn btn-primary" id="openSiteModal">
+    Create New Site
+</button>
+<div class="table-responsive">
+    <table id="data" class="table table-light table-striped table-hover w-100">
+        <thead class="table-light">
+        <tr>
+            <th>Address</th>
+            <th>Local Authority</th>
+            <th>Wind Class</th>
+            <th>Soil Class</th>
+            <th>Lot Number</th>
+            <th>Plan Number</th>
+            <th>Heritage Status</th>
+            <th>Zone</th>
+            <th>Precinct</th>
+            <th>Area</th>
+            <th>Overlays</th>
+        </tr>
+        </thead>
+        <tbody class="table-light">
+        {% for site in sites %}
+        <tr>
+            <td>{{ site.address.full_address }}</td>
+            <td>{{ site.local_authority.name }}</td>
+            <td>{{ site.wind_class.class_ }}</td>
+            <td>{{ site.soil_class.class_ }}</td>
+            <td>{{ site.lot_number }}</td>
+            <td>{{ site.plan_number }}</td>
+            <td>{{ site.heritage_status }}</td>
+            <td>{{ site.zone }}</td>
+            <td>{{ site.precinct }}</td>
+            <td>{{ site.area }}</td>
+            <td>{{ site.overlays|join(', ') }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

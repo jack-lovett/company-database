@@ -10,7 +10,7 @@ class Project(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     number = Column(Integer, unique=True, nullable=False)
     client_id = Column(Integer, ForeignKey('client.id'), nullable=False)
-    address_id = Column(Integer, ForeignKey('address.id'), nullable=False)
+    site_id = Column(Integer, ForeignKey('site.id'), nullable=False)
     status = Column(Enum('lead', 'job', 'completed', 'no_sale', name='status_enum'), nullable=False)
     description = Column(Text, nullable=True)
     initial_inquiry_date = Column(Date, nullable=False)
@@ -37,6 +37,6 @@ class Project(Base):
 
     notes = relationship("Note", back_populates="project")
 
-    address = relationship("Address", back_populates="projects")
+    site = relationship("Site", back_populates="projects")
 
     call_logs = relationship("CallLog", back_populates="project")

@@ -24,4 +24,4 @@ class Address(Base):
                                       foreign_keys="Contact.postal_address_id",
                                       back_populates="postal_address")
 
-    projects = relationship("Project", back_populates="address")
+    sites = relationship("Site", back_populates="address")

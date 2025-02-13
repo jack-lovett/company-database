@@ -5,6 +5,7 @@ from app.services.address_service import AddressService
 from app.services.client_service import ClientService
 from app.services.contact_service import ContactService
 from app.services.project_service import ProjectService
+from app.services.site_service import SiteService
 
 app = Flask(__name__, template_folder="app/ui/templates", static_folder="app/ui/static")
 
@@ -66,6 +67,15 @@ def addresses():
     address_service = AddressService()
     enriched_addresses = address_service.get_enriched_addresses(session)
     return render_template("addresses.html", addresses=enriched_addresses)
+
+
+# Add these new routes
+@app.route('/sites')
+def sites():
+    session = g.database
+    site_service = SiteService()
+    sites = site_service.get_all(session)
+    return render_template('sites.html', sites=sites)
 
 
 if __name__ == '__main__':

@@ -6,7 +6,8 @@ from sqlalchemy.orm import Session
 
 from app.core.database import get_database
 from app.models import Client, Contact, Address, ContractorType, Contractor, ProjectHasContractor, \
-    ProjectIsBuildingClass, Budget, BuildingClass, CallLog, StaffTime, StaffProject, Note, Staff
+    ProjectIsBuildingClass, Budget, BuildingClass, CallLog, StaffTime, StaffProject, Note, Staff, WindClass, SoilClass, \
+    LocalAuthority, Overlay, SiteOverlay, Site
 from app.services.project_service import ProjectService
 
 fake = Faker()
@@ -72,7 +73,7 @@ def create_clients(database: Session, contacts: list):
     return clients
 
 
-def create_projects(database: Session, clients: list, addresses: list):
+def create_projects(database: Session, clients: list, sites: list):
     """Generate and insert test project data using ProjectService."""
     project_service = ProjectService()
     project_statuses = ['lead', 'job', 'completed', 'no_sale']
@@ -83,7 +84,7 @@ def create_projects(database: Session, clients: list, addresses: list):
     for client in clients:
         project_dict = {
             'client_id': client.id,
-            'address_id': fake.random_element(addresses).id,
+            'site_id': fake.random_element(sites).id,  # Changed from address_id to site_id
             'status': fake.random_element(project_statuses),
             'description': fake.text(),
             'initial_inquiry_date': fake.date_this_decade(),
@@ -290,6 +291,101 @@ def create_budgets(database: Session, number_of_records: int, projects: list):
     database.commit()
 
 
+# Add these new functions after the existing imports
+def create_wind_classes(database: Session):
+    """Generate and insert wind class data."""
+    wind_classes = [
+        WindClass(class_='N1'),
+        WindClass(class_='N2'),
+        WindClass(class_='N3'),
+        WindClass(class_='N4'),
+        WindClass(class_='N5'),
+        WindClass(class_='N6'),
+        WindClass(class_='C1'),
+        WindClass(class_='C2'),
+        WindClass(class_='C3'),
+        WindClass(class_='C4')
+    ]
+    database.add_all(wind_classes)
+    database.commit()
+    return wind_classes
+
+
+def create_soil_classes(database: Session):
+    """Generate and insert soil class data."""
+    soil_classes = [
+        SoilClass(abbreviation='A', class_='Rock', description='Strong rock'),
+        SoilClass(abbreviation='S', class_='Sand', description='Sandy soil'),
+        SoilClass(abbreviation='M', class_='Mud', description='Muddy soil'),
+        SoilClass(abbreviation='H', class_='High', description='Highly reactive clay'),
+        SoilClass(abbreviation='P', class_='Problem', description='Problem soils')
+    ]
+    database.add_all(soil_classes)
+    database.commit()
+    return soil_classes
+
+
+def create_local_authorities(database: Session):
+    """Generate and insert local authority data."""
+    authorities = [
+        LocalAuthority(
+            name=fake.city() + " Council",
+            website=fake.url()
+        )
+        for _ in range(5)
+    ]
+    database.add_all(authorities)
+    database.commit()
+    return authorities
+
+
+def create_overlays(database: Session):
+    """Generate and insert overlay data."""
+    overlays = [
+        Overlay(name=name) for name in [
+            'Heritage', 'Flood', 'Bushfire', 'Environmental',
+            'Vegetation', 'Infrastructure', 'Development'
+        ]
+    ]
+    database.add_all(overlays)
+    database.commit()
+    return overlays
+
+
+def create_sites(database: Session, addresses: list, local_authorities: list,
+                 wind_classes: list, soil_classes: list):
+    """Generate and insert site data."""
+    sites = [
+        Site(
+            address_id=fake.random_element(addresses).id,
+            local_authority_id=fake.random_element(local_authorities).id,
+            wind_class_id=fake.random_element(wind_classes).id,
+            soil_class_id=fake.random_element(soil_classes).id,
+            lot_number=fake.random_int(min=1, max=999),
+            plan_number=fake.bothify(text='??####'),
+            heritage_status=fake.boolean(),
+            zone=fake.random_element(['residential', 'commercial', 'industrial', 'mixed']),
+            precinct=fake.random_element(['A', 'B', 'C', 'D']),
+            area=str(fake.random_int(min=100, max=10000)) + 'm²'
+        )
+        for _ in range(len(addresses))
+    ]
+    database.add_all(sites)
+    database.commit()
+    return sites
+
+
+def create_site_overlays(database: Session, sites: list, overlays: list):
+    """Associate sites with overlays."""
+    for site in sites:
+        num_overlays = random.randint(1, 3)
+        selected_overlays = random.sample([o.id for o in overlays], num_overlays)
+        for overlay_id in selected_overlays:
+            site_overlay = SiteOverlay(site_id=site.id, overlay_id=overlay_id)
+            database.add(site_overlay)
+    database.commit()
+
+
 def generate_test_data(database: Session, number_of_records: int):
     """Main function to generate test data for the database."""
     try:
@@ -297,16 +393,24 @@ def generate_test_data(database: Session, number_of_records: int):
         addresses = create_addresses(database, number_of_records)
         contacts = create_contacts(database, number_of_records, addresses)
         clients = create_clients(database, contacts)
-        projects = create_projects(database, clients, addresses)
+
+        # Create new site-related data
+        wind_classes = create_wind_classes(database)
+        soil_classes = create_soil_classes(database)
+        local_authorities = create_local_authorities(database)
+        overlays = create_overlays(database)
+        sites = create_sites(database, addresses, local_authorities, wind_classes, soil_classes)
+        create_site_overlays(database, sites, overlays)
+
+        # Create projects with sites instead of addresses
+        projects = create_projects(database, clients, sites)
         contractor_types = create_contractor_types(database)
         contractors = create_contractors(database, number_of_records)
 
-        # Create staff-related data
+        # Rest of the function remains the same
         staff = create_staff(database, number_of_records, contacts)
         create_staff_time(database, number_of_records, staff, projects)
         create_staff_project(database, staff, projects)
-
-        # Create other associations
         create_project_has_contractors(database, contractors, projects, contractor_types)
         create_notes(database, number_of_records, projects, clients)
         building_classes = create_building_classes(database, number_of_records)

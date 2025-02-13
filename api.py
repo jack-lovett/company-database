@@ -17,17 +17,25 @@ from app.routes import (
     project_is_building_class_routes,
     staff_routes,
     staff_project_routes,
-    staff_time_routes
+    staff_time_routes,
+    site_routes,
+    wind_class_routes,
+    soil_class_routes,
+    local_authority_routes
 )
 
 app = FastAPI()
 
-# Include all routers efficiently
+# Add to routers list
 routers = [
     project_routes,
     client_routes,
     contact_routes,
     address_routes,
+    site_routes,
+    wind_class_routes,
+    soil_class_routes,
+    local_authority_routes,
     budget_routes,
     building_class_routes,
     call_log_routes,
