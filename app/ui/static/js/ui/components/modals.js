@@ -23,6 +23,7 @@ export function initModalHandlers() {
     $('#openContactModal').click(async () => modalState.pushModal(null, 'contactModal'));
     $('#openAddressModal').click(async () => modalState.pushModal(null, 'addressModal'));
     $('#openClientModal').click(async () => modalState.pushModal(null, 'clientModal'));
+    $('#openSiteModal').click(async () => modalState.pushModal(null, 'siteModal'));
 
     // Open modal triggers
     $('#projectModal').on('show.bs.modal', async () => {
@@ -47,6 +48,11 @@ export function initModalHandlers() {
         const addresses = await API.fetchAddresses();
         await populateSelect('billing_address_select', addresses, 'id', ['street', 'suburb']);
         await populateSelect('postal_address_select', addresses, 'id', ['street', 'suburb']);
+    });
+
+    $('#siteModal').on('show.bs.modal', async () => {
+        const addresses = await API.fetchAddresses();
+        await populateSelect('site_address_select', addresses, 'id', ['street', 'suburb']);
     });
 
 
@@ -100,7 +106,12 @@ export function initModalHandlers() {
         modalState.pushModal('projectModal', 'addressModal');
     });
 
-    ['projectModal', 'contactModal', 'clientModal', 'addressModal'].forEach(modalId => {
+    $('#createSiteAddressBtn').click(function () {
+        modalState.lastClickedAddressBtn = this.id;
+        modalState.pushModal('siteModal', 'addressModal');
+    });
+
+    ['projectModal', 'contactModal', 'clientModal', 'addressModal', 'siteModal'].forEach(modalId => {
         $(`#${modalId}`)
             .on('hidden.bs.modal', () => modalState.popModal())
             .on('shown.bs.modal', function () {

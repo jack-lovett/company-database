@@ -16,9 +16,7 @@ class SiteService(BaseService):
         address_service = AddressService()
         address = address_service.get_by_id(database, site.address_id)
         if address:
-            site_dict['address'] = {
-                'full_address': f"{address.street}, {address.suburb}, {address.city}, {address.state} {address.postal_code}"
-            }
+            site_dict['address'] = str(address)
 
         # Get related models
         local_authority = database.query(LocalAuthority).get(site.local_authority_id)
@@ -26,11 +24,16 @@ class SiteService(BaseService):
         soil_class = database.query(SoilClass).get(site.soil_class_id)
 
         # Add related data
-        site_dict['local_authority'] = {'name': local_authority.name} if local_authority else None
-        site_dict['wind_class'] = {'class_': wind_class.class_} if wind_class else None
-        site_dict['soil_class'] = {'class_': soil_class.class_} if soil_class else None
+        site_dict['local_authority'] = local_authority.name if local_authority else None
+        site_dict['wind_class'] = wind_class.class_ if wind_class else None
+        site_dict['soil_class'] = soil_class.class_ if soil_class else None
 
         # Format overlays as a list of names
         site_dict['overlays'] = [overlay.name for overlay in site.overlays] if site.overlays else []
 
         return site_dict
+
+    def get_enriched_sites(self, database):
+        """Retrieve all sites with enriched values."""
+        sites = self.get_all(database)
+        return [self.enrich_site(database, site) for site in sites]

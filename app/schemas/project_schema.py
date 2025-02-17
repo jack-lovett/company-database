@@ -3,28 +3,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-
-class AddressDisplay(BaseModel):
-    full_address: str
-
-
-class LocalAuthorityDisplay(BaseModel):
-    name: str
-
-
-class WindClassDisplay(BaseModel):
-    class_: str
-
-
-class SoilClassDisplay(BaseModel):
-    class_: str
-
-
-class SiteDisplay(BaseModel):
-    address: AddressDisplay
-    local_authority: LocalAuthorityDisplay
-    wind_class: WindClassDisplay
-    soil_class: SoilClassDisplay
+from app.schemas.site_schema import SiteDisplay
 
 
 class ProjectBase(BaseModel):

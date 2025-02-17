@@ -11,3 +11,6 @@ class Overlay(Base):
     name = Column(String(45), nullable=True)
 
     sites = relationship("Site", secondary="site_overlay", back_populates="overlays")
+
+    def __str__(self):
+        return self.name

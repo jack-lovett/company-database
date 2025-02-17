@@ -25,7 +25,7 @@
         <tbody class="table-light">
         {% for site in sites %}
         <tr>
-            <td>{{ site.address.full_address }}</td>
+            <td>{{ site.address }}</td>
             <td>{{ site.local_authority.name }}</td>
             <td>{{ site.wind_class.class_ }}</td>
             <td>{{ site.soil_class.class_ }}</td>
@@ -41,4 +41,38 @@
         </tbody>
     </table>
 </div>
+{% endblock %}
+{% block table_scripts %}
+<script>
+    $(document).ready(function () {
+        let sitesTable = $('#data').DataTable({
+            deferRender: true,
+            processing: true,
+            serverSide: false,
+            autoWidth: true,
+            ajax: {
+                url: "http://localhost:8080/sites",
+                type: "GET",
+                dataSrc: ""
+            },
+            pageLength: 10,
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            columns: [
+                {data: "address"},
+                {data: "local_authority"},
+                {data: "wind_class"},
+                {data: "soil_class"},
+                {data: "lot_number"},
+                {data: "plan_number"},
+                {data: "heritage_status"},
+                {data: "zone"},
+                {data: "precinct"},
+                {data: "area"},
+                {
+                    data: "overlays"
+                }
+            ]
+        });
+    });
+</script>
 {% endblock %}

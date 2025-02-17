@@ -13,6 +13,11 @@ class WindClassUpdate(WindClassBase):
     pass
 
 
+class WindClassDisplay(BaseModel):
+    id: int
+    class_: str
+
+
 class WindClass(WindClassBase):
     id: int
 

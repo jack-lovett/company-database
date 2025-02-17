@@ -16,6 +16,12 @@ class LocalAuthorityUpdate(LocalAuthorityBase):
     pass
 
 
+class LocalAuthorityDisplay(BaseModel):
+    id: int
+    name: str
+    website: Optional[str] = None
+
+
 class LocalAuthority(LocalAuthorityBase):
     id: int
 

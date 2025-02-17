@@ -15,6 +15,13 @@ class SoilClassUpdate(SoilClassBase):
     pass
 
 
+class SoilClassDisplay(BaseModel):
+    id: int
+    abbreviation: str
+    class_: str
+    description: str
+
+
 class SoilClass(SoilClassBase):
     id: int
 

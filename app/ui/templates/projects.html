@@ -31,7 +31,7 @@
         <tr>
             <td>{{ project.number }}</td>
             <td>{{ project.client_name }}</td>
-            <td>{{ project.site.address.full_address }}</td>
+            <td>{{ project.site.address }}</td>
             <td>{{ project.site.local_authority.name }}</td>
             <td>{{ project.site.wind_class.class_ }}</td>
             <td>{{ project.site.soil_class.class_ }}</td>
@@ -68,7 +68,7 @@
             columns: [
                 {data: "number"},
                 {data: "client_name"},
-                {data: "site.address.full_address"},
+                {data: "site.address"},
                 {data: "site.local_authority.name"},
                 {data: "site.wind_class.class_"},
                 {data: "site.soil_class.class_"},

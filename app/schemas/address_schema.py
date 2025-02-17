@@ -36,8 +36,16 @@ class AddressUpdate(AddressBase):
     type: Optional[AddressTypeEnum] = None
 
 
+class AddressDisplay(BaseModel):
+    id: int
+    street: str
+    suburb: str
+    city: str
+    state: str
+    postal_code: str
+    country: str
+    type: AddressTypeEnum
+
+
 class Address(AddressBase):
     id: int
-
-    class Config:
-        from_attributes = True  # Allow pydantic to read data from SQLAlchemy model

@@ -29,3 +29,21 @@ class Site(SiteBase):
 
     class Config:
         from_attributes = True
+
+
+class SiteDisplay(BaseModel):
+    id: int
+    address: str
+    local_authority: str
+    wind_class: str
+    soil_class: str
+    lot_number: Optional[int] = None
+    plan_number: Optional[str] = None
+    heritage_status: Optional[bool] = None
+    zone: Optional[str] = None
+    precinct: Optional[str] = None
+    area: Optional[str] = None
+    overlays: Optional[list[str]]
+
+    class Config:
+        from_attributes = True

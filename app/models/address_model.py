@@ -25,3 +25,6 @@ class Address(Base):
                                       back_populates="postal_address")
 
     sites = relationship("Site", back_populates="address")
+
+    def __str__(self):
+        return f"{self.street}, {self.suburb}, {self.city}, {self.state} {self.postal_code}"
