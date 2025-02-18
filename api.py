@@ -24,6 +24,7 @@ from app.routes import (
     local_authority_routes,
     overlay_routes
 )
+from app.schemas.table_config import get_table_configs
 
 app = FastAPI()
 
@@ -77,6 +78,11 @@ app.add_middleware(
 @app.get("/")
 async def main():
     return {"message": "Welcome to Drawing Works API"}
+
+
+@app.get("/table-config")
+async def get_table_configuration():
+    return get_table_configs()
 
 
 if __name__ == "__main__":

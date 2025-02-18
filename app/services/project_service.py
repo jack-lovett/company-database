@@ -31,7 +31,7 @@ class ProjectService(BaseService):
         # Fetch site details
         site = site_service.get_by_id(database, project.site_id)
         if site:
-            project_dict['site'] = site_service.enrich_site(database, site)
+            project_dict['site'] = str(site)
         else:
             project_dict['site'] = "Unknown Site"
 

@@ -1,0 +1,21 @@
+{% extends "table_base.html" %}
+
+{% block content %}
+<h2>{{ title }}</h2>
+<button type="button" class="btn btn-primary" id="open{{ entity }}Modal">
+    Create {{ entity }}
+</button>
+{% if entity == 'Address' %}
+<button type="button" class="btn btn-success" id="openImportModal">
+    Import Addresses
+</button>
+{% endif %}
+<div class="table-responsive">
+    <table id="data" class="table table-light table-striped table-hover w-100 datatable-hidden">
+        <thead>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

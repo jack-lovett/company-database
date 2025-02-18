@@ -4,7 +4,7 @@ import {initModalData} from './ui/components/modalSelects.js';
 import {initFormHandlers} from './ui/components/forms.js';
 import {initGoogleAutocomplete} from './ui/components/autocomplete.js';
 
-async function initializeApp() {
+async function initialiseApp() {
     initModalHandlers();
     initModalButtons();
     await initModalData();
@@ -12,4 +12,4 @@ async function initializeApp() {
     await initGoogleAutocomplete();
 }
 
-$(document).ready(initializeApp);
+$(document).ready(initialiseApp);

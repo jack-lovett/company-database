@@ -24,11 +24,13 @@
     {% include "navigation.html" %}
     <div class="px-4 py-4">
         {% block content %}
-        <!--Page specific content-->
         {% endblock %}
     </div>
 
 </main>
+
+<!-- Components -->
+{% include "components/loading_spinner.html" %}
 
 <!-- Core JavaScript -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

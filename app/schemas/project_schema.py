@@ -3,8 +3,6 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from app.schemas.site_schema import SiteDisplay
-
 
 class ProjectBase(BaseModel):
     client_id: int
@@ -36,7 +34,7 @@ class ProjectDisplay(BaseModel):
     id: int
     number: int
     client_name: str
-    site: SiteDisplay
+    site: str
     status: str
     description: Optional[str]
     initial_inquiry_date: date

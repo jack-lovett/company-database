@@ -25,3 +25,6 @@ class Site(Base):
     soil_class = relationship("SoilClass", back_populates="sites")
     overlays = relationship("Overlay", secondary="site_overlay", back_populates="sites")
     projects = relationship("Project", back_populates="site")
+
+    def __repr__(self):
+        return f"Site {self.id}: {self.address.street}, {self.address.suburb}, {self.address.city}, {self.address.state} {self.address.postal_code}"
