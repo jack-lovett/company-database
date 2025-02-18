@@ -9,7 +9,7 @@
     Import Addresses
 </button>
 <div class="table-responsive">
-    <table id="data" class="table table-light table-striped table-hover w-100">
+    <table id="data" class="table table-light table-striped table-hover w-100 datatable-hidden">
         <thead>
         <tr>
             <th>Address ID</th>
@@ -38,6 +38,9 @@
         </tbody>
     </table>
 </div>
+
+{% include "components/loading_spinner.html" %}
+
 {% endblock %}
 {% block table_scripts %}
 <script>
@@ -62,7 +65,11 @@
                 {data: "postal_code"},
                 {data: "country"},
                 {data: "type"}
-            ]
+            ],
+            initComplete: function () {
+                $('#loading-spinner').hide();
+                $('#data').removeClass('datatable-hidden');
+            }
         });
     });
 </script>

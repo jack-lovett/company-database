@@ -6,7 +6,7 @@
     Create Contact
 </button>
 <div class="table-responsive">
-    <table id="data" class="table table-light table-striped table-hover w-100">
+    <table id="data" class="table table-light table-striped table-hover w-100 datatable-hidden">
         <thead>
         <tr>
             <th>Contact ID</th>
@@ -39,6 +39,9 @@
         </tbody>
     </table>
 </div>
+
+{% include "components/loading_spinner.html" %}
+
 {% endblock %}
 {% block table_scripts %}
 <script>
@@ -70,7 +73,11 @@
                         return data ? new Date(data).toLocaleString() : 'N/A';
                     }
                 }
-            ]
+            ],
+            initComplete: function () {
+                $('#loading-spinner').hide();
+                $('#data').removeClass('datatable-hidden');
+            }
         });
     });
 </script>

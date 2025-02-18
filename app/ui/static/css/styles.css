@@ -9,3 +9,11 @@
 .modal-backdrop {
     z-index: 1040;
 }
+
+.datatable-hidden {
+    visibility: hidden;
+}
+
+#loading-spinner {
+    z-index: 1000;
+}

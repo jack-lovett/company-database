@@ -6,7 +6,7 @@
     Create New Site
 </button>
 <div class="table-responsive">
-    <table id="data" class="table table-light table-striped table-hover w-100">
+    <table id="data" class="table table-light table-striped table-hover w-100 datatable-hidden">
         <thead class="table-light">
         <tr>
             <th>Address</th>
@@ -41,6 +41,9 @@
         </tbody>
     </table>
 </div>
+
+{% include "components/loading_spinner.html" %}
+
 {% endblock %}
 {% block table_scripts %}
 <script>
@@ -71,7 +74,11 @@
                 {
                     data: "overlays"
                 }
-            ]
+            ],
+            initComplete: function () {
+                $('#loading-spinner').hide();
+                $('#data').removeClass('datatable-hidden');
+            }
         });
     });
 </script>
