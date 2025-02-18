@@ -90,6 +90,18 @@ export function initFormHandlers() {
         }
     });
 
+    $('#siteForm').submit(async function (e) {
+        e.preventDefault();
+        const formData = cleanFormData(new FormData(e.target));
+        const response = await API.createSite(formData);
+
+        if (response) {
+            $('#siteModal').modal('hide');
+            await handleSiteCreationSuccess(response);
+            this.reset();
+        }
+    });
+
     $('#overlayForm').submit(async function (e) {
         e.preventDefault();
         const formData = cleanFormData(new FormData(e.target));
@@ -143,6 +155,7 @@ async function handleWindClassCreationSuccess(response) {
     await populateSelect('wind_class_select', windClasses, 'id', ['class_']);
     console.log('Setting select value to:', response.id);
     $('#wind_class_select').val(response.id);
+    refreshDataTable();
 }
 
 
@@ -150,12 +163,21 @@ async function handleLocalAuthorityCreationSuccess(response) {
     const localAuthorities = await API.fetchLocalAuthorities();
     await populateSelect('local_authority_select', localAuthorities, 'id', ['name']);
     $('#local_authority_select').val(response.id);
+    refreshDataTable();
 }
 
 async function handleSoilClassCreationSuccess(response) {
     const soilClasses = await API.fetchSoilClasses();
     await populateSelect('soil_class_select', soilClasses, 'id', ['class_', 'description']);
     $('#soil_class_select').val(response.id);
+    refreshDataTable();
+}
+
+async function handleSiteCreationSuccess(response) {
+    const sites = await API.fetchSites();
+    await populateSelect('site_select', sites, 'id', ['address']);
+    $('#site_select').val(response.id);
+    refreshDataTable();
 }
 
 

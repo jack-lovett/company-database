@@ -122,6 +122,15 @@ export const API = {
         return response.json();
     },
 
+    async createSite(data) {
+        const response = await fetch(`${this.baseUrl}/sites`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        return response.json();
+    },
+
     async fetchSites() {
         const response = await fetch(`${this.baseUrl}/sites`);
         return response.json();
