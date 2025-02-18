@@ -5,7 +5,7 @@ export const modalState = {
     stackSizeAfterOpen: 0,
 
     clearAllForms() {
-        ['addressForm', 'contactForm', 'clientForm', 'projectForm'].forEach(formId => {
+        ['addressForm', 'contactForm', 'clientForm', 'projectForm', 'siteForm', 'windClassForm', 'soilClassForm', 'localAuthorityForm', 'overlayForm'].forEach(formId => {
             $(`#${formId}`)[0].reset();
         });
     },
@@ -17,12 +17,11 @@ export const modalState = {
         if (fromModalId) {
             const fromModal = $(`#${fromModalId}`);
             fromModal.modal('hide');
-            fromModal.attr('aria-hidden', 'false');
+            fromModal.removeAttr('aria-hidden');
         }
 
         const toModal = $(`#${toModalId}`);
         toModal.modal('show');
-        toModal.attr('aria-hidden', 'false');
 
         // Set focus to the first focusable element in new modal
         toModal.find('input:visible, select:visible').first().focus();

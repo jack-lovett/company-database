@@ -22,21 +22,40 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Local Authority</label>
-                                <select class="form-select" name="local_authority_id" required>
-                                    <option value="">Select Authority...</option>
-                                </select>
+                                <div class="input-group">
+                                    <select class="form-select" name="local_authority_id" id="local_authority_select"
+                                            required>
+                                        <option value="">Select Authority...</option>
+                                    </select>
+                                    <button type="button" class="btn btn-outline-secondary"
+                                            id="createLocalAuthorityBtn">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Wind Class</label>
-                                <select class="form-select" name="wind_class_id" required>
-                                    <option value="">Select Wind Class...</option>
-                                </select>
+                                <div class="input-group">
+                                    <select class="form-select" name="wind_class_id" id="wind_class_select" required>
+                                        <option value="">Select Wind Class...</option>
+                                    </select>
+                                    <button type="button" class="btn btn-outline-secondary"
+                                            id="createWindClassBtn">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Soil Class</label>
-                                <select class="form-select" name="soil_class_id" required>
-                                    <option value="">Select Soil Class...</option>
-                                </select>
+                                <div class="input-group">
+                                    <select class="form-select" name="soil_class_id" id="soil_class_select" required>
+                                        <option value="">Select Soil Class...</option>
+                                    </select>
+                                    <button type="button" class="btn btn-outline-secondary"
+                                            id="createSoilClassBtn">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -71,9 +90,19 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Overlays</label>
-                        <select class="form-select" name="overlays" multiple>
-                        </select>
+                        <div class="input-group">
+                            <select class="selectpicker" name="overlay_ids" id="overlay_select"
+                                    multiple
+                                    data-live-search="true"
+                                    data-selected-text-format="count > 3"
+                                    title="Select overlays...">
+                            </select>
+                            <button type="button" class="btn btn-outline-secondary" id="createOverlayBtn">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
                     </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

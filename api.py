@@ -21,7 +21,8 @@ from app.routes import (
     site_routes,
     wind_class_routes,
     soil_class_routes,
-    local_authority_routes
+    local_authority_routes,
+    overlay_routes
 )
 
 app = FastAPI()
@@ -46,7 +47,8 @@ routers = [
     project_is_building_class_routes,
     staff_routes,
     staff_project_routes,
-    staff_time_routes
+    staff_time_routes,
+    overlay_routes
 ]
 
 for router in routers:

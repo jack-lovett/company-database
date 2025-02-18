@@ -32,9 +32,9 @@
             <td>{{ project.number }}</td>
             <td>{{ project.client_name }}</td>
             <td>{{ project.site.address }}</td>
-            <td>{{ project.site.local_authority.name }}</td>
-            <td>{{ project.site.wind_class.class_ }}</td>
-            <td>{{ project.site.soil_class.class_ }}</td>
+            <td>{{ project.site.local_authority }}</td>
+            <td>{{ project.site.wind_class }}</td>
+            <td>{{ project.site.soil_class }}</td>
             <td>{{ project.status }}</td>
             <td>{{ project.description or 'N/A' }}</td>
             <td>{{ project.initial_inquiry_date }}</td>
@@ -69,9 +69,9 @@
                 {data: "number"},
                 {data: "client_name"},
                 {data: "site.address"},
-                {data: "site.local_authority.name"},
-                {data: "site.wind_class.class_"},
-                {data: "site.soil_class.class_"},
+                {data: "site.local_authority"},
+                {data: "site.wind_class"},
+                {data: "site.soil_class"},
                 {data: "status"},
                 {data: "description"},
                 {data: "initial_inquiry_date"},

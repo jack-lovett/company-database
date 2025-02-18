@@ -56,6 +56,50 @@ export function initFormHandlers() {
             this.reset();
         }
     });
+
+    $('#windClassForm').submit(async function (e) {
+        e.preventDefault();
+        const formData = cleanFormData(new FormData(e.target));
+        const response = await API.createWindClass(formData);
+        if (response) {
+            $('#windClassModal').modal('hide');
+            await handleWindClassCreationSuccess(response);
+            this.reset();
+        }
+    });
+
+    $('#localAuthorityForm').submit(async function (e) {
+        e.preventDefault();
+        const formData = cleanFormData(new FormData(e.target));
+        const response = await API.createLocalAuthority(formData);
+        if (response) {
+            $('#localAuthorityModal').modal('hide');
+            await handleLocalAuthorityCreationSuccess(response);
+            this.reset();
+        }
+    });
+
+    $('#soilClassForm').submit(async function (e) {
+        e.preventDefault();
+        const formData = cleanFormData(new FormData(e.target));
+        const response = await API.createSoilClass(formData);
+        if (response) {
+            $('#soilClassModal').modal('hide');
+            await handleSoilClassCreationSuccess(response);
+            this.reset();
+        }
+    });
+
+    $('#overlayForm').submit(async function (e) {
+        e.preventDefault();
+        const formData = cleanFormData(new FormData(e.target));
+        const response = await API.createOverlay(formData);
+        if (response) {
+            $('#overlayModal').modal('hide');
+            await handleOverlayCreationSuccess(response);
+            this.reset();
+        }
+    });
 }
 
 function cleanFormData(formData) {
@@ -90,6 +134,35 @@ async function handleClientCreationSuccess(response) {
     await populateSelect('client_select', clients, 'id', ['name']);
     refreshDataTable();
     updateClientSelect(response.id);
+}
+
+async function handleWindClassCreationSuccess(response) {
+    console.log('Wind Class Response:', response);
+    const windClasses = await API.fetchWindClasses();
+    console.log('Fetched Wind Classes:', windClasses);
+    await populateSelect('wind_class_select', windClasses, 'id', ['class_']);
+    console.log('Setting select value to:', response.id);
+    $('#wind_class_select').val(response.id);
+}
+
+
+async function handleLocalAuthorityCreationSuccess(response) {
+    const localAuthorities = await API.fetchLocalAuthorities();
+    await populateSelect('local_authority_select', localAuthorities, 'id', ['name']);
+    $('#local_authority_select').val(response.id);
+}
+
+async function handleSoilClassCreationSuccess(response) {
+    const soilClasses = await API.fetchSoilClasses();
+    await populateSelect('soil_class_select', soilClasses, 'id', ['class_', 'description']);
+    $('#soil_class_select').val(response.id);
+}
+
+
+async function handleOverlayCreationSuccess(response) {
+    const overlays = await API.fetchOverlays();
+    await populateSelect('overlay_select', overlays, 'id', ['name']);
+    $('#overlay_select').val(response.id);
 }
 
 

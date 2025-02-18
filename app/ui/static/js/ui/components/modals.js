@@ -51,8 +51,25 @@ export function initModalHandlers() {
     });
 
     $('#siteModal').on('show.bs.modal', async () => {
-        const addresses = await API.fetchAddresses();
+        const [addresses, windClasses, localAuthorities, soilClasses, overlays] = await Promise.all([
+            API.fetchAddresses(),
+            API.fetchWindClasses(),
+            API.fetchLocalAuthorities(),
+            API.fetchSoilClasses(),
+            API.fetchOverlays()
+        ]);
+
+        // Destroy work around as refreshing caused duplicate select entries
+        $('#overlay_select').selectpicker('destroy');
+
         await populateSelect('site_address_select', addresses, 'id', ['street', 'suburb']);
+        await populateSelect('wind_class_select', windClasses, 'id', ['class_']);
+        await populateSelect('local_authority_select', localAuthorities, 'id', ['name']);
+        await populateSelect('soil_class_select', soilClasses, 'id', ['class_', 'description']);
+        await populateSelect('overlay_select', overlays, 'id', ['name']);
+
+        // Reinitialise selectpicker
+        $('#overlay_select').selectpicker();
     });
 
 
@@ -62,6 +79,11 @@ export function initModalHandlers() {
         modalState.lastClickedContactBtn = this.id;
         modalState.pushModal('clientModal', 'contactModal');
     });
+
+    $('#createWindClassBtn').click(() => modalState.pushModal('siteModal', 'windClassModal'));
+    $('#createLocalAuthorityBtn').click(() => modalState.pushModal('siteModal', 'localAuthorityModal'));
+    $('#createSoilClassBtn').click(() => modalState.pushModal('siteModal', 'soilClassModal'));
+    $('#createOverlayBtn').click(() => modalState.pushModal('siteModal', 'overlayModal'));
 
     // Modal close handlers
     $('.btn-close').click(() => {
@@ -111,7 +133,9 @@ export function initModalHandlers() {
         modalState.pushModal('siteModal', 'addressModal');
     });
 
-    ['projectModal', 'contactModal', 'clientModal', 'addressModal', 'siteModal'].forEach(modalId => {
+    // Update modal stack handling
+    ['projectModal', 'contactModal', 'clientModal', 'addressModal', 'siteModal',
+        'windClassModal', 'localAuthorityModal', 'soilClassModal', 'overlayModal'].forEach(modalId => {
         $(`#${modalId}`)
             .on('hidden.bs.modal', () => modalState.popModal())
             .on('shown.bs.modal', function () {

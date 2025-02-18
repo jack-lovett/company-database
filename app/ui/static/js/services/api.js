@@ -64,6 +64,62 @@ export const API = {
             body: JSON.stringify(addresses)
         });
         return response.json();
+    },
+
+    async fetchWindClasses() {
+        const response = await fetch(`${this.baseUrl}/wind-classes`);
+        return response.json();
+    },
+
+    async fetchLocalAuthorities() {
+        const response = await fetch(`${this.baseUrl}/local-authorities`);
+        return response.json();
+    },
+
+    async fetchSoilClasses() {
+        const response = await fetch(`${this.baseUrl}/soil-classes`);
+        return response.json();
+    },
+
+    async fetchOverlays() {
+        const response = await fetch(`${this.baseUrl}/overlays`);
+        return response.json();
+    },
+
+    async createWindClass(data) {
+        const response = await fetch(`${this.baseUrl}/wind-classes`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        return response.json();
+    },
+
+    async createLocalAuthority(data) {
+        const response = await fetch(`${this.baseUrl}/local-authorities`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        return response.json();
+    },
+
+    async createSoilClass(data) {
+        const response = await fetch(`${this.baseUrl}/soil-classes`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        return response.json();
+    },
+
+    async createOverlay(data) {
+        const response = await fetch(`${this.baseUrl}/overlays`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        return response.json();
     }
 };
 
