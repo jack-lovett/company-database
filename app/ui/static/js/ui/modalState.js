@@ -5,8 +5,10 @@ export const modalState = {
     stackSizeAfterOpen: 0,
 
     clearAllForms() {
-        ['addressForm', 'contactForm', 'clientForm', 'projectForm', 'siteForm', 'windClassForm', 'soilClassForm', 'localAuthorityForm', 'overlayForm'].forEach(formId => {
-            $(`#${formId}`)[0].reset();
+        ['addressForm', 'contactForm', 'clientForm', 'projectForm', 'siteForm',
+            'windClassForm', 'soilClassForm', 'localAuthorityForm', 'overlayForm'].forEach(formId => {
+            const form = document.getElementById(formId);
+            if (form) form.reset();
         });
     },
 

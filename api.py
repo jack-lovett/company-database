@@ -22,7 +22,7 @@ from app.routes import (
     wind_class_routes,
     soil_class_routes,
     local_authority_routes,
-    overlay_routes
+    overlay_routes, modal_config
 )
 from app.schemas.table_config import get_table_configs
 
@@ -49,7 +49,8 @@ routers = [
     staff_routes,
     staff_project_routes,
     staff_time_routes,
-    overlay_routes
+    overlay_routes,
+    modal_config
 ]
 
 for router in routers:

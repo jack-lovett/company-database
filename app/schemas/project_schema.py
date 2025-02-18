@@ -30,6 +30,10 @@ class Project(ProjectBase):
         from_attributes = True
 
 
+class ProjectUpdate(BaseModel):
+    pass
+
+
 class ProjectDisplay(BaseModel):
     id: int
     number: int

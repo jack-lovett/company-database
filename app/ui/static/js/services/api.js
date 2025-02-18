@@ -134,6 +134,14 @@ export const API = {
     async fetchSites() {
         const response = await fetch(`${this.baseUrl}/sites`);
         return response.json();
+    },
+
+    async getTableConfig() {
+        const response = await fetch(`${this.baseUrl}/table-config`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch table configuration');
+        }
+        return response.json();
     }
 
 };
