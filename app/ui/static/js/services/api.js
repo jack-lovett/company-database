@@ -120,6 +120,12 @@ export const API = {
             body: JSON.stringify(data)
         });
         return response.json();
+    },
+
+    async fetchSites() {
+        const response = await fetch(`${this.baseUrl}/sites`);
+        return response.json();
     }
+
 };
 

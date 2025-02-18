@@ -1,7 +1,7 @@
 import {API} from '../../services/api.js';
 // import {validators} from '../validators.js';
 import {modalState} from "../modalState.js";
-import {populateSelect} from "./modals.js";
+import {populateSelect} from "./modalSelects.js";
 
 export function initFormHandlers() {
     // Form submissions
