@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.core.database import get_database
-from app.schemas.project_schema import Project, ProjectCreate, ProjectDisplay
+from app.models import Project, ProjectCreate, ProjectDisplay
 from app.services.project_service import ProjectService
 
 router = APIRouter(prefix="/projects", tags=["projects"])

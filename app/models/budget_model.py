@@ -1,8 +1,6 @@
 from decimal import Decimal
 from enum import Enum
 from typing import Optional
-
-from sqlalchemy.orm import Mapped
 from sqlmodel import SQLModel, Field, Relationship
 from app.models.project_model import Project
 
