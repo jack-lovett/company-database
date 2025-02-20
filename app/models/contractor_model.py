@@ -26,3 +26,6 @@ class ContractorCreate(ContractorBase):
 
 class ContractorUpdate(SQLModel):
     contact_id: Optional[int] = None
+
+class ContractorDisplay(ContractorBase):
+    id: int

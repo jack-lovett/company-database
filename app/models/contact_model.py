@@ -68,3 +68,7 @@ class ContactUpdate(SQLModel):
     discipline: Optional[str] = None
     address_id: Optional[int] = None
     postal_address_id: Optional[int] = None
+
+class ContactDisplay(ContactBase):
+    postal_address: Optional[str] = None
+    billing_address: Optional[str] = None

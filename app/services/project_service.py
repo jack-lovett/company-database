@@ -11,7 +11,7 @@ class ProjectService(BaseService):
     def __init__(self):
         super().__init__(CRUDProject())
 
-    def enrich_project(self, database, project):
+    def enrich_record(self, database, project):
         """Convert foreign keys into meaningful values for display."""
         project_dict = project.__dict__.copy()
 
@@ -40,7 +40,7 @@ class ProjectService(BaseService):
     def get_enriched_projects(self, database):
         """Retrieve all projects with enriched values."""
         projects = self.get_all(database)
-        return [self.enrich_project(database, project) for project in projects]
+        return [self.enrich_record(database, project) for project in projects]
 
     def generate_project_number(self, database) -> int:
         """Generate a unique project number based on year and sequence.

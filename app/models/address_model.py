@@ -56,3 +56,7 @@ class AddressUpdate(SQLModel):
     postal_code: Optional[str] = None
     country: Optional[str] = None
     type: Optional[AddressType] = None
+
+
+class AddressDisplay(AddressBase):
+    id: int

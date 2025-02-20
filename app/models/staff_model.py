@@ -54,3 +54,7 @@ class StaffUpdate(StaffBase):
     role: Optional[StaffRole] = None
     employment_status: Optional[EmploymentStatus] = None
     hire_date: Optional[date] = None
+
+
+class StaffDisplay(StaffBase):
+    id: int

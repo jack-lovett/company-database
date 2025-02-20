@@ -69,7 +69,7 @@ def addresses():
     return render_template("addresses.html", addresses=enriched_addresses)
 
 
-# Add these new routes
+# Add these new routers
 @app.route('/sites')
 def sites():
     session = g.database

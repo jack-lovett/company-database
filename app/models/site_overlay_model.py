@@ -12,3 +12,7 @@ class SiteOverlay(SQLModel, table=True):
         foreign_key="site.id",
         primary_key=True
     )
+
+
+class SiteOverlayDisplay(SiteOverlay):
+    pass

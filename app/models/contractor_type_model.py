@@ -20,3 +20,6 @@ class ContractorTypeCreate(ContractorTypeBase):
 class ContractorTypeUpdate(SQLModel):
     type: Optional[str] = None
     description: Optional[str] = None
+
+class ContractorTypeDisplay(ContractorTypeBase):
+    id: int

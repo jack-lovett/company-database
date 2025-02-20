@@ -40,3 +40,7 @@ class NoteCreate(SQLModel):
 class NoteUpdate(SQLModel):
     type: Optional[NoteType] = None
     content: Optional[str] = None
+
+
+class NoteDisplay(NoteBase):
+    id: int

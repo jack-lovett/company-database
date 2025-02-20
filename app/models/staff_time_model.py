@@ -28,3 +28,7 @@ class StaffTimeCreate(StaffTimeBase):
 class StaffTimeUpdate(SQLModel):
     description: Optional[str] = None
     hours: Optional[int] = None
+
+
+class StaffTimeDisplay(StaffTimeBase):
+    id: int

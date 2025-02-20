@@ -18,3 +18,7 @@ class StaffProject(SQLModel, table=True):
 class StaffProjectCreate(SQLModel):
     staff_id: int
     project_id: int
+
+
+class StaffProjectDisplay(StaffProjectCreate):
+    pass

@@ -10,7 +10,7 @@ class AddressService(BaseService):
         super().__init__(CRUDAddress())
         self.gmaps = Client(key=GOOGLE_MAPS_API_KEY)
 
-    def enrich_address(self, database, address):
+    def enrich_record(self, database, address):
         """Convert foreign keys into meaningful values for display."""
         address_dict = address.__dict__.copy()
 
