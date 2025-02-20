@@ -35,51 +35,30 @@ export class DynamicModal {
         label.textContent = field.label;
         wrapper.appendChild(label);
 
-        // Handle enum fields
-        if (field.type === 'select' && field.enum_values) {
-            const select = document.createElement('select');
-            select.className = 'form-select';
-            select.name = name;
-            if (field.required) select.required = true;
+        let input;
+
+        if (field.type === 'textarea') {
+            input = document.createElement('textarea');
+            input.className = 'form-control';
+        } else if (field.type === 'select' && field.enum_values) {
+            input = document.createElement('select');
+            input.className = 'form-select';
             field.enum_values.forEach(value => {
                 const option = document.createElement('option');
                 option.value = value;
                 option.textContent = value;
-                select.appendChild(option);
+                input.appendChild(option);
             });
-            wrapper.appendChild(select);
-        }
-        // Handle foreign key fields
-        else if (field.type === 'select' && field.related_model) {
-            const inputGroup = document.createElement('div');
-            inputGroup.className = 'input-group';
-
-            const select = document.createElement('select');
-            select.className = 'form-select';
-            select.name = name;
-            select.id = `${name}_select`;
-            if (field.required) select.required = true;
-            inputGroup.appendChild(select);
-
-            if (field.create_button) {
-                const button = document.createElement('button');
-                button.type = 'button';
-                button.className = 'btn btn-outline-secondary';
-                button.id = `create${field.related_model}Btn`;
-                button.innerHTML = '<i class="fas fa-plus"></i>';
-                inputGroup.appendChild(button);
-            }
-
-            wrapper.appendChild(inputGroup);
         } else {
-            const input = document.createElement(field.type === 'textarea' ? 'textarea' : 'input');
+            input = document.createElement('input');
             input.className = 'form-control';
-            input.name = name;
-            input.type = field.type;
-            if (field.required) input.required = true;
-            wrapper.appendChild(input);
+            input.setAttribute('type', field.type || 'text');
         }
 
+        input.name = name;
+        if (field.required) input.required = true;
+
+        wrapper.appendChild(input);
         return wrapper;
     }
 

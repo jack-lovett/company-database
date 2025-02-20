@@ -41,8 +41,8 @@ class ClientUpdate(SQLModel):
 
 class ClientDisplay(SQLModel):
     id: int
-    creation_datetime: datetime
     name: str
+    creation_datetime: datetime
     primary_contact_email: str
     primary_contact_phone: str
     secondary_contact_name: Optional[str] = None

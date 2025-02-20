@@ -30,3 +30,7 @@ class OverlayCreate(OverlayBase):
 
 class OverlayUpdate(OverlayBase):
     pass
+
+
+class OverlayDisplay(OverlayBase):
+    id: int

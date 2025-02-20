@@ -1,20 +1,7 @@
 from typing import Optional, List
-
-from sqlalchemy.orm import Mapped
 from sqlmodel import SQLModel, Field, Relationship
 
-
-class ProjectIsBuildingClass(SQLModel, table=True):
-    building_class_id: Optional[int] = Field(
-        default=None,
-        foreign_key="buildingclass.id",
-        primary_key=True
-    )
-    project_id: Optional[int] = Field(
-        default=None,
-        foreign_key="project.id",
-        primary_key=True
-    )
+from app.models.project_is_building_class_model import ProjectIsBuildingClass
 
 
 class BuildingClass(SQLModel, table=True):
@@ -29,3 +16,9 @@ class BuildingClass(SQLModel, table=True):
         back_populates="building_classes",
         link_model=ProjectIsBuildingClass
     )
+
+
+class BuildingClassDisplay(SQLModel):
+    id: int
+    code: str
+    description: str

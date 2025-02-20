@@ -10,7 +10,7 @@ class AddressService(BaseService):
         super().__init__(CRUDAddress())
         self.gmaps = Client(key=GOOGLE_MAPS_API_KEY)
 
-    def enrich_address(self, database, address):
+    def enrich_record(self, database, address):
         """Convert foreign keys into meaningful values for display."""
         address_dict = address.__dict__.copy()
 
@@ -32,7 +32,7 @@ class AddressService(BaseService):
     def get_enriched_addresses(self, database):
         """Retrieve all addresses with enriched values."""
         addresses = self.get_all(database)
-        return [self.enrich_address(database, address) for address in addresses]
+        return [self.enrich_record(database, address) for address in addresses]
 
     def process_import_address(self, address_text: str) -> dict:
         """Process a single address through Google Maps API."""

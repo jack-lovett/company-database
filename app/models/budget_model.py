@@ -28,7 +28,7 @@ class BudgetBase(SQLModel):
 class Budget(BudgetBase, table=True):
     __tablename__ = "budget"
 
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: int = Field(default=None, primary_key=True)
     project_id: int = Field(foreign_key="project.id")
 
     # Relationship
@@ -45,3 +45,7 @@ class BudgetUpdate(SQLModel):
     description: Optional[str] = None
     estimate: Optional[Decimal] = None
     actual: Optional[Decimal] = None
+
+
+class BudgetDisplay(BudgetBase):
+    id: int

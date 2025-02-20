@@ -20,7 +20,7 @@ class BaseService:
             print(f"Database session: {database}")
             return self.crud.get_all(database)
         except SQLAlchemyError as e:
-            print(f"Error: {e.args}")
+            print(f"Error: str({e.args})")
             return []
 
     def get_by_id(self, database, object_id):

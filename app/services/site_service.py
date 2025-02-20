@@ -8,7 +8,7 @@ class SiteService(BaseService):
     def __init__(self):
         super().__init__(CRUDSite())
 
-    def enrich_site(self, database, site):
+    def enrich_record(self, database, site):
         """Convert foreign keys into meaningful values for display."""
         site_dict = site.__dict__.copy()
 
@@ -36,4 +36,4 @@ class SiteService(BaseService):
     def get_enriched_sites(self, database):
         """Retrieve all sites with enriched values."""
         sites = self.get_all(database)
-        return [self.enrich_site(database, site) for site in sites]
+        return [self.enrich_record(database, site) for site in sites]

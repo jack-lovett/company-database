@@ -48,3 +48,6 @@ class CallLogUpdate(SQLModel):
     type: Optional[CallLogType] = None
     status: Optional[CallLogStatus] = None
     description: Optional[str] = None
+
+class CallLogDisplay(CallLogBase):
+    id: int

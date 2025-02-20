@@ -18,3 +18,7 @@ class ProjectIsBuildingClass(SQLModel, table=True):
 class ProjectIsBuildingClassCreate(SQLModel):
     building_class_id: int
     project_id: int
+
+
+class ProjectIsBuildingClassDisplay(ProjectIsBuildingClassCreate):
+    pass

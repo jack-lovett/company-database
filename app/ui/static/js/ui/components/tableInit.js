@@ -4,6 +4,12 @@ import {API} from "../../services/api.js";
 export async function initialiseDataTable(tableId, apiEndpoint) {
     const tableConfigs = await API.getTableConfig();
 
+    // Add validation to check if config exists for the endpoint
+    if (!tableConfigs[apiEndpoint]) {
+        console.error(`No table configuration found for endpoint: ${apiEndpoint}`);
+        return;
+    }
+
     // Add table headers dynamically before initialization
     const headerRow = $('<tr>');
     tableConfigs[apiEndpoint].forEach(config => {

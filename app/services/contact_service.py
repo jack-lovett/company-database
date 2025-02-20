@@ -7,7 +7,7 @@ class ContactService(BaseService):
     def __init__(self):
         super().__init__(CRUDContact())
 
-    def enrich_contact(self, database, contact):
+    def enrich_record(self, database, contact):
         """Convert foreign keys into meaningful values for display."""
         contact_dict = contact.__dict__.copy()
 
@@ -34,4 +34,4 @@ class ContactService(BaseService):
     def get_enriched_contacts(self, database):
         """Retrieve all contacts with enriched values."""
         contacts = self.get_all(database)
-        return [self.enrich_contact(database, contact) for contact in contacts]
+        return [self.enrich_record(database, contact) for contact in contacts]

@@ -14,3 +14,7 @@ class ProjectHasContractorCreate(SQLModel):
     project_id: int
     contractor_id: int
     contractor_type_id: int
+
+
+class ProjectHasContractorDisplay(ProjectHasContractor):
+    pass

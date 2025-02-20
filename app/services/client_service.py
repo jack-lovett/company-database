@@ -7,7 +7,7 @@ class ClientService(BaseService):
     def __init__(self):
         super().__init__(CRUDClient())
 
-    def enrich_client(self, database, client):
+    def enrich_record(self, database, client):
         """Convert foreign keys into meaningful values for display."""
         client_dict = client.__dict__.copy()
 
@@ -37,12 +37,12 @@ class ClientService(BaseService):
     def get_enriched_clients(self, database):
         """Retrieve all clients with enriched values."""
         clients = self.get_all(database)
-        return [self.enrich_client(database, client) for client in clients]
+        return [self.enrich_record(database, client) for client in clients]
 
     def get_by_name(self, database, query):
         """Retrieve all clients searchable by name."""
         clients = self.filter(database, name=query)
-        enriched_clients = [self.enrich_client(database, client) for client in clients]
+        enriched_clients = [self.enrich_record(database, client) for client in clients]
 
         # Ensure the client dict contains 'name' and 'id' for Select2 compatibility
         return [{'id': client['client_id'], 'text': client['primary_contact_name']} for client in enriched_clients]

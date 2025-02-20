@@ -24,3 +24,7 @@ class LocalAuthorityCreate(LocalAuthorityBase):
 
 class LocalAuthorityUpdate(LocalAuthorityBase):
     pass
+
+
+class LocalAuthorityDisplay(LocalAuthorityBase):
+    pass
