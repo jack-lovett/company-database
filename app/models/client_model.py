@@ -1,23 +1,50 @@
-from sqlalchemy import Column, Integer, ForeignKey, DateTime, func
-from sqlalchemy.orm import relationship
+from datetime import datetime
+from typing import Optional, List
 
-from app.models.base_model import Base
+from sqlalchemy.orm import Mapped
+from sqlmodel import SQLModel, Field, Relationship
 
 
-class Client(Base):
+class ClientBase(SQLModel):
+    primary_contact_id: int = Field(foreign_key="contact.id")
+    secondary_contact_id: Optional[int] = Field(default=None, foreign_key="contact.id")
+    creation_datetime: datetime = Field(default_factory=datetime.utcnow)
+
+
+class Client(ClientBase, table=True):
     __tablename__ = "client"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    primary_contact_id = Column(Integer, ForeignKey('contact.id'), nullable=False)
-    secondary_contact_id = Column(Integer, ForeignKey('contact.id'), nullable=True)
-    creation_datetime = Column(DateTime, default=func.now(), nullable=False)
+    id: Optional[int] = Field(default=None, primary_key=True)
 
-    primary_contact = relationship("Contact", foreign_keys=[primary_contact_id], back_populates="primary_for_clients")
-    secondary_contact = relationship("Contact", foreign_keys=[secondary_contact_id],
-                                     back_populates="secondary_for_clients")
+    # Relationships
+    primary_contact: "Contact" = Relationship(
+        back_populates="primary_for_clients",
+        sa_relationship_kwargs={"foreign_keys": "[Client.primary_contact_id]"}
+    )
+    secondary_contact: Optional["Contact"] = Relationship(
+        back_populates="secondary_for_clients",
+        sa_relationship_kwargs={"foreign_keys": "[Client.secondary_contact_id]"}
+    )
+    projects: List["Project"] = Relationship(back_populates="client")
+    notes: List["Note"] = Relationship(back_populates="client")
+    call_logs: List["CallLog"] = Relationship(back_populates="client")
 
-    projects = relationship("Project", back_populates="client")
 
-    notes = relationship("Note", back_populates="client")
+class ClientCreate(ClientBase):
+    pass
 
-    call_logs = relationship("CallLog", back_populates="client")
+
+class ClientUpdate(SQLModel):
+    primary_contact_id: Optional[int] = None
+    secondary_contact_id: Optional[int] = None
+
+
+class ClientDisplay(SQLModel):
+    id: int
+    creation_datetime: datetime
+    name: str
+    primary_contact_email: str
+    primary_contact_phone: str
+    secondary_contact_name: Optional[str] = None
+    secondary_contact_email: Optional[str] = None
+    secondary_contact_phone: Optional[str] = None

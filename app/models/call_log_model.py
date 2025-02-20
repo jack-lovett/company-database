@@ -1,22 +1,50 @@
-from sqlalchemy import Integer, Column, ForeignKey, Enum, DateTime, func, String
-from sqlalchemy.orm import relationship
+import datetime
+from enum import Enum
+from typing import Optional
 
-from app.models.base_model import Base
+from sqlalchemy.orm import Mapped
+from sqlmodel import SQLModel, Field, Relationship
 
 
-class CallLog(Base):
+class CallLogType(str, Enum):
+    lead = "lead"
+    information_request = "information_request"
+
+
+class CallLogStatus(str, Enum):
+    follow_up = "follow_up"
+    resolved = "resolved"
+    in_progress = "in_progress"
+
+
+class CallLogBase(SQLModel):
+    client_id: int = Field(foreign_key="client.id")
+    staff_id: int = Field(foreign_key="staff.id")
+    project_id: Optional[int] = Field(default=None, foreign_key="project.id")
+    type: CallLogType = Field(sa_column_kwargs={"name": "type"})
+    status: CallLogStatus
+    datetime_: datetime.datetime = Field(default_factory=lambda: datetime.datetime.now(datetime.UTC))
+    description: Optional[str] = Field(default=None, max_length=255)
+
+
+class CallLog(CallLogBase, table=True):
     __tablename__ = "call_log"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    client_id = Column(Integer, ForeignKey('client.id'), nullable=False)
-    staff_id = Column(Integer, ForeignKey('staff.id'), nullable=False)
-    project_id = Column(Integer, ForeignKey('project.id'), nullable=True)
-    type = Column(Enum('lead', 'information_request', name='type_enum'), nullable=False)
-    status = Column(Enum('follow_up', 'resolved', 'in_progress', name='status_enum'), nullable=False)
-    datetime = Column(DateTime, default=func.now(),
-                      nullable=False)  # Automatically set to current timestamp
-    description = Column(String(255), nullable=True)
+    id: Optional[int] = Field(default=None, primary_key=True)
 
-    client = relationship("Client", back_populates="call_logs")
-    staff = relationship("Staff", back_populates="call_logs")
-    project = relationship("Project", back_populates="call_logs")
+    # Relationships
+    client: "Client" = Relationship(back_populates="call_logs")
+    staff: "Staff" = Relationship(back_populates="call_logs")
+    project: Optional["Project"] = Relationship(back_populates="call_logs")
+
+
+class CallLogCreate(CallLogBase):
+    pass
+
+
+class CallLogUpdate(SQLModel):
+    client_id: Optional[int] = None
+    staff_id: Optional[int] = None
+    type: Optional[CallLogType] = None
+    status: Optional[CallLogStatus] = None
+    description: Optional[str] = None

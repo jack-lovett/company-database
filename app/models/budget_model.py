@@ -1,20 +1,49 @@
-from sqlalchemy import Column, Integer, String, Enum, ForeignKey, DECIMAL
-from sqlalchemy.orm import relationship
+from decimal import Decimal
+from enum import Enum
+from typing import Optional
 
-from app.models.base_model import Base
+from sqlalchemy.orm import Mapped
+from sqlmodel import SQLModel, Field, Relationship
+from app.models.project_model import Project
 
 
-class Budget(Base):
+class BudgetType(str, Enum):
+    asset = "asset"
+    liability = "liability"
+
+
+class BudgetStatus(str, Enum):
+    not_invoiced = "not_invoiced"
+    invoiced = "invoiced"
+    paid = "paid"
+    partially_invoiced = "partially_invoiced"
+
+
+class BudgetBase(SQLModel):
+    type: BudgetType
+    status: BudgetStatus = Field(default=BudgetStatus.not_invoiced)
+    description: Optional[str] = Field(default=None, max_length=255)
+    estimate: Optional[Decimal] = Field(default=None, max_digits=10, decimal_places=2)
+    actual: Optional[Decimal] = Field(default=None, max_digits=10, decimal_places=2)
+
+
+class Budget(BudgetBase, table=True):
     __tablename__ = "budget"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    project_id = Column(Integer, ForeignKey('project.id'), nullable=False)
-    type = Column(Enum('asset', 'liability', name='type_enum'), nullable=False)
-    status = Column(Enum('not_invoiced', 'invoiced', 'paid', 'partially_invoiced', name='status_enum'),
-                    default='not_invoiced',
-                    nullable=False)
-    description = Column(String(255), nullable=True)
-    estimate = Column(DECIMAL(10, 2), nullable=True)
-    actual = Column(DECIMAL(10, 2), nullable=True)
+    id: Optional[int] = Field(default=None, primary_key=True)
+    project_id: int = Field(foreign_key="project.id")
 
-    project = relationship("Project", back_populates="budgets")
+    # Relationship
+    project: "Project" = Relationship(back_populates="budgets")
+
+
+class BudgetCreate(BudgetBase):
+    project_id: int
+
+
+class BudgetUpdate(SQLModel):
+    type: Optional[BudgetType] = None
+    status: Optional[BudgetStatus] = None
+    description: Optional[str] = None
+    estimate: Optional[Decimal] = None
+    actual: Optional[Decimal] = None

@@ -1,14 +1,26 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship
+from typing import Optional, List
 
-from app.models.base_model import Base
+from sqlalchemy.orm import Mapped
+from sqlmodel import SQLModel, Field, Relationship
 
 
-class LocalAuthority(Base):
+class LocalAuthorityBase(SQLModel):
+    name: str = Field(max_length=45)
+    website: Optional[str] = Field(default=None, max_length=45)
+
+
+class LocalAuthority(LocalAuthorityBase, table=True):
     __tablename__ = "local_authority"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(45), nullable=False)
-    website = Column(String(45), nullable=True)
+    id: Optional[int] = Field(default=None, primary_key=True)
 
-    sites = relationship("Site", back_populates="local_authority")
+    # Relationship
+    sites: List["Site"] = Relationship(back_populates="local_authority")
+
+
+class LocalAuthorityCreate(LocalAuthorityBase):
+    pass
+
+
+class LocalAuthorityUpdate(LocalAuthorityBase):
+    pass

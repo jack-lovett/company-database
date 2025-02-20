@@ -1,15 +1,31 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship
+from typing import Optional, List
+from sqlmodel import SQLModel, Field, Relationship
 
-from app.models.base_model import Base
+from app.models.site_model import Site
 
 
-class SoilClass(Base):
+class SoilClassBase(SQLModel):
+    abbreviation: str = Field(max_length=45)
+    class_: str = Field(max_length=45, sa_column_kwargs={"name": "class"})
+    description: str = Field(max_length=45)
+
+
+class SoilClass(SoilClassBase, table=True):
     __tablename__ = "soil_class"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    abbreviation = Column(String(45), nullable=False)
-    class_ = Column('class', String(45), nullable=False)
-    description = Column(String(45), nullable=False)
+    id: Optional[int] = Field(default=None, primary_key=True)
 
-    sites = relationship("Site", back_populates="soil_class")
+    # Relationship
+    sites: List[Site] = Relationship(back_populates="soil_class")
+
+
+class SoilClassCreate(SoilClassBase):
+    pass
+
+
+class SoilClassUpdate(SoilClassBase):
+    pass
+
+
+class SoilClassDisplay(SoilClassBase):
+    id: int

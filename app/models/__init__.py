@@ -1,5 +1,4 @@
 """Package initialisation."""
-
 from .address_model import Address
 from .budget_model import Budget
 from .building_class_model import BuildingClass

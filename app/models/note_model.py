@@ -1,19 +1,42 @@
-"""Note model for SQL database."""
-from sqlalchemy import Column, Integer, ForeignKey, Text, DateTime, func, Enum
-from sqlalchemy.orm import relationship
+from datetime import datetime
+from enum import Enum
+from typing import Optional
 
-from app.models.base_model import Base
+from sqlalchemy.orm import Mapped
+from sqlmodel import SQLModel, Field, Relationship
 
 
-class Note(Base):
+class NoteType(str, Enum):
+    comment = "comment"
+    reminder = "reminder"
+    follow_up = "follow_up"
+
+
+class NoteBase(SQLModel):
+    type: NoteType
+    content: str = Field()
+    project_id: Optional[int] = Field(default=None, foreign_key="project.id")
+    client_id: Optional[int] = Field(default=None, foreign_key="client.id")
+    creation_datetime: datetime = Field(default_factory=datetime.utcnow)
+
+
+class Note(NoteBase, table=True):
     __tablename__ = "note"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    project_id = Column(Integer, ForeignKey('project.id'), nullable=True)
-    client_id = Column(Integer, ForeignKey('client.id'), nullable=True)
-    type = Column(Enum('comment', 'reminder', 'follow_up', name='type_enum'), nullable=False)
-    content = Column(Text, nullable=False)
-    creation_datetime = Column(DateTime, default=func.now(), nullable=False)
+    id: Optional[int] = Field(default=None, primary_key=True)
 
-    client = relationship("Client", back_populates="notes")
-    project = relationship("Project", back_populates="notes")
+    # Relationships
+    client: Optional["Client"] = Relationship(back_populates="notes")
+    project: Optional["Project"] = Relationship(back_populates="notes")
+
+
+class NoteCreate(SQLModel):
+    type: NoteType
+    content: str
+    project_id: int
+    client_id: int
+
+
+class NoteUpdate(SQLModel):
+    type: Optional[NoteType] = None
+    content: Optional[str] = None

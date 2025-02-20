@@ -1,11 +1,20 @@
-"""Staff project model for SQL database."""
-from sqlalchemy import Integer, Column, ForeignKey
-
-from app.models.base_model import Base
+from sqlmodel import SQLModel, Field
 
 
-class StaffProject(Base):
+class StaffProject(SQLModel, table=True):
     __tablename__ = "staff_project"
 
-    staff_id = Column(Integer, ForeignKey('staff.id'), primary_key=True)
-    project_id = Column(Integer, ForeignKey('project.id'), primary_key=True)
+    staff_id: int = Field(
+        foreign_key="staff.id",
+        primary_key=True
+    )
+    project_id: int = Field(
+        foreign_key="project.id",
+        primary_key=True
+    )
+
+
+# For API operations
+class StaffProjectCreate(SQLModel):
+    staff_id: int
+    project_id: int

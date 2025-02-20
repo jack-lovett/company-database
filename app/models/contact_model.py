@@ -1,36 +1,70 @@
-from sqlalchemy import Column, Integer, ForeignKey, DateTime, String, func
-from sqlalchemy.orm import relationship
+from datetime import datetime
+from typing import Optional, List
 
-from app.models.base_model import Base
+from sqlalchemy.orm import Mapped
+from sqlmodel import SQLModel, Field, Relationship
 
 
-class Contact(Base):
+class ContactBase(SQLModel):
+    first_name: str = Field(max_length=45)
+    last_name: str = Field(max_length=45)
+    phone: Optional[str] = Field(default=None, max_length=20)
+    email: Optional[str] = Field(default=None, max_length=255)
+    business_name: Optional[str] = Field(default=None, max_length=255)
+    abn: Optional[str] = Field(default=None, max_length=11)
+    accounts_email: Optional[str] = Field(default=None, max_length=255)
+    website: Optional[str] = Field(default=None, max_length=255)
+    discipline: Optional[str] = Field(default=None, max_length=255)
+    address_id: Optional[int] = Field(default=None, foreign_key="address.id")
+    postal_address_id: Optional[int] = Field(default=None, foreign_key="address.id")
+    creation_datetime: datetime = Field(default_factory=datetime.utcnow)
+
+
+class Contact(ContactBase, table=True):
     __tablename__ = "contact"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    address_id = Column(Integer, ForeignKey('address.id'), nullable=True)
-    postal_address_id = Column(Integer, ForeignKey('address.id'), nullable=True)
-    first_name = Column(String(45), nullable=False)
-    last_name = Column(String(45), nullable=False)
-    phone = Column(String(20), nullable=True)
-    email = Column(String(255), nullable=True)
-    business_name = Column(String(255), nullable=True)
-    abn = Column(String(11), nullable=True)
-    accounts_email = Column(String(255), nullable=True)
-    website = Column(String(255), nullable=True)
-    discipline = Column(String(255), nullable=True)
-    creation_datetime = Column(DateTime, default=func.now(), nullable=False)
+    id: Optional[int] = Field(default=None, primary_key=True)
 
-    contractors = relationship("Contractor", back_populates="contact")
+    # Relationships
+    contractors: List["Contractor"] = Relationship(back_populates="contact")
+    staff: List["Staff"] = Relationship(back_populates="contact")
+    billing_address: Optional["Address"] = Relationship(
+        back_populates="contacts_as_billing",
+        sa_relationship_kwargs={
+            "foreign_keys": "[Contact.address_id]",
+            "overlaps": "contacts_as_postal"
+        }
+    )
+    postal_address: Optional["Address"] = Relationship(
+        back_populates="contacts_as_postal",
+        sa_relationship_kwargs={
+            "foreign_keys": "[Contact.postal_address_id]",
+            "overlaps": "contacts_as_billing"
+        }
+    )
+    primary_for_clients: List["Client"] = Relationship(
+        back_populates="primary_contact",
+        sa_relationship_kwargs={"foreign_keys": "Client.primary_contact_id"}
+    )
+    secondary_for_clients: List["Client"] = Relationship(
+        back_populates="secondary_contact",
+        sa_relationship_kwargs={"foreign_keys": "Client.secondary_contact_id"}
+    )
 
-    staff = relationship("Staff", back_populates="contact")
 
-    billing_address = relationship("Address", foreign_keys=[address_id], back_populates="contacts_as_billing",
-                                   overlaps="contacts_as_postal")
-    postal_address = relationship("Address", foreign_keys=[postal_address_id], back_populates="contacts_as_postal",
-                                  overlaps="contacts_as_billing")
+class ContactCreate(ContactBase):
+    pass
 
-    primary_for_clients = relationship("Client", foreign_keys="Client.primary_contact_id",
-                                       back_populates="primary_contact")
-    secondary_for_clients = relationship("Client", foreign_keys="Client.secondary_contact_id",
-                                         back_populates="secondary_contact")
+
+class ContactUpdate(SQLModel):
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    phone: Optional[str] = None
+    email: Optional[str] = None
+    business_name: Optional[str] = None
+    abn: Optional[str] = None
+    accounts_email: Optional[str] = None
+    website: Optional[str] = None
+    discipline: Optional[str] = None
+    address_id: Optional[int] = None
+    postal_address_id: Optional[int] = None

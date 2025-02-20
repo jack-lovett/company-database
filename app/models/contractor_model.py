@@ -1,15 +1,28 @@
-from sqlalchemy import Column, Integer, ForeignKey
-from sqlalchemy.orm import relationship
+from typing import Optional, List
+from sqlmodel import SQLModel, Field, Relationship
+from app.models.project_has_contractor_model import ProjectHasContractor
 
-from app.models.base_model import Base
+
+class ContractorBase(SQLModel):
+    contact_id: int = Field(foreign_key="contact.id")
 
 
-class Contractor(Base):
+class Contractor(ContractorBase, table=True):
     __tablename__ = "contractor"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    contact_id = Column(Integer, ForeignKey('contact.id'), nullable=False)
+    id: Optional[int] = Field(default=None, primary_key=True)
 
-    contact = relationship("Contact", back_populates="contractors")
+    # Relationships
+    contact: "Contact" = Relationship(back_populates="contractors")
+    projects: List["Project"] = Relationship(
+        back_populates="contractors",
+        link_model=ProjectHasContractor
+    )
 
-    projects = relationship("Project", secondary="project_has_contractor", back_populates="contractors")
+
+class ContractorCreate(ContractorBase):
+    pass
+
+
+class ContractorUpdate(SQLModel):
+    contact_id: Optional[int] = None

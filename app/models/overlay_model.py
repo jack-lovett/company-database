@@ -1,16 +1,32 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship
+from typing import Optional, List
 
-from app.models.base_model import Base
+from sqlalchemy.orm import Mapped
+from sqlmodel import SQLModel, Field, Relationship
+from app.models.site_overlay_model import SiteOverlay
 
 
-class Overlay(Base):
+class OverlayBase(SQLModel):
+    name: Optional[str] = Field(default=None, max_length=45)
+
+
+class Overlay(OverlayBase, table=True):
     __tablename__ = "overlay"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(45), nullable=True)
+    id: Optional[int] = Field(default=None, primary_key=True)
 
-    sites = relationship("Site", secondary="site_overlay", back_populates="overlays")
+    # Relationship
+    sites: List["Site"] = Relationship(
+        back_populates="overlays",
+        link_model=SiteOverlay
+    )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
+
+
+class OverlayCreate(OverlayBase):
+    pass
+
+
+class OverlayUpdate(OverlayBase):
+    pass

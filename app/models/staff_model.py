@@ -1,25 +1,56 @@
-from sqlalchemy import Integer, Column, ForeignKey, Enum, Text, Date
-from sqlalchemy.orm import relationship
+from datetime import date
+from enum import Enum
+from typing import Optional, List
 
-from app.models.base_model import Base
+from sqlalchemy.orm import Mapped
+from sqlmodel import SQLModel, Field, Relationship
+
+from app.models.staff_project_model import StaffProject
 
 
-class Staff(Base):
+class StaffRole(str, Enum):
+    secretary = "secretary"
+    director = "director"
+    building_designer = "building_designer"
+    draftsperson = "draftsperson"
+    junior_draftsperson = "junior_draftsperson"
+
+
+class EmploymentStatus(str, Enum):
+    full_time = "full_time"
+    part_time = "part_time"
+    casual = "casual"
+    not_employed = "not_employed"
+
+
+class StaffBase(SQLModel):
+    contact_id: int = Field(foreign_key="contact.id")
+    role: StaffRole
+    employment_status: EmploymentStatus
+    hire_date: date
+    notes: Optional[str] = Field(default=None)
+
+
+class Staff(StaffBase, table=True):
     __tablename__ = "staff"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    contact_id = Column(Integer, ForeignKey('contact.id'), nullable=False)
-    role = Column(Enum('secretary', 'director', 'building_designer', 'draftsperson', 'junior_draftsperson',
-                       name='role_enum'), nullable=False)
-    employment_status = Column(
-        Enum('full_time', 'part_time', 'casual', 'not_employed', name='employment_status_enum'), nullable=False)
-    hire_date = Column(Date, nullable=False)
-    notes = Column(Text, nullable=True)
+    id: Optional[int] = Field(default=None, primary_key=True)
 
-    contact = relationship("Contact", back_populates="staff")
+    # Relationships
+    contact: "Contact" = Relationship(back_populates="staff")
+    projects: List["Project"] = Relationship(
+        back_populates="staff",
+        link_model=StaffProject
+    )
+    staff_times: List["StaffTime"] = Relationship(back_populates="staff")
+    call_logs: List["CallLog"] = Relationship(back_populates="staff")
 
-    projects = relationship("Project", secondary="staff_project", back_populates="staff")
 
-    staff_times = relationship("StaffTime", back_populates="staff")
+class StaffCreate(StaffBase):
+    pass
 
-    call_logs = relationship("CallLog", back_populates="staff")
+
+class StaffUpdate(StaffBase):
+    role: Optional[StaffRole] = None
+    employment_status: Optional[EmploymentStatus] = None
+    hire_date: Optional[date] = None

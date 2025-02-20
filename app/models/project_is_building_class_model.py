@@ -1,9 +1,20 @@
-from sqlalchemy import Column, ForeignKey, Integer
-
-from app.models.base_model import Base
+from sqlmodel import SQLModel, Field
 
 
-class ProjectIsBuildingClass(Base):
-    __tablename__ = "project_is_building_class"
-    building_class_id = Column(Integer, ForeignKey('building_class.id'), primary_key=True)
-    project_id = Column(Integer, ForeignKey('project.id'), primary_key=True)
+class ProjectIsBuildingClass(SQLModel, table=True):
+    __tablename__ = 'project_is_building_class'
+
+    building_class_id: int = Field(
+        foreign_key="buildingclass.id",
+        primary_key=True
+    )
+    project_id: int = Field(
+        foreign_key="project.id",
+        primary_key=True
+    )
+
+
+# For API operations
+class ProjectIsBuildingClassCreate(SQLModel):
+    building_class_id: int
+    project_id: int

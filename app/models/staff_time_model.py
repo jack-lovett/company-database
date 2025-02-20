@@ -1,17 +1,30 @@
-from sqlalchemy import Integer, Column, ForeignKey, String
-from sqlalchemy.orm import relationship
+from typing import Optional
 
-from app.models.base_model import Base
+from sqlalchemy.orm import Mapped
+from sqlmodel import SQLModel, Field, Relationship
 
 
-class StaffTime(Base):
+class StaffTimeBase(SQLModel):
+    staff_id: int = Field(foreign_key="staff.id")
+    project_id: Optional[int] = Field(default=None, foreign_key="project.id")
+    description: Optional[str] = Field(default=None, max_length=255)
+    hours: int
+
+
+class StaffTime(StaffTimeBase, table=True):
     __tablename__ = "staff_time"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    staff_id = Column(Integer, ForeignKey('staff.id'), nullable=False)
-    project_id = Column(Integer, ForeignKey('project.id'), nullable=True)
-    description = Column(String(255), nullable=True)
-    hours = Column(Integer, nullable=False)
+    id: Optional[int] = Field(default=None, primary_key=True)
 
-    staff = relationship("Staff", back_populates="staff_times")
-    project = relationship("Project", back_populates="staff_times")
+    # Relationships
+    staff: "Staff" = Relationship(back_populates="staff_times")
+    project: Optional["Project"] = Relationship(back_populates="staff_times")
+
+
+class StaffTimeCreate(StaffTimeBase):
+    pass
+
+
+class StaffTimeUpdate(SQLModel):
+    description: Optional[str] = None
+    hours: Optional[int] = None

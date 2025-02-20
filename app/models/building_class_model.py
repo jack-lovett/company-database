@@ -1,14 +1,31 @@
-from sqlalchemy import Integer, Column, String
-from sqlalchemy.orm import relationship
+from typing import Optional, List
 
-from app.models.base_model import Base
+from sqlalchemy.orm import Mapped
+from sqlmodel import SQLModel, Field, Relationship
 
 
-class BuildingClass(Base):
-    __tablename__ = "building_class"
+class ProjectIsBuildingClass(SQLModel, table=True):
+    building_class_id: Optional[int] = Field(
+        default=None,
+        foreign_key="buildingclass.id",
+        primary_key=True
+    )
+    project_id: Optional[int] = Field(
+        default=None,
+        foreign_key="project.id",
+        primary_key=True
+    )
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    code = Column(String(2), nullable=False)
-    description = Column(String(255), nullable=True)
 
-    projects = relationship("Project", secondary="project_is_building_class", back_populates="building_classes")
+class BuildingClass(SQLModel, table=True):
+    __tablename__ = 'buildingclass'
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    code: str = Field(max_length=2)
+    description: Optional[str] = Field(default=None, max_length=255)
+
+    # Relationship
+    projects: List["Project"] = Relationship(
+        back_populates="building_classes",
+        link_model=ProjectIsBuildingClass
+    )

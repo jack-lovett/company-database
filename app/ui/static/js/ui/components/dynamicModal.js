@@ -35,7 +35,22 @@ export class DynamicModal {
         label.textContent = field.label;
         wrapper.appendChild(label);
 
-        if (field.type === 'select' && field.related_model) {
+        // Handle enum fields
+        if (field.type === 'select' && field.enum_values) {
+            const select = document.createElement('select');
+            select.className = 'form-select';
+            select.name = name;
+            if (field.required) select.required = true;
+            field.enum_values.forEach(value => {
+                const option = document.createElement('option');
+                option.value = value;
+                option.textContent = value;
+                select.appendChild(option);
+            });
+            wrapper.appendChild(select);
+        }
+        // Handle foreign key fields
+        else if (field.type === 'select' && field.related_model) {
             const inputGroup = document.createElement('div');
             inputGroup.className = 'input-group';
 

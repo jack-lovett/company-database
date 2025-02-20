@@ -1,30 +1,62 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
-from sqlalchemy.orm import relationship
+from typing import Optional, List
 
-from app.models.base_model import Base
+from sqlalchemy.orm import Mapped
+from sqlmodel import SQLModel, Field, Relationship
+
+from app.models.site_overlay_model import SiteOverlay
 
 
-class Site(Base):
+class SiteBase(SQLModel):
+    address_id: int = Field(foreign_key="address.id")
+    local_authority_id: int = Field(foreign_key="local_authority.id")
+    wind_class_id: int = Field(foreign_key="wind_class.id")
+    soil_class_id: int = Field(foreign_key="soil_class.id")
+    lot_number: Optional[int] = None
+    plan_number: Optional[str] = Field(default=None, max_length=15)
+    heritage_status: Optional[bool] = None
+    zone: Optional[str] = Field(default=None, max_length=45)
+    precinct: Optional[str] = Field(default=None, max_length=45)
+    area: Optional[str] = Field(default=None, max_length=45)
+
+
+class Site(SiteBase, table=True):
     __tablename__ = "site"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    address_id = Column(Integer, ForeignKey('address.id'), nullable=False)
-    local_authority_id = Column(Integer, ForeignKey('local_authority.id'), nullable=False)
-    wind_class_id = Column(Integer, ForeignKey('wind_class.id'), nullable=False)
-    soil_class_id = Column(Integer, ForeignKey('soil_class.id'), nullable=False)
-    lot_number = Column(Integer, nullable=True)
-    plan_number = Column(String(15), nullable=True)
-    heritage_status = Column(Boolean, nullable=True)
-    zone = Column(String(45), nullable=True)
-    precinct = Column(String(45), nullable=True)
-    area = Column(String(45), nullable=True)
+    id: Optional[int] = Field(default=None, primary_key=True)
 
-    address = relationship("Address", back_populates="sites")
-    local_authority = relationship("LocalAuthority", back_populates="sites")
-    wind_class = relationship("WindClass", back_populates="sites")
-    soil_class = relationship("SoilClass", back_populates="sites")
-    overlays = relationship("Overlay", secondary="site_overlay", back_populates="sites")
-    projects = relationship("Project", back_populates="site")
+    # Relationships
+    address: "Address" = Relationship(back_populates="sites")
+    local_authority: "LocalAuthority" = Relationship(back_populates="sites")
+    wind_class: "WindClass" = Relationship(back_populates="sites")
+    soil_class: "SoilClass" = Relationship(back_populates="sites")
+    overlays: List["Overlay"] = Relationship(
+        back_populates="sites",
+        link_model=SiteOverlay
+    )
+    projects: List["Project"] = Relationship(back_populates="site")
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Site {self.id}: {self.address.street}, {self.address.suburb}, {self.address.city}, {self.address.state} {self.address.postal_code}"
+
+
+class SiteCreate(SiteBase):
+    pass
+
+
+class SiteUpdate(SiteBase):
+    pass
+
+
+class SiteDisplay(SQLModel):
+    id: int
+    address: str
+    local_authority: str
+    wind_class: str
+    soil_class: str
+    lot_number: Optional[int] = None
+    plan_number: Optional[str] = None
+    heritage_status: Optional[bool] = None
+    zone: Optional[str] = None
+    precinct: Optional[str] = None
+    area: Optional[str] = None
+    overlays: Optional[List[str]] = None

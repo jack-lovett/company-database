@@ -1,13 +1,13 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlmodel import SQLModel
 
 from app.core.config import DATABASE_URL
-from app.models.base_model import Base
 
 # Create the SQLAlchemy engine
 engine = create_engine(
     DATABASE_URL,
-    echo=True,  # Set to False in production
+    echo=False,
     pool_pre_ping=True
 )
 
@@ -30,4 +30,5 @@ def get_database():
 
 # Initialise the database
 def init_db():
-    Base.metadata.create_all(bind=engine)
+    import app.models  # Import your models here
+    SQLModel.metadata.create_all(bind=engine)

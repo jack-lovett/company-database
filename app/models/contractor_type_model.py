@@ -1,12 +1,22 @@
-"""Project model for SQL database."""
-from sqlalchemy import Column, Integer, Text, String
-
-from app.models.base_model import Base
+from typing import Optional
+from sqlmodel import SQLModel, Field
 
 
-class ContractorType(Base):
+class ContractorTypeBase(SQLModel):
+    type: str = Field(max_length=255)
+    description: Optional[str] = Field(default=None)
+
+
+class ContractorType(ContractorTypeBase, table=True):
     __tablename__ = "contractor_type"
+    
+    id: Optional[int] = Field(default=None, primary_key=True)
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    type = Column(String(255), nullable=False)
-    description = Column(Text, nullable=True)
+
+class ContractorTypeCreate(ContractorTypeBase):
+    pass
+
+
+class ContractorTypeUpdate(SQLModel):
+    type: Optional[str] = None
+    description: Optional[str] = None

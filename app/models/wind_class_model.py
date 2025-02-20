@@ -1,13 +1,30 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship
+from typing import Optional, List
 
-from app.models.base_model import Base
+from sqlalchemy.orm import Mapped
+from sqlmodel import SQLModel, Field, Relationship
 
 
-class WindClass(Base):
+class WindClassBase(SQLModel):
+    class_: str = Field(max_length=2, sa_column_kwargs={"name": "class"})
+
+
+class WindClass(WindClassBase, table=True):
     __tablename__ = "wind_class"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    class_ = Column('class', String(2), nullable=True)
+    id: Optional[int] = Field(default=None, primary_key=True)
 
-    sites = relationship("Site", back_populates="wind_class")
+    # Relationship
+    sites: List["Site"] = Relationship(back_populates="wind_class")
+
+
+class WindClassCreate(WindClassBase):
+    pass
+
+
+class WindClassUpdate(WindClassBase):
+    pass
+
+
+class WindClassDisplay(SQLModel):
+    id: int
+    class_: str

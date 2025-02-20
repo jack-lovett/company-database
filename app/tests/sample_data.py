@@ -15,6 +15,7 @@ fake = Faker()
 
 def create_addresses(database: Session, number_of_records: int):
     """Generate and insert test address data."""
+
     addresses = [
         Address(
             street=fake.street_address(),

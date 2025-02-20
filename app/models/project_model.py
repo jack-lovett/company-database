@@ -1,42 +1,103 @@
-from sqlalchemy import Column, Integer, ForeignKey, Enum, Text, Date, DateTime, func
-from sqlalchemy.orm import relationship
+from datetime import date, datetime
+from enum import Enum
+from typing import Optional, List
 
-from app.models.base_model import Base
+from sqlalchemy.orm import Mapped
+from sqlmodel import SQLModel, Field, Relationship
+
+from app.models.project_is_building_class_model import ProjectIsBuildingClass
+from app.models.staff_project_model import StaffProject
+from app.models.project_has_contractor_model import ProjectHasContractor
 
 
-class Project(Base):
+class ProjectStatus(str, Enum):
+    lead = "lead"
+    job = "job"
+    completed = "completed"
+    no_sale = "no_sale"
+
+
+class ReferralSource(str, Enum):
+    google = "google"
+    referral = "referral"
+    repeat_client = "repeat_client"
+    jkc = "jkc"
+    smce = "smce"
+    word_of_mouth = "word_of_mouth"
+    website = "website"
+
+
+class PaymentBasis(str, Enum):
+    lump_sum = "lump_sum"
+    hourly_rate = "hourly_rate"
+
+
+class ProjectBase(SQLModel):
+    number: int = Field(unique=True)
+    client_id: int = Field(foreign_key="client.id")
+    site_id: int = Field(foreign_key="site.id")
+    status: ProjectStatus
+    description: Optional[str] = Field(default=None)
+    initial_inquiry_date: date
+    start_date: Optional[date] = None
+    end_date: Optional[date] = None
+    storeys: Optional[int] = None
+    referral_source: Optional[ReferralSource] = None
+    payment_basis: Optional[PaymentBasis] = None
+    creation_datetime: datetime = Field(default_factory=datetime.utcnow)
+
+
+class Project(ProjectBase, table=True):
     __tablename__ = "project"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    number = Column(Integer, unique=True, nullable=False)
-    client_id = Column(Integer, ForeignKey('client.id'), nullable=False)
-    site_id = Column(Integer, ForeignKey('site.id'), nullable=False)
-    status = Column(Enum('lead', 'job', 'completed', 'no_sale', name='status_enum'), nullable=False)
-    description = Column(Text, nullable=True)
-    initial_inquiry_date = Column(Date, nullable=False)
-    start_date = Column(Date, nullable=True)
-    end_date = Column(Date, nullable=True)
-    storeys = Column(Integer, nullable=True)
-    referral_source = Column(
-        Enum('google', 'referral', 'repeat_client', 'jkc', 'smce', 'word_of_mouth', 'website',
-             name='referral_source_enum'), nullable=True)
-    payment_basis = Column(Enum('lump_sum', 'hourly_rate', name='payment_basis_enum'), nullable=True)
-    creation_datetime = Column(DateTime, default=func.now(), nullable=False)
+    id: Optional[int] = Field(default=None, primary_key=True)
 
-    contractors = relationship("Contractor", secondary="project_has_contractor", back_populates="projects")
+    # Relationships
+    contractors: List["Contractor"] = Relationship(
+        back_populates="projects",
+        link_model=ProjectHasContractor
+    )
+    budgets: List["Budget"] = Relationship(back_populates="project")
+    client: "Client" = Relationship(back_populates="projects")
+    building_classes: List["BuildingClass"] = Relationship(
+        back_populates="projects",
+        link_model=ProjectIsBuildingClass
+    )
+    staff: List["Staff"] = Relationship(
+        back_populates="projects",
+        link_model=StaffProject
+    )
+    staff_times: List["StaffTime"] = Relationship(back_populates="project")
+    notes: List["Note"] = Relationship(back_populates="project")
+    site: "Site" = Relationship(back_populates="projects")
+    call_logs: List["CallLog"] = Relationship(back_populates="project")
 
-    budgets = relationship("Budget", back_populates="project")
 
-    client = relationship("Client", back_populates="projects")
+class ProjectCreate(ProjectBase):
+    pass
 
-    building_classes = relationship("BuildingClass", secondary="project_is_building_class", back_populates="projects")
 
-    staff = relationship("Staff", secondary="staff_project", back_populates="projects")
+class ProjectUpdate(SQLModel):
+    status: Optional[ProjectStatus] = None
+    description: Optional[str] = None
+    start_date: Optional[date] = None
+    end_date: Optional[date] = None
+    storeys: Optional[int] = None
+    referral_source: Optional[ReferralSource] = None
+    payment_basis: Optional[PaymentBasis] = None
 
-    staff_times = relationship("StaffTime", back_populates="project")
 
-    notes = relationship("Note", back_populates="project")
-
-    site = relationship("Site", back_populates="projects")
-
-    call_logs = relationship("CallLog", back_populates="project")
+class ProjectDisplay(SQLModel):
+    id: int
+    number: int
+    client_name: str
+    site: str
+    status: ProjectStatus
+    description: Optional[str] = None
+    initial_inquiry_date: date
+    start_date: Optional[date] = None
+    end_date: Optional[date] = None
+    storeys: Optional[int] = None
+    referral_source: Optional[ReferralSource] = None
+    payment_basis: Optional[PaymentBasis] = None
+    creation_datetime: datetime
