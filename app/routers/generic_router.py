@@ -48,7 +48,7 @@ class CRUDRouter(Generic[ModelType]):
         # Dynamic routes for CRUD operations
         @self.router.post("/", response_model=model)
         def create(element: model, database: Session = Depends(get_database)):
-            return self.service.create(database, element.dump_model())
+            return self.service.create(database, element.dict())
 
         @self.router.get("/", response_model=List[display_model])
         def get_all(database: Session = Depends(get_database)):

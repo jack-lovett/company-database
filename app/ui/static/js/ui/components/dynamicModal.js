@@ -1,6 +1,7 @@
 import {API} from '../../services/api.js';
 import {populateSelect} from './modalSelects.js';
 
+
 export class DynamicModal {
     constructor(config) {
         this.config = config;
@@ -40,15 +41,24 @@ export class DynamicModal {
         if (field.type === 'textarea') {
             input = document.createElement('textarea');
             input.className = 'form-control';
-        } else if (field.type === 'select' && field.enum_values) {
+        } else if (field.type === 'select') {
             input = document.createElement('select');
             input.className = 'form-select';
-            field.enum_values.forEach(value => {
-                const option = document.createElement('option');
-                option.value = value;
-                option.textContent = value;
-                input.appendChild(option);
-            });
+            input.id = `${name}_select`;
+
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = 'Select...';
+            input.appendChild(defaultOption);
+
+            if (field.enum_values) {
+                field.enum_values.forEach(value => {
+                    const option = document.createElement('option');
+                    option.value = value;
+                    option.textContent = value;
+                    input.appendChild(option);
+                });
+            }
         } else {
             input = document.createElement('input');
             input.className = 'form-control';
@@ -79,10 +89,9 @@ export class DynamicModal {
 
         modalElement.addEventListener('shown.bs.modal', () => {
             this.initialiseSelects();
-            // Use setTimeout to ensure DOM is ready
             setTimeout(() => {
-                const firstInput = modalElement.querySelector('input:visible, select:visible');
-                if (firstInput) {
+                const firstInput = $(modalElement).find('input:first:visible, select:first:visible');
+                if (firstInput.length) {
                     firstInput.focus();
                 }
             }, 100);
@@ -102,16 +111,53 @@ export class DynamicModal {
     }
 
     async initialiseSelects() {
-        for (const [name, field] of Object.entries(this.config.fields)) {
-            if (field.type === 'select' && field.related_model) {
-                const items = await API.fetch(field.related_model.toLowerCase());
-                await populateSelect(
-                    `${name}_select`,
-                    items,
-                    'id',
-                    ['name']
-                );
+        if (this.config.name === 'Project') {
+            const response = await fetch(`${API.baseUrl}/next-number`);
+            const data = await response.json();
+            const numberField = document.querySelector(`#${this.config.name.toLowerCase()}Form [name="number"]`);
+            if (numberField) {
+                numberField.value = data.project_number;
             }
         }
+
+        const irregularPlurals = {
+            'address': 'addresses'
+        };
+
+        console.log('Initializing select fields...');
+        for (const [name, field] of Object.entries(this.config.fields)) {
+            if (name.endsWith('_id')) {
+                const baseModelName = name.replace('_id', '').split('_').pop();
+                const modelName = baseModelName.toLowerCase();
+                const pluralEndpoint = irregularPlurals[modelName] || `${modelName}s`;
+                console.log(`Processing field: ${name}, Model: ${modelName}`);
+
+                try {
+                    const response = await fetch(`${API.baseUrl}/${pluralEndpoint}`);
+                    const items = await response.json();
+
+                    if (items && items.length > 0) {
+                        console.log(`Retrieved ${items.length} items for ${modelName}`);
+                        const displayFields = Object.keys(items[0]).filter(key =>
+                            !key.endsWith('_id') &&
+                            key !== 'id' &&
+                            !key.includes('datetime')
+                        );
+                        console.log(`Display fields selected: ${displayFields.join(', ')}`);
+                        await populateSelect(
+                            `${name}_select`,
+                            items,
+                            'id',
+                            displayFields
+                        );
+                    }
+                } catch (error) {
+                    console.log(`Error fetching ${pluralEndpoint}:`, error);
+                }
+            }
+        }
+        console.log('Select initialization completed');
     }
+
+
 }

@@ -17,7 +17,7 @@ export const API = {
     },
 
     async getNextProjectNumber() {
-        const response = await fetch(`${this.baseUrl}/projects/next-number`);
+        const response = await fetch(`${this.baseUrl}/next-number`);
         return response.json();
     },
 

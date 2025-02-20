@@ -17,7 +17,6 @@ from app.ui.templates.modals.modal_generator import ModalGenerator
 
 app = FastAPI()
 
-
 for model in [
     Address,
     Budget,
@@ -49,7 +48,7 @@ origins = [
     "http://192.168.15.15:5000",
     "http://localhost:8080",
     "http://192.168.15.15:8080",
-    "https://localhost:5000",
+    "http://localhost:5000",
     "https://192.168.15.15:5000",
     "https://localhost:8080",
     "https://192.168.15.15:8080"
